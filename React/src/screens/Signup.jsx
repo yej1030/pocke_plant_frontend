@@ -97,7 +97,7 @@ export default function SignUp({ navigation }) {
   // 화면
   return (
     <>
-      <Header title="회원가입" navigation={navigation} />
+      <Header title="회원가입" navigation={navigation} type="auth" />
       <ScrollView style={styles.container}>
 
         <Text style={styles.sectionTitle}>회원정보를 입력해주세요</Text>

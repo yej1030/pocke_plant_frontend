@@ -2,16 +2,35 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 
-export default function Header({ title, navigation }) {
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={styles.back}>{'<'}</Text>
-      </TouchableOpacity>
-      <Text style={styles.title}>{title}</Text>
-      <View style={styles.empty} />
-    </View>
-  );
+export default function Header({ title, navigation, type = 'auth' }) {
+  // type = 'auth'  -> 뒤로가기, 타이틀
+  // type = 'main'   뒤로가기, 타이틀, 설정
+
+  if (type === 'main') {
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.back}>{'<'}</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>{title}</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+          <Text style={styles.menu}>{'≡'}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // auth 타입
+return (
+  <View style={styles.container}>
+    <TouchableOpacity onPress={() => navigation.goBack()}>
+      <Text style={styles.back}>{'<'}</Text>
+    </TouchableOpacity>
+    <Text style={styles.title}>{title}</Text>
+    <View style={styles.empty} />
+  </View>
+);
+
 }
 
 const styles = StyleSheet.create({
@@ -20,7 +39,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingTop: 20,
+    paddingBottom: 5,
     backgroundColor: '#fff',
   },
   back: {
@@ -32,7 +52,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
-  empty: {
-    width: 24,
+  menu: {
+    fontSize: 24,
+    color: '#333',
   },
 });
