@@ -29,7 +29,10 @@ export default function Login_1({ navigation }) {
         </TouchableOpacity>
 
         {/* 기존 유저 로그인 버튼 */}
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={() => navigation.replace('Main')}
+        >
           <Text style={styles.loginText}>기존 유저 로그인</Text>
         </TouchableOpacity>
 

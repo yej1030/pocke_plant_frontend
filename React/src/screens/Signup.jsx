@@ -14,6 +14,7 @@ import styles from './style/Signup.style';
 export default function SignUp({ navigation }) {
   // 입력값 상태
   const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -116,6 +117,15 @@ export default function SignUp({ navigation }) {
           </TouchableOpacity>
         </View>
         {!!certMessage && <Text style={styles.certMessage}>{certMessage}</Text>}
+
+        {/* 인증번호 */}
+        <TextInput
+          style={styles.input}
+          placeholder="인증번호"
+          value={code}
+          onChangeText={setCode}
+          keyboardType="number-pad"
+        />
 
         {/* 비밀번호 입력 */}
         <View style={styles.passwordRow}>
