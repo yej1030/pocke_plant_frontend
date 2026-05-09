@@ -4,9 +4,9 @@ import {
   Text, 
   TextInput, 
   TouchableOpacity, 
-  SafeAreaView, 
   Alert 
 } from 'react-native';
+import Header from '../components/Header';
 import styles from './style/Login_2.style';
 // api 파일에 loginUser 함수가 있다고 가정합니다.
 import { loginUser } from '../api/api'; 
@@ -57,19 +57,10 @@ export default function Login_2({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <>
+      <Header title="로그인" navigation={navigation} type="auth" />
       <View style={styles.container}>
-        
-        {/* 상단 헤더 */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Text style={styles.backIcon}>〈</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>로그인</Text>
-          <View style={styles.emptySpace} />
-        </View>
-
-        <View style={styles.content}>
+        <View >
           <TextInput
             style={styles.input}
             placeholder="아이디 (이메일)"
@@ -88,12 +79,10 @@ export default function Login_2({ navigation }) {
             secureTextEntry
           />
 
-          <TouchableOpacity 
-            style={styles.loginSubmitButton}
-            onPress={handleLogin}
-          >
-            <Text style={styles.loginSubmitText}>로그인하기</Text>
-          </TouchableOpacity>
+        {/* 로그인 버튼 */}
+        <TouchableOpacity style={styles.loginSubmitButton} onPress={handleLogin}>
+          <Text style={styles.loginSubmitText}>로그인하기</Text>
+        </TouchableOpacity>
 
           <View style={styles.footerLinks}>
             <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
@@ -104,8 +93,7 @@ export default function Login_2({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-
       </View>
-    </SafeAreaView>
+</>
   );
 }
