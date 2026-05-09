@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@react-native-community/datetimepicker": "^9.1.0",
-    "@react-native-picker/picker": "^2.11.4"
+    "@react-native-picker/picker": "^2.11.4",
+    "react-native-image-picker": "^8.2.1"
   }
 }
