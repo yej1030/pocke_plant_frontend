@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+
   background: {
     flex: 1,
     backgroundColor: '#fafafa',
@@ -78,6 +79,14 @@ export default StyleSheet.create({
     width: 40,
     height: 40,
     opacity: 0.3,
+  },
+    selectedImage: {
+    width: 220,
+    height: 220,
+    borderRadius: 12,
+    alignSelf: 'center',
+    marginVertical: 12,
+    resizeMode: 'cover',
   },
   personalityWrap: {
     flex: 1,

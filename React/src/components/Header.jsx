@@ -11,7 +11,9 @@ export default function Header({ title, navigation, type = 'auth' }) {
       <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
         </TouchableOpacity>
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.centerTitleWrap}>
+          <Text style={styles.mainTitle}>{title}</Text>
+        </View>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
           <Text style={styles.menu}>{'≡'}</Text>
         </TouchableOpacity>
@@ -55,6 +57,17 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingBottom: 5,
     backgroundColor: '#fff',
+  },
+  centerTitleWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
   },
   back: {
     fontSize: 24,

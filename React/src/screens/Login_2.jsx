@@ -35,25 +35,34 @@ export default function Login_2({ navigation }) {
     }
 
     // 2. 서버 연동 및 아이디/비번 일치 확인
+    /*
     try {
       // 서버에 로그인 요청을 보냅니다.
-      const response = await loginUser({
-        email: email.trim(),
-        password: password,
-      });
+      // const response = await loginUser({
+      //   email: email.trim(),
+      //   password: password,
+      // });
 
       // 성공 시 (서버에서 성공 응답을 보냈을 때)
-      Alert.alert('안내', '로그인에 성공했습니다!', [
-        {
-          text: '확인',
-          onPress: () => navigation.replace('Main'), // 메인 화면으로 이동
-        },
-      ]);
+      // Alert.alert('안내', '로그인에 성공했습니다!', [
+      //   {
+      //     text: '확인',
+      //     onPress: () => navigation.replace('Main'), // 메인 화면으로 이동
+      //   },
+      // ]);
     } catch (error) {
       // 실패 시 (아이디/비번 불일치 또는 서버 오류)
       // 서버에서 "아이디 또는 비밀번호가 일치하지 않습니다"라는 에러 메시지를 보낸다고 가정합니다.
-      Alert.alert('로그인 실패', error.message || '아이디 또는 비밀번호를 확인해주세요.');
+      // Alert.alert('로그인 실패', error.message || '아이디 또는 비밀번호를 확인해주세요.');
     }
+    */
+    // 서버 없이 바로 메인으로 이동 (Alert로 안내 후 이동)
+    Alert.alert('안내', '로그인에 성공했습니다!', [
+      {
+        text: '확인',
+        onPress: () => navigation.replace('Main'),
+      },
+    ]);
   };
 
   return (

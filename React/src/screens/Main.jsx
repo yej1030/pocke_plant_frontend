@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
 	SafeAreaView,
 	View,
@@ -6,6 +6,8 @@ import {
 	Image,
 	TouchableOpacity,
 	StatusBar,
+	Modal,
+	Pressable,
 	Alert,
 } from 'react-native';
 import Header from '../components/Header';
@@ -15,6 +17,40 @@ import { PlantsContext } from '../context/PlantsContext';
 
 export default function Main({ navigation }) {
 	const { plants, removePlant } = useContext(PlantsContext);
+	const [actionVisible, setActionVisible] = useState(false);
+	const [selectedPlant, setSelectedPlant] = useState(null);
+	const [selectedIndex, setSelectedIndex] = useState(null);
+
+	const openActionSheet = (p, idx) => {
+		setSelectedPlant(p);
+		setSelectedIndex(idx);
+		setActionVisible(true);
+	};
+
+	const closeActionSheet = () => {
+		setActionVisible(false);
+		setSelectedPlant(null);
+		setSelectedIndex(null);
+	};
+
+	const onEdit = () => {
+		closeActionSheet();
+		if (selectedPlant || selectedIndex === 0 || selectedIndex) {
+			navigation.navigate('PlantRegister', { plant: selectedPlant, index: selectedIndex });
+		}
+	};
+
+	const onDelete = () => {
+		const idx = selectedIndex;
+		closeActionSheet();
+		// show Alert after a short delay so the action sheet has time to close
+		setTimeout(() => {
+			Alert.alert('삭제', '삭제하시겠습니까?', [
+				{ text: '취소', style: 'cancel' },
+				{ text: '삭제', style: 'destructive', onPress: () => { if (idx || idx === 0) removePlant(idx); } },
+			]);
+		}, 220);
+	};
 
 	return (
 		<>
@@ -29,11 +65,7 @@ export default function Main({ navigation }) {
 							style={styles.plantCard}
 							activeOpacity={0.85}
 							onLongPress={() => {
-								Alert.alert('선택', '작업을 선택하세요', [
-									{ text: '수정', onPress: () => navigation.navigate('PlantRegister', { plant: p, index: idx }) },
-									{ text: '삭제', style: 'destructive', onPress: () => removePlant(idx) },
-									{ text: '취소', style: 'cancel' },
-								]);
+								openActionSheet(p, idx);
 							}}
 						>
 							{p.imageUri ? (
@@ -52,6 +84,27 @@ export default function Main({ navigation }) {
 					))
 				)}
 			</View>
+			<Modal visible={actionVisible} animationType="slide" transparent onRequestClose={closeActionSheet}>
+				<Pressable style={styles.actionOverlay} onPress={closeActionSheet} />
+				<View style={styles.actionContainer}>
+					<View style={styles.actionHandleWrap}>
+						<View style={styles.actionHandle} />
+					</View>
+					<Pressable style={styles.actionItem} onPress={onEdit}>
+						<Text style={styles.actionIcon}>✏️</Text>
+						<Text style={styles.actionText}>수정</Text>
+					</Pressable>
+					<View style={styles.actionDivider} />
+					<Pressable style={styles.actionItem} onPress={onDelete}>
+						<Text style={[styles.actionIcon, { color: '#B85C5C' }]}>🗑️</Text>
+						<Text style={[styles.actionText, { color: '#B85C5C' }]}>삭제</Text>
+					</Pressable>
+					<View style={styles.actionSpacing} />
+					<Pressable style={styles.actionCancel} onPress={closeActionSheet}>
+						<Text style={styles.actionCancelText}>취소</Text>
+					</Pressable>
+				</View>
+			</Modal>
 			<BottomButton title="식물 등록하기" onPress={() => navigation.navigate('PlantRegister')} />
 		</>
 	);

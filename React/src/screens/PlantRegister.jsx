@@ -153,13 +153,15 @@ export default function PlantRegister({ navigation, route }) {
         {/* 이미지 */}
         <View style={styles.row}>
           <Text style={styles.label}>이미지</Text>
-          <TouchableOpacity style={styles.imageBox} onPress={handleImagePress}>
-            {imageUri ? (
-              <Image source={{ uri: imageUri }} style={styles.imageIcon} />
-            ) : (
+          {imageUri ? (
+            <TouchableOpacity onPress={handleImagePress} activeOpacity={0.8}>
+              <Image source={{ uri: imageUri }} style={styles.selectedImage} />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.imageBox} onPress={handleImagePress}>
               <Image source={require('../assets/placeholder.png')} style={styles.imageIcon} />
-            )}
-          </TouchableOpacity>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* 성격 */}

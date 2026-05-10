@@ -51,4 +51,66 @@ export default StyleSheet.create({
 		resizeMode: 'contain',
 		tintColor: '#8a8a8a',
 	},
+
+	// Action sheet (custom modal)
+	actionOverlay: {
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.18)'
+	},
+	actionContainer: {
+		backgroundColor: '#fff',
+		borderTopLeftRadius: 18,
+		borderTopRightRadius: 18,
+		paddingBottom: 24,
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		bottom: 0,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: -2 },
+		shadowOpacity: 0.08,
+		shadowRadius: 8,
+		elevation: 8,
+	},
+	actionHandleWrap: {
+		alignItems: 'center',
+		marginTop: 8,
+		marginBottom: 8,
+	},
+	actionHandle: {
+		width: 48,
+		height: 5,
+		borderRadius: 3,
+		backgroundColor: '#e0e0e0',
+	},
+	actionItem: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingVertical: 20,
+		paddingHorizontal: 24,
+	},
+	actionIcon: {
+		fontSize: 20,
+		marginRight: 12,
+	},
+	actionText: {
+		fontSize: 17,
+		color: '#222',
+	},
+	actionDivider: {
+		height: 1,
+		backgroundColor: '#eee',
+	},
+	actionSpacing: {
+		height: 8,
+	},
+	actionCancel: {
+		alignItems: 'center',
+		paddingVertical: 16,
+		backgroundColor: '#fff',
+	},
+	actionCancelText: {
+		fontSize: 16,
+		color: '#bbb',
+	},
 });
