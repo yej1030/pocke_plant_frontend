@@ -60,7 +60,6 @@ export default function Login_2({ navigation }) {
     <>
       <Header title="로그인" navigation={navigation} type="auth" />
       <View style={styles.container}>
-        <View >
           <TextInput
             style={styles.input}
             placeholder="아이디 (이메일)"
@@ -92,7 +91,6 @@ export default function Login_2({ navigation }) {
               <Text style={styles.linkText}>비밀번호 찾기</Text>
             </TouchableOpacity>
           </View>
-        </View>
       </View>
 </>
   );
