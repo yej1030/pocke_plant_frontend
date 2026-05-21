@@ -9,6 +9,7 @@ export default StyleSheet.create({
     paddingTop: 20,
   },
 
+  // 이메일 input
   input: {
     width: '100%',
     height: 52,
@@ -20,20 +21,52 @@ export default StyleSheet.create({
     fontSize: 15,
     color: '#333',
   },
+
+  // 비밀번호 row
+  passwordRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e1e1e1',
+    borderRadius: 4,
+    marginBottom: 10,
+    paddingHorizontal: 15,
+    height: 52,
+  },
+
+  // 비밀번호 input
+  passwordInput: {
+    flex: 1,
+    fontSize: 15,
+    color: '#333',
+  },
+
+  // 눈 버튼
+  eyeButton: {
+    paddingLeft: 10,
+  },
+
+  // 눈 아이콘
+  eyeText: {
+    fontSize: 18,
+  },
+
   // 로그인 버튼
   loginSubmitButton: {
     backgroundColor: '#5CD79E',
     padding: 18,
     borderRadius: 5,
     alignItems: 'center',
-      marginTop: 20,
+    marginTop: 20,
     marginBottom: 0,
   },
+
   loginSubmitText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
+
   // 하단 링크
   footerLinks: {
     flexDirection: 'row',
@@ -41,9 +74,11 @@ export default StyleSheet.create({
     marginTop: 8,
     paddingHorizontal: 2,
   },
+
   linkText: {
     fontSize: 14,
     color: '#888',
     textDecorationLine: 'underline',
   },
+
 });
