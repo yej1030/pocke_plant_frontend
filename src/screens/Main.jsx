@@ -16,41 +16,50 @@ import styles from './style/Main.style';
 import { PlantsContext } from '../context/PlantsContext';
 
 export default function Main({ navigation }) {
-	const { plants, removePlant } = useContext(PlantsContext);
+    const { plants, removePlant, toggleBookmark } = useContext(PlantsContext);
 	const [actionVisible, setActionVisible] = useState(false);
 	const [selectedPlant, setSelectedPlant] = useState(null);
-	const [selectedIndex, setSelectedIndex] = useState(null);
+	const [selectedPlantId, setSelectedPlantId] = useState(null);
 
-	const openActionSheet = (p, idx) => {
+	const openActionSheet = (p) => {
 		setSelectedPlant(p);
-		setSelectedIndex(idx);
+		setSelectedPlantId(p.id);
 		setActionVisible(true);
 	};
 
 	const closeActionSheet = () => {
 		setActionVisible(false);
 		setSelectedPlant(null);
-		setSelectedIndex(null);
+		setSelectedPlantId(null);
 	};
 
 	const onEdit = () => {
 		closeActionSheet();
-		if (selectedPlant || selectedIndex === 0 || selectedIndex) {
-			navigation.navigate('PlantRegister', { plant: selectedPlant, index: selectedIndex });
+		if (selectedPlant || selectedPlantId) {
+			navigation.navigate('PlantRegister', { plant: selectedPlant, plantId: selectedPlantId });
 		}
 	};
 
 	const onDelete = () => {
-		const idx = selectedIndex;
+		const id = selectedPlantId;
 		closeActionSheet();
 		// show Alert after a short delay so the action sheet has time to close
 		setTimeout(() => {
 			Alert.alert('삭제', '삭제하시겠습니까?', [
 				{ text: '취소', style: 'cancel' },
-				{ text: '삭제', style: 'destructive', onPress: () => { if (idx || idx === 0) removePlant(idx); } },
+				{ text: '삭제', style: 'destructive', onPress: () => { if (id) removePlant(id); } },
 			]);
 		}, 220);
 	};
+
+	const sortedPlants = [...plants]
+		.map((plant, index) => ({ plant, index }))
+		.sort((left, right) => {
+			const leftBookmarked = left.plant.bookmarked ? 1 : 0;
+			const rightBookmarked = right.plant.bookmarked ? 1 : 0;
+			if (leftBookmarked !== rightBookmarked) return rightBookmarked - leftBookmarked;
+			return left.index - right.index;
+		});
 
 	return (
 		<>
@@ -59,13 +68,13 @@ export default function Main({ navigation }) {
 				{plants.length === 0 ? (
 					<Text style={{ color: '#888', textAlign: 'center', marginTop: 20 }}>등록된 식물이 없습니다.</Text>
 				) : (
-					plants.map((p, idx) => (
+					sortedPlants.map(({ plant: p }) => (
 						<TouchableOpacity
-							key={idx}
+							key={p.id}
 							style={styles.plantCard}
 							activeOpacity={0.85}
 							onLongPress={() => {
-								openActionSheet(p, idx);
+								openActionSheet(p);
 							}}
 						>
 							{p.imageUri ? (
@@ -77,8 +86,15 @@ export default function Main({ navigation }) {
 								<Text style={styles.plantName}>{p.name} {p.species ? `(${p.species})` : ''}</Text>
 								<Text style={styles.plantMeta}>{p.adoptDate ? p.adoptDate : ''} {p.age ? `/ ${p.age}세` : ''}</Text>
 							</View>
-							<TouchableOpacity style={styles.settingsButton} onPress={() => {}} activeOpacity={0.8}>
-								<Image source={require('../assets/setting.png')} style={styles.settingsIcon} />
+							<TouchableOpacity
+								style={styles.settingsButton}
+								onPress={() => toggleBookmark(p.id)}
+								activeOpacity={0.8}
+							>
+								<Image
+									source={p.bookmarked ? require('../assets/bookmarked.png') : require('../assets/unbookmarked.png')}
+									style={styles.settingsIcon}
+								/>
 							</TouchableOpacity>
 						</TouchableOpacity>
 					))

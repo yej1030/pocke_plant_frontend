@@ -49,7 +49,6 @@ export default StyleSheet.create({
 		width: 20,
 		height: 20,
 		resizeMode: 'contain',
-		tintColor: '#8a8a8a',
 	},
 
 	// Action sheet (custom modal)

@@ -12,7 +12,7 @@ const personalityList = ['활발한', '무뚝뚝한', '다정한', '느긋한'];
 export default function PlantRegister({ navigation, route }) {
   const { addPlant, updatePlant } = useContext(PlantsContext);
 
-  const editingIndex = route && route.params && typeof route.params.index === 'number' ? route.params.index : null;
+  const editingId = route && route.params && route.params.plantId ? route.params.plantId : null;
 
   const [selectedPersonality, setSelectedPersonality] = useState('느긋한');
   const [customPersonality, setCustomPersonality] = useState('');
@@ -60,8 +60,8 @@ export default function PlantRegister({ navigation, route }) {
       personality: customPersonality || selectedPersonality,
       imageUri: imageUri || null,
     };
-    if (editingIndex !== null) {
-      updatePlant(editingIndex, plant);
+    if (editingId !== null) {
+      updatePlant(editingId, plant);
     } else {
       addPlant(plant);
     }
