@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
@@ -79,6 +80,14 @@ export default function Login_2({
     });
   };
 
+  const handleKakaoLogin = () => {
+    showAlert({
+      title: '카카오 로그인',
+      message: '카카오 소셜 로그인은 준비 중입니다.',
+      variant: 'warning',
+    });
+  };
+
   return (
     <>
       <Header
@@ -143,6 +152,8 @@ export default function Login_2({
 
         </TouchableOpacity>
 
+        {/* SNS LOGIN - placed ~30px below links (moved inside container) */}
+
         {/* 하단 링크 */}
         <View style={styles.footerLinks}>
 
@@ -174,6 +185,20 @@ export default function Login_2({
 
           </TouchableOpacity>
 
+        </View>
+
+        <View style={styles.snsContainer}>
+          <View style={styles.snsHeader}>
+            <View style={styles.snsLine} />
+            <Text style={styles.snsTitle}>SNS LOGIN</Text>
+            <View style={styles.snsLine} />
+          </View>
+
+          <View style={styles.snsIconsRow}>
+            <TouchableOpacity style={styles.snsIconButton} onPress={handleKakaoLogin} activeOpacity={0.85}>
+              <Image source={require('../assets/Kakao.png')} style={styles.snsIconImage} />
+            </TouchableOpacity>
+          </View>
         </View>
 
       </View>

@@ -67,6 +67,41 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
 
+  // 소셜 로그인 영역
+  socialLoginWrap: {
+    alignItems: 'center',
+    marginTop: 18,
+    marginBottom: 8,
+  },
+
+  socialLoginLabel: {
+    fontSize: 13,
+    color: '#888',
+    marginBottom: 10,
+    fontWeight: '600',
+  },
+
+  // 카카오 원형 버튼
+  kakaoRoundButton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#FEE500',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+
+  kakaoRoundIcon: {
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+  },
+
   // 하단 링크
   footerLinks: {
     flexDirection: 'row',
@@ -79,6 +114,54 @@ export default StyleSheet.create({
     fontSize: 14,
     color: '#888',
     textDecorationLine: 'underline',
+  },
+
+  // SNS section
+  snsContainer: {
+    marginTop: 50,
+    paddingBottom: 14,
+    alignItems: 'center',
+  },
+  snsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    justifyContent: 'center',
+    marginBottom: 25,
+  },
+  snsLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#e6e6e6',
+  },
+  snsTitle: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '350',
+  },
+  snsIconsRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 22,
+  },
+  snsIconButton: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#F3F3F3',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 12,
+  },
+  snsIconImage: {
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
+  },
+  snsIconText: {
+    fontSize: 20,
+    color: '#fff',
+    fontWeight: '800',
   },
 
 });
