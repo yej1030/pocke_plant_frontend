@@ -8,15 +8,17 @@ import {
 	StatusBar,
 	Modal,
 	Pressable,
-	Alert,
 } from 'react-native';
 import Header from '../components/Header';
 import BottomButton from '../components/Bottombutton';
+import CustomAlert from '../components/CustomAlert';
+import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/Main.style';
 import { PlantsContext } from '../context/PlantsContext';
 
 export default function Main({ navigation }) {
     const { plants, removePlant, toggleBookmark } = useContext(PlantsContext);
+	const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 	const [actionVisible, setActionVisible] = useState(false);
 	const [selectedPlant, setSelectedPlant] = useState(null);
 	const [selectedPlantId, setSelectedPlantId] = useState(null);
@@ -43,13 +45,15 @@ export default function Main({ navigation }) {
 	const onDelete = () => {
 		const id = selectedPlantId;
 		closeActionSheet();
-		// show Alert after a short delay so the action sheet has time to close
-		setTimeout(() => {
-			Alert.alert('삭제', '삭제하시겠습니까?', [
-				{ text: '취소', style: 'cancel' },
-				{ text: '삭제', style: 'destructive', onPress: () => { if (id) removePlant(id); } },
-			]);
-		}, 220);
+		showAlert({
+			title: '삭제',
+			message: '삭제하시겠습니까?',
+			variant: 'error',
+			actions: [
+				{ text: '취소', kind: 'cancel' },
+				{ text: '삭제', kind: 'destructive', onPress: () => { if (id) removePlant(id); } },
+			],
+		});
 	};
 
 	const sortedPlants = [...plants]
@@ -121,6 +125,18 @@ export default function Main({ navigation }) {
 					</Pressable>
 				</View>
 			</Modal>
+			<CustomAlert
+				visible={alertConfig.visible}
+				title={alertConfig.title}
+				message={alertConfig.message}
+				buttonText={alertConfig.buttonText}
+				onPress={alertConfig.onPress}
+				secondaryButtonText={alertConfig.secondaryButtonText}
+				onSecondaryPress={alertConfig.onSecondaryPress}
+				actions={alertConfig.actions}
+				variant={alertConfig.variant}
+				onRequestClose={closeAlert}
+			/>
 			<BottomButton title="식물 등록하기" onPress={() => navigation.navigate('PlantRegister')} />
 		</>
 	);

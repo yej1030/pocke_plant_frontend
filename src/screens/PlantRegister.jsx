@@ -7,7 +7,6 @@ import {
   Image,
   ScrollView,
   Platform,
-  Alert,
 } from 'react-native';
 
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -15,6 +14,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import Header from '../components/Header';
 import BottomButton from '../components/Bottombutton';
+import CustomAlert from '../components/CustomAlert';
+import useCustomAlert from '../components/useCustomAlert';
 
 import styles from './style/PlantRegister.style';
 
@@ -25,6 +26,7 @@ const personalityList = ['활발한', '무뚝뚝한', '다정한', '느긋한', 
 export default function PlantRegister({ navigation, route }) {
 
   const { addPlant, updatePlant } = useContext(PlantsContext);
+  const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
   const editingId =
     route?.params?.plantId ?? null;
@@ -58,12 +60,13 @@ export default function PlantRegister({ navigation, route }) {
 
   // 이미지 선택
   const handleImagePress = () => {
-    Alert.alert(
-      '이미지 선택',
-      '이미지 선택 방법을 골라주세요.',
-      [
+    showAlert({
+      title: '이미지 선택',
+      message: '이미지 선택 방법을 골라주세요.',
+      actions: [
         {
           text: '카메라로 촬영',
+          kind: 'primary',
           onPress: () => {
             launchCamera(
               {
@@ -83,9 +86,9 @@ export default function PlantRegister({ navigation, route }) {
             );
           },
         },
-
         {
           text: '갤러리에서 선택',
+          kind: 'primary',
           onPress: () => {
             launchImageLibrary(
               {
@@ -104,13 +107,12 @@ export default function PlantRegister({ navigation, route }) {
             );
           },
         },
-
         {
           text: '취소',
-          style: 'cancel',
+          kind: 'cancel',
         },
-      ]
-    );
+      ],
+    });
   };
 
   // AI 분석 mock
@@ -133,7 +135,11 @@ export default function PlantRegister({ navigation, route }) {
     if (!name || name.trim() === '') missing.push('이름');
     if (!imageUri) missing.push('이미지');
     if (missing.length > 0) {
-      Alert.alert('필수 입력', `${missing.join(' 및 ')}을(를) 입력해주세요.`);
+      showAlert({
+        title: '필수 입력',
+        message: `${missing.join(' 및 ')}을(를) 입력해주세요.`,
+        variant: 'warning',
+      });
       return;
     }
 
@@ -484,6 +490,19 @@ export default function PlantRegister({ navigation, route }) {
         </View>
 
       </ScrollView>
+
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        buttonText={alertConfig.buttonText}
+        onPress={alertConfig.onPress}
+        secondaryButtonText={alertConfig.secondaryButtonText}
+        onSecondaryPress={alertConfig.onSecondaryPress}
+        actions={alertConfig.actions}
+        variant={alertConfig.variant}
+        onRequestClose={closeAlert}
+      />
 
       <BottomButton
         title="등록하기"

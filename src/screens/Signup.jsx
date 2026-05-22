@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Alert,
   View,
   Text,
   TextInput,
@@ -8,6 +7,8 @@ import {
   ScrollView,
 } from 'react-native';
 import Header from '../components/Header';
+import CustomAlert from '../components/CustomAlert';
+import useCustomAlert from '../components/useCustomAlert';
 import { checkEmailAvailability, signUpUser } from '../api/api';
 import styles from './style/Signup.style';
 
@@ -21,6 +22,7 @@ export default function SignUp({ navigation }) {
   const [showPasswordCheck, setShowPasswordCheck] = useState(false);
   const [name, setName] = useState('');
   const [certMessage, setCertMessage] = useState('');
+  const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
   // 유효성 검사
   const isValidEmail = value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
@@ -31,12 +33,18 @@ export default function SignUp({ navigation }) {
   const handleCert = async () => {
     if (!email.trim()) {
       setCertMessage('');
-      Alert.alert('안내', '이메일을 작성해 주세요.');
+      showAlert({
+        title: '안내',
+        message: '이메일을 작성해 주세요.',
+      });
       return;
     }
     if (!isValidEmail(email)) {
       setCertMessage('');
-      Alert.alert('안내', '이메일 형식으로 써주세요.');
+      showAlert({
+        title: '안내',
+        message: '이메일 형식으로 써주세요.',
+      });
       return;
     }
     try {
@@ -44,38 +52,65 @@ export default function SignUp({ navigation }) {
       setCertMessage('사용 가능한 이메일입니다.');
     } catch (error) {
       setCertMessage('');
-      Alert.alert('안내', error.message || '이메일 확인에 실패했습니다.');
+      showAlert({
+        title: '안내',
+        message: error.message || '이메일 확인에 실패했습니다.',
+        variant: 'error',
+      });
     }
   };
 
   // 회원가입
   const handleSubmit = async () => {
     if (!email.trim()) {
-      Alert.alert('안내', '이메일을 작성해 주세요.');
+      showAlert({
+        title: '안내',
+        message: '이메일을 작성해 주세요.',
+      });
       return;
     }
     if (!isValidEmail(email)) {
-      Alert.alert('안내', '이메일 형식으로 써주세요.');
+      showAlert({
+        title: '안내',
+        message: '이메일 형식으로 써주세요.',
+      });
       return;
     }
     if (!password.trim()) {
-      Alert.alert('안내', '비밀번호를 작성해 주세요.');
+      showAlert({
+        title: '안내',
+        message: '비밀번호를 작성해 주세요.',
+      });
       return;
     }
     if (!isValidPassword(password)) {
-      Alert.alert('안내', '비밀번호 형식을 확인해 주세요.');
+      showAlert({
+        title: '안내',
+        message: '비밀번호 형식을 확인해 주세요.',
+        variant: 'warning',
+      });
       return;
     }
     if (!passwordCheck.trim()) {
-      Alert.alert('안내', '비밀번호 확인을 작성해 주세요.');
+      showAlert({
+        title: '안내',
+        message: '비밀번호 확인을 작성해 주세요.',
+      });
       return;
     }
     if (!name.trim()) {
-      Alert.alert('안내', '이름을 작성해 주세요.');
+      showAlert({
+        title: '안내',
+        message: '이름을 작성해 주세요.',
+      });
       return;
     }
     if (password !== passwordCheck) {
-      Alert.alert('안내', '비밀번호가 일치하지 않습니다.');
+      showAlert({
+        title: '안내',
+        message: '비밀번호가 일치하지 않습니다.',
+        variant: 'warning',
+      });
       return;
     }
     try {
@@ -84,14 +119,19 @@ export default function SignUp({ navigation }) {
         password,
         name: name.trim(),
       });
-      Alert.alert('안내', '회원가입이 완료되었습니다!', [
-        {
-          text: '확인',
-          onPress: () => navigation.replace('Login_1'),
-        },
-      ]);
+      showAlert({
+        title: '회원가입 완료',
+        message: '회원가입이 완료되었어요 🌱',
+        buttonText: '확인',
+        onPress: () => navigation.replace('Login_1'),
+        variant: 'success',
+      });
     } catch (error) {
-      Alert.alert('안내', error.message || '회원가입에 실패했습니다.');
+      showAlert({
+        title: '안내',
+        message: error.message || '회원가입에 실패했습니다.',
+        variant: 'error',
+      });
     }
   };
 
@@ -182,6 +222,18 @@ export default function SignUp({ navigation }) {
         </TouchableOpacity>
 
       </ScrollView>
+
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        buttonText={alertConfig.buttonText}
+        onPress={alertConfig.onPress}
+        secondaryButtonText={alertConfig.secondaryButtonText}
+        onSecondaryPress={alertConfig.onSecondaryPress}
+        variant={alertConfig.variant}
+        onRequestClose={closeAlert}
+      />
     </>
   );
 }

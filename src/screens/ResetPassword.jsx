@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import {
-  Alert,
   View,
   Text,
   TextInput,
@@ -12,6 +11,8 @@ import {
 import styles from './style/ResetPassword.style';
 
 import Header from '../components/Header';
+import CustomAlert from '../components/CustomAlert';
+import useCustomAlert from '../components/useCustomAlert';
 
 export default function ResetPassword({ navigation }) {
 
@@ -32,6 +33,7 @@ export default function ResetPassword({ navigation }) {
 
   const [showNewPasswordCheck, setShowNewPasswordCheck] =
     useState(false);
+  const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
   // 비밀번호 유효성 검사
   const isValidPassword = value =>
@@ -41,49 +43,46 @@ export default function ResetPassword({ navigation }) {
   const handleSubmit = () => {
 
     if (!newPassword.trim()) {
-      Alert.alert(
-        '안내',
-        '새 비밀번호를 입력해주세요.'
-      );
+      showAlert({
+        title: '안내',
+        message: '새 비밀번호를 입력해주세요.',
+      });
       return;
     }
 
     if (!isValidPassword(newPassword)) {
-      Alert.alert(
-        '안내',
-        '비밀번호 형식을 확인해주세요.'
-      );
+      showAlert({
+        title: '안내',
+        message: '비밀번호 형식을 확인해주세요.',
+        variant: 'warning',
+      });
       return;
     }
 
     if (!newPasswordCheck.trim()) {
-      Alert.alert(
-        '안내',
-        '새 비밀번호 확인을 입력해주세요.'
-      );
+      showAlert({
+        title: '안내',
+        message: '새 비밀번호 확인을 입력해주세요.',
+      });
       return;
     }
 
     if (newPassword !== newPasswordCheck) {
-      Alert.alert(
-        '안내',
-        '비밀번호가 일치하지 않습니다.'
-      );
+      showAlert({
+        title: '안내',
+        message: '비밀번호가 일치하지 않습니다.',
+        variant: 'warning',
+      });
       return;
     }
 
-    Alert.alert(
-      '안내',
-      '비밀번호가 변경되었습니다!',
-      [
-        {
-          text: '확인',
-          onPress: () => {
-            navigation.navigate('Login_2');
-          },
-        },
-      ]
-    );
+    showAlert({
+      title: '안내',
+      message: '비밀번호가 변경되었습니다!',
+      onPress: () => {
+        navigation.navigate('Login_2');
+      },
+    });
   };
 
   return (
@@ -203,6 +202,19 @@ export default function ResetPassword({ navigation }) {
         </View>
 
       </ScrollView>
+
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        buttonText={alertConfig.buttonText}
+        onPress={alertConfig.onPress}
+        secondaryButtonText={alertConfig.secondaryButtonText}
+        onSecondaryPress={alertConfig.onSecondaryPress}
+        actions={alertConfig.actions}
+        variant={alertConfig.variant}
+        onRequestClose={closeAlert}
+      />
     </>
   );
 }

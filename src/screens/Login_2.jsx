@@ -5,15 +5,13 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 
 import Header from '../components/Header';
+import CustomAlert from '../components/CustomAlert';
+import useCustomAlert from '../components/useCustomAlert';
 
 import styles from './style/Login_2.style';
-
-// api 파일에 loginUser 함수가 있다고 가정합니다.
-import { loginUser } from '../api/api';
 
 export default function Login_2({ navigation }) {
 
@@ -25,6 +23,7 @@ export default function Login_2({ navigation }) {
 
   const [showPassword, setShowPassword] =
     useState(false);
+  const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
   // 이메일 유효성 검사
   const isValidEmail = value =>
@@ -36,80 +35,39 @@ export default function Login_2({ navigation }) {
 
     // 이메일 입력 확인
     if (!email.trim()) {
-
-      Alert.alert(
-        '안내',
-        '이메일을 작성해 주세요.'
-      );
-
+      showAlert({
+        title: '안내',
+        message: '이메일을 작성해 주세요.',
+      });
       return;
     }
 
     // 이메일 형식 확인
     if (!isValidEmail(email)) {
-
-      Alert.alert(
-        '안내',
-        '이메일 형식으로 써주세요.'
-      );
-
+      showAlert({
+        title: '안내',
+        message: '이메일 형식으로 써주세요.',
+      });
       return;
     }
 
     // 비밀번호 입력 확인
     if (!password.trim()) {
-
-      Alert.alert(
-        '안내',
-        '비밀번호를 작성해 주세요.'
-      );
-
+      showAlert({
+        title: '안내',
+        message: '비밀번호를 작성해 주세요.',
+      });
       return;
     }
 
-    /*
-    // 서버 연동 예시
-    try {
-
-      const response = await loginUser({
-        email: email.trim(),
-        password: password,
-      });
-
-      Alert.alert(
-        '안내',
-        '로그인에 성공했습니다!',
-        [
-          {
-            text: '확인',
-            onPress: () =>
-              navigation.replace('Main'),
-          },
-        ]
-      );
-
-    } catch (error) {
-
-      Alert.alert(
-        '로그인 실패',
-        error.message ||
-        '아이디 또는 비밀번호를 확인해주세요.'
-      );
-    }
-    */
-
     // 서버 없이 바로 이동
-    Alert.alert(
-      '안내',
-      '로그인에 성공했습니다!',
-      [
-        {
-          text: '확인',
-          onPress: () =>
-            navigation.replace('Main'),
-        },
-      ]
-    );
+    showAlert({
+      title: '안내',
+      message: '로그인에 성공했습니다!',
+      buttonText: '확인',
+      onPress: () => navigation.replace('Main'),
+      variant: 'success',
+    });
   };
 
   return (
@@ -203,6 +161,18 @@ export default function Login_2({ navigation }) {
         </View>
 
       </View>
+
+      <CustomAlert
+        visible={alertConfig.visible}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        buttonText={alertConfig.buttonText}
+        onPress={alertConfig.onPress}
+        secondaryButtonText={alertConfig.secondaryButtonText}
+        onSecondaryPress={alertConfig.onSecondaryPress}
+        variant={alertConfig.variant}
+        onRequestClose={closeAlert}
+      />
     </>
   );
 }
