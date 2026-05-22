@@ -46,6 +46,29 @@ export default StyleSheet.create({
     marginBottom: 30,
   },
 
+  // 카카오 로그인 버튼
+  kakaoButton: {
+    width: '100%',
+    backgroundColor: '#FEE500',
+    paddingVertical: 13,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+    flexDirection: 'row',
+  },
+  kakaoIcon: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+    marginRight: 8,
+  },
+  kakaoText: {
+    fontSize: 17,
+    color: '#381E1F',
+    fontWeight: '700',
+  },
+
   // 신규 회원가입 버튼
   signupButton: {
     width: '100%',
