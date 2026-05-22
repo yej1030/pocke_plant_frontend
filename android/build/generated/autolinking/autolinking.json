@@ -56,6 +56,30 @@
         }
       }
     },
+    "@react-native-seoul/kakao-login": {
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-seoul\\kakao-login",
+      "name": "@react-native-seoul/kakao-login",
+      "platforms": {
+        "ios": {
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-seoul\\kakao-login\\kakao-login.podspec",
+          "version": "5.4.2",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-seoul\\kakao-login\\android",
+          "packageImportPath": "import com.dooboolab.kakaologins.RNKakaoLoginsPackage;",
+          "packageInstance": "new RNKakaoLoginsPackage()",
+          "buildTypes": [],
+          "componentDescriptors": [],
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/@react-native-seoul/kakao-login/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
     "react-native-gesture-handler": {
       "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-gesture-handler",
       "name": "react-native-gesture-handler",
