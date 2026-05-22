@@ -1,4 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, {
+  useState,
+  useContext,
+  useEffect,
+} from 'react';
 import {
   View,
   Text,
@@ -8,58 +12,101 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {
+  launchCamera,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import Header from '../components/Header';
 import BottomButton from '../components/Bottombutton';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
-
 import styles from './style/PlantRegister.style';
+import {
+  PlantsContext,
+} from '../context/PlantsContext';
 
-import { PlantsContext } from '../context/PlantsContext';
+// 기본 성격 리스트
+const personalityList = [
+  '활발한',
+  '무뚝뚝한',
+  '다정한',
+  '느긋한',
+  '사교적인',
+  '적극적인',
+  '애교 많은',
+  '까칠한',
+];
 
-const personalityList = ['활발한', '무뚝뚝한', '다정한', '느긋한', '사교적인', '적극적인', '애교 많은', '까칠한'];
+export default function PlantRegister({
+  navigation,
+  route,
+}) {
 
-export default function PlantRegister({ navigation, route }) {
+  // 식물 context
+  const {
+    addPlant,
+    updatePlant,
+  } = useContext(PlantsContext);
 
-  const { addPlant, updatePlant } = useContext(PlantsContext);
-  const { alertConfig, showAlert, closeAlert } = useCustomAlert();
+  // 커스텀 알림
+  const {
+    alertConfig,
+    showAlert,
+    closeAlert,
+  } = useCustomAlert();
 
+  // 수정 여부 확인
   const editingId =
     route?.params?.plantId ?? null;
 
-  const [selectedPersonality, setSelectedPersonality] =
-    useState('느긋한');
-
-  const [customPersonality, setCustomPersonality] =
+  // 입력값
+  const [name, setName] =
     useState('');
 
-  const [name, setName] = useState('');
-  const [species, setSpecies] = useState('');
+  const [species, setSpecies] =
+    useState('');
 
-  const [adoptDate, setAdoptDate] =
-    useState(new Date());
-
-  const [showDatePicker, setShowDatePicker] =
-    useState(false);
-
-  const [age, setAge] = useState('');
+  const [age, setAge] =
+    useState('');
 
   const [imageUri, setImageUri] =
     useState(null);
 
-  // AI 분석 상태
-  const [analyzedSpecies, setAnalyzedSpecies] =
-    useState('');
+  // 입양 날짜
+  const [adoptDate, setAdoptDate] =
+    useState(new Date());
 
-  const [isAnalyzed, setIsAnalyzed] =
-    useState(false);
+  const [
+    showDatePicker,
+    setShowDatePicker,
+  ] = useState(false);
+
+  // 성격
+  const [
+    selectedPersonality,
+    setSelectedPersonality,
+  ] = useState('느긋한');
+
+  const [
+    customPersonality,
+    setCustomPersonality,
+  ] = useState('');
+
+  // AI 분석 상태
+  const [
+    analyzedSpecies,
+    setAnalyzedSpecies,
+  ] = useState('');
+
+  const [
+    isAnalyzed,
+    setIsAnalyzed,
+  ] = useState(false);
 
   // 이미지 선택
   const handleImagePress = () => {
+
     showAlert({
       title: '이미지 선택',
       message: '이미지 선택 방법을 골라주세요.',
@@ -73,12 +120,21 @@ export default function PlantRegister({ navigation, route }) {
                 mediaType: 'photo',
                 cameraType: 'back',
               },
+
               (res) => {
-                if (res.didCancel || res.errorCode) return;
+                if (
+                  res.didCancel ||
+                  res.errorCode
+                ) {
+                  return;
+                }
 
-                if (res.assets?.length > 0) {
-                  setImageUri(res.assets[0].uri);
-
+                if (
+                  res.assets?.length > 0
+                ) {
+                  setImageUri(
+                    res.assets[0].uri
+                  );
                   setIsAnalyzed(false);
                   setAnalyzedSpecies('');
                 }
@@ -86,20 +142,31 @@ export default function PlantRegister({ navigation, route }) {
             );
           },
         },
+
         {
           text: '갤러리에서 선택',
           kind: 'primary',
           onPress: () => {
+
             launchImageLibrary(
               {
                 mediaType: 'photo',
               },
+
               (res) => {
-                if (res.didCancel || res.errorCode) return;
+                if (
+                  res.didCancel ||
+                  res.errorCode
+                ) {
+                  return;
+                }
 
-                if (res.assets?.length > 0) {
-                  setImageUri(res.assets[0].uri);
-
+                if (
+                  res.assets?.length > 0
+                ) {
+                  setImageUri(
+                    res.assets[0].uri
+                  );
                   setIsAnalyzed(false);
                   setAnalyzedSpecies('');
                 }
@@ -107,6 +174,7 @@ export default function PlantRegister({ navigation, route }) {
             );
           },
         },
+
         {
           text: '취소',
           kind: 'cancel',
@@ -115,48 +183,73 @@ export default function PlantRegister({ navigation, route }) {
     });
   };
 
-  // AI 분석 mock
+  // AI 종 분석
   const handleAnalyzeSpecies = () => {
 
-    // 나중에 API 연결하면 여기 수정
-    const mockResult = '몬스테라';
+    // 임시 하드코딩
+    const mockResult =
+      '몬스테라';
 
     setAnalyzedSpecies(mockResult);
-
     setSpecies(mockResult);
-
     setIsAnalyzed(true);
   };
 
-  // 등록
+  // 식물 등록
   const handleSubmit = () => {
-    // require name and image
+
+    // 필수 입력 확인
     const missing = [];
-    if (!name || name.trim() === '') missing.push('이름');
-    if (!imageUri) missing.push('이미지');
+
+    if (!name || name.trim() === '') {
+      missing.push('이름');
+    }
+
+    if (!imageUri) {
+      missing.push('이미지');
+    }
+
     if (missing.length > 0) {
       showAlert({
         title: '필수 입력',
-        message: `${missing.join(' 및 ')}을(를) 입력해주세요.`,
+        message:
+          `${missing.join(' 및 ')}을(를) 입력해주세요.`,
         variant: 'warning',
       });
       return;
     }
 
     const plant = {
-      name: name || '이름 없음',
-      species: species || '',
+      name:
+        name || '이름 없음',
+
+      species:
+        species || '',
+
       adoptDate: adoptDate
-        ? adoptDate.toISOString().slice(0, 10)
+        ? adoptDate
+          .toISOString()
+          .slice(0, 10)
         : '',
-      age: age || '',
+
+      age:
+        age || '',
+
       personality:
-        customPersonality || selectedPersonality,
-      imageUri: imageUri || null,
+        customPersonality ||
+        selectedPersonality,
+
+      imageUri:
+        imageUri || null,
     };
 
+    // 수정 / 등록 분기
     if (editingId !== null) {
-      updatePlant(editingId, plant);
+      updatePlant(
+        editingId,
+        plant
+      );
+
     } else {
       addPlant(plant);
     }
@@ -164,43 +257,58 @@ export default function PlantRegister({ navigation, route }) {
     navigation.navigate('Main');
   };
 
+  // 수정 화면 데이터 세팅
   useEffect(() => {
-
     if (route?.params?.plant) {
+      const p =
+        route.params.plant;
 
-      const p = route.params.plant;
-
-      if (p.name) setName(p.name);
+      if (p.name) {
+        setName(p.name);
+      }
 
       if (p.species) {
         setSpecies(p.species);
       }
 
       if (p.adoptDate) {
-
-        const d = new Date(p.adoptDate);
+        const d =
+          new Date(p.adoptDate);
 
         if (!isNaN(d.getTime())) {
           setAdoptDate(d);
         }
       }
 
-      if (p.age) setAge(p.age);
+      if (p.age) {
+        setAge(p.age);
+      }
 
       if (p.imageUri) {
         setImageUri(p.imageUri);
       }
 
       if (p.personality) {
-
         if (
-          personalityList.includes(p.personality)
+          personalityList.includes(
+            p.personality
+          )
         ) {
-          setSelectedPersonality(p.personality);
+
+          setSelectedPersonality(
+            p.personality
+          );
+
           setCustomPersonality('');
+
         } else {
-          setCustomPersonality(p.personality);
-          setSelectedPersonality(p.personality);
+          setCustomPersonality(
+            p.personality
+          );
+
+          setSelectedPersonality(
+            p.personality
+          );
         }
       }
     }
@@ -208,10 +316,11 @@ export default function PlantRegister({ navigation, route }) {
   }, [route]);
 
   return (
-
     <View style={styles.background}>
 
+      {/* 날짜 선택 */}
       {showDatePicker && (
+
         <DateTimePicker
           value={adoptDate}
           mode="date"
@@ -220,14 +329,21 @@ export default function PlantRegister({ navigation, route }) {
               ? 'spinner'
               : 'default'
           }
-          onChange={(event, selectedDate) => {
+
+          onChange={(
+            event,
+            selectedDate
+          ) => {
 
             setShowDatePicker(false);
 
             if (selectedDate) {
-              setAdoptDate(selectedDate);
+              setAdoptDate(
+                selectedDate
+              );
             }
           }}
+
           maximumDate={new Date()}
         />
       )}
@@ -239,7 +355,10 @@ export default function PlantRegister({ navigation, route }) {
       />
 
       <ScrollView
-        contentContainerStyle={styles.container}
+        contentContainerStyle={
+          styles.container
+        }
+
         keyboardShouldPersistTaps="handled"
       >
 
@@ -250,7 +369,9 @@ export default function PlantRegister({ navigation, route }) {
         {/* 이름 */}
         <View style={styles.row}>
 
-          <Text style={styles.label}>이름</Text>
+          <Text style={styles.label}>
+            이름
+          </Text>
 
           <View style={styles.contentWrap}>
 
@@ -280,6 +401,7 @@ export default function PlantRegister({ navigation, route }) {
                 onPress={() =>
                   setShowDatePicker(true)
                 }
+
                 activeOpacity={0.8}
               >
 
@@ -303,14 +425,22 @@ export default function PlantRegister({ navigation, route }) {
                   style={styles.ageInput}
                   placeholder="나이"
                   value={age}
-                  onChangeText={(text) => {
+
+                  onChangeText={(
+                    text
+                  ) => {
 
                     const onlyNumber =
-                      text.replace(/[^0-9]/g, '');
+                      text.replace(
+                        /[^0-9]/g,
+                        ''
+                      );
 
                     setAge(onlyNumber);
                   }}
+
                   keyboardType="numeric"
+
                   maxLength={3}
                 />
 
@@ -319,7 +449,9 @@ export default function PlantRegister({ navigation, route }) {
                 </Text>
 
               </View>
+
             </View>
+
           </View>
         </View>
 
@@ -339,8 +471,9 @@ export default function PlantRegister({ navigation, route }) {
               onChangeText={setSpecies}
             />
 
-            {/* AI 결과 카드 */}
+            {/* AI 결과 */}
             {isAnalyzed && (
+
               <View style={styles.aiResultCard}>
 
                 <View style={styles.aiResultTop}>
@@ -350,14 +483,19 @@ export default function PlantRegister({ navigation, route }) {
                   </Text>
 
                   <TouchableOpacity
-                    onPress={handleAnalyzeSpecies}
+                    onPress={
+                      handleAnalyzeSpecies
+                    }
                   >
+
                     <Text style={styles.aiRetry}>
                       다시 분석하기
                     </Text>
+
                   </TouchableOpacity>
 
                 </View>
+
               </View>
             )}
 
@@ -382,19 +520,34 @@ export default function PlantRegister({ navigation, route }) {
                 >
 
                   <Image
-                    source={{ uri: imageUri }}
-                    style={styles.selectedImage}
+                    source={{
+                      uri: imageUri,
+                    }}
+
+                    style={
+                      styles.selectedImage
+                    }
                   />
 
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={styles.analyzeButton}
-                  onPress={handleAnalyzeSpecies}
+                  style={
+                    styles.analyzeButton
+                  }
+
+                  onPress={
+                    handleAnalyzeSpecies
+                  }
+
                   activeOpacity={0.85}
                 >
 
-                  <Text style={styles.analyzeButtonText}>
+                  <Text
+                    style={
+                      styles.analyzeButtonText
+                    }
+                  >
                     🌿 종 분석하기
                   </Text>
 
@@ -411,13 +564,15 @@ export default function PlantRegister({ navigation, route }) {
 
                   <Image
                     source={require('../assets/placeholder.png')}
+
                     style={styles.imageIcon}
                   />
 
                 </TouchableOpacity>
 
                 <Text style={styles.aiGuide}>
-                  사진을 등록하면 AI가 종을 분석합니다.
+                  사진을 등록하면
+                  AI가 종을 분석합니다.
                 </Text>
               </>
             )}
@@ -434,39 +589,52 @@ export default function PlantRegister({ navigation, route }) {
 
           <View style={styles.contentWrap}>
 
-            <View style={styles.personalityWrap}>
+            <View
+              style={
+                styles.personalityWrap
+              }
+            >
 
-              {personalityList.map((item) => (
+              {personalityList.map(
+                (item) => (
 
-                <TouchableOpacity
-                  key={item}
-                  style={[
-                    styles.personalityBtn,
+                  <TouchableOpacity
+                    key={item}
 
-                    selectedPersonality === item &&
-                    styles.personalityBtnSelected,
-                  ]}
-                  onPress={() => {
-
-                    setSelectedPersonality(item);
-
-                    setCustomPersonality('');
-                  }}
-                >
-
-                  <Text
                     style={[
-                      styles.personalityText,
+                      styles.personalityBtn,
 
-                      selectedPersonality === item &&
-                      styles.personalityTextSelected,
+                      selectedPersonality ===
+                      item &&
+                      styles.personalityBtnSelected,
                     ]}
-                  >
-                    {item}
-                  </Text>
 
-                </TouchableOpacity>
-              ))}
+                    onPress={() => {
+
+                      setSelectedPersonality(
+                        item
+                      );
+
+                      setCustomPersonality('');
+                    }}
+                  >
+
+                    <Text
+                      style={[
+                        styles.personalityText,
+
+                        selectedPersonality ===
+                        item &&
+                        styles.personalityTextSelected,
+                      ]}
+                    >
+                      {item}
+                    </Text>
+
+                  </TouchableOpacity>
+                )
+              )}
+
             </View>
 
             <TextInput
@@ -474,14 +642,19 @@ export default function PlantRegister({ navigation, route }) {
                 styles.input,
                 styles.inputUnderPersonality,
               ]}
+
               placeholder="직접 입력 (선택)"
+
               value={customPersonality}
+
               onChangeText={(text) => {
 
                 setCustomPersonality(text);
 
                 if (text) {
-                  setSelectedPersonality(text);
+                  setSelectedPersonality(
+                    text
+                  );
                 }
               }}
             />
@@ -491,19 +664,30 @@ export default function PlantRegister({ navigation, route }) {
 
       </ScrollView>
 
+      {/* 커스텀 알림 */}
       <CustomAlert
         visible={alertConfig.visible}
         title={alertConfig.title}
         message={alertConfig.message}
         buttonText={alertConfig.buttonText}
         onPress={alertConfig.onPress}
-        secondaryButtonText={alertConfig.secondaryButtonText}
-        onSecondaryPress={alertConfig.onSecondaryPress}
+
+        secondaryButtonText={
+          alertConfig.secondaryButtonText
+        }
+
+        onSecondaryPress={
+          alertConfig.onSecondaryPress
+        }
+
         actions={alertConfig.actions}
+
         variant={alertConfig.variant}
+
         onRequestClose={closeAlert}
       />
 
+      {/* 등록 버튼 */}
       <BottomButton
         title="등록하기"
         onPress={handleSubmit}

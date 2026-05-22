@@ -1,31 +1,38 @@
 import React, { useState } from 'react';
-
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
-
 import styles from './style/Login_2.style';
 
-export default function Login_2({ navigation }) {
+export default function Login_2({
+  navigation,
+}) {
 
+  // 입력값
   const [email, setEmail] =
     useState('');
 
   const [password, setPassword] =
     useState('');
 
+  // 비밀번호 보기
   const [showPassword, setShowPassword] =
     useState(false);
-  const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
-  // 이메일 유효성 검사
+  // 커스텀 알림
+  const {
+    alertConfig,
+    showAlert,
+    closeAlert,
+  } = useCustomAlert();
+
+  // 이메일 형식 검사
   const isValidEmail = value =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       .test(value.trim());
@@ -60,18 +67,19 @@ export default function Login_2({ navigation }) {
       return;
     }
 
-    // 서버 없이 바로 이동
+    // 임시 로그인 처리
     showAlert({
       title: '안내',
       message: '로그인에 성공했습니다!',
       buttonText: '확인',
-      onPress: () => navigation.replace('Main'),
+      onPress: () =>
+        navigation.replace('Main'),
+
       variant: 'success',
     });
   };
 
   return (
-
     <>
       <Header
         title="로그인"
@@ -107,12 +115,16 @@ export default function Login_2({ navigation }) {
           <TouchableOpacity
             style={styles.eyeButton}
             onPress={() =>
-              setShowPassword(prev => !prev)
+              setShowPassword(
+                prev => !prev
+              )
             }
           >
 
             <Text style={styles.eyeText}>
-              {showPassword ? '🙈' : '👁'}
+              {showPassword
+                ? '🙈'
+                : '👁'}
             </Text>
 
           </TouchableOpacity>
@@ -136,7 +148,9 @@ export default function Login_2({ navigation }) {
 
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('Signup')
+              navigation.navigate(
+                'Signup'
+              )
             }
           >
 
@@ -148,7 +162,9 @@ export default function Login_2({ navigation }) {
 
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('FindPassword')
+              navigation.navigate(
+                'FindPassword'
+              )
             }
           >
 
@@ -162,15 +178,24 @@ export default function Login_2({ navigation }) {
 
       </View>
 
+      {/* 커스텀 알림 */}
       <CustomAlert
         visible={alertConfig.visible}
         title={alertConfig.title}
         message={alertConfig.message}
         buttonText={alertConfig.buttonText}
         onPress={alertConfig.onPress}
-        secondaryButtonText={alertConfig.secondaryButtonText}
-        onSecondaryPress={alertConfig.onSecondaryPress}
+
+        secondaryButtonText={
+          alertConfig.secondaryButtonText
+        }
+
+        onSecondaryPress={
+          alertConfig.onSecondaryPress
+        }
+
         variant={alertConfig.variant}
+
         onRequestClose={closeAlert}
       />
     </>
