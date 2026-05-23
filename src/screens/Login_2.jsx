@@ -160,10 +160,8 @@ export default function Login_2({
 
         showAlert({
           title: '실패',
-
           message:
             '카카오 로그인에 실패했습니다.',
-
           variant: 'error',
         });
       }
