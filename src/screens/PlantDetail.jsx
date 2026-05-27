@@ -128,6 +128,9 @@ export default function PlantDetail({ navigation, route }) {
           <TouchableOpacity
             style={styles.actionButton}
             activeOpacity={0.85}
+            onPress={() => {
+              navigation.navigate('Chat', { plant });
+            }}
           >
             <Text style={styles.actionText}>💬 대화하기</Text>
           </TouchableOpacity>

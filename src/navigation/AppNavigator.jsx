@@ -8,6 +8,7 @@ import Signup from '../screens/Signup';
 import Main from '../screens/Main';
 import PlantRegister from '../screens/PlantRegister';
 import PlantDetail from '../screens/PlantDetail';
+import Chat from '../screens/Chat';
 import FindPassword from '../screens/FindPassword';
 import ResetPassword from '../screens/ResetPassword';
 
@@ -24,6 +25,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="PlantRegister" component={PlantRegister} />
         <Stack.Screen name="PlantDetail" component={PlantDetail} />
+        <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="FindPassword" component={FindPassword} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         
