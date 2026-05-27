@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PocketPlants</string>
+    <string name="kakao_app_key">dae51a4f284277405ac8d1773f32ffec</string>
 </resources>

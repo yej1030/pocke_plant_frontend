@@ -1,18 +1,33 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { login } from '@react-native-seoul/kakao-login';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/Login_1.style';
+import { kakaoLoginApi } from '../api/api';
 
 export default function Login_1({ navigation }) {
   const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
-  const handleKakaoLogin = () => {
-    showAlert({
-      title: '카카오 로그인',
-      message: '카카오 소셜 로그인은 준비 중입니다.',
-      variant: 'warning',
-    });
+  const handleKakaoLogin = async () => {
+    try {
+      const token = await login();
+
+      await kakaoLoginApi(token.accessToken);
+
+      navigation.replace('Main');
+    } catch (error) {
+      console.log('카카오 로그인 실패:', error);
+
+      showAlert({
+        title: '실패',
+        message:
+          error?.response?.data?.message ||
+          error?.message ||
+          '카카오 로그인에 실패했습니다.',
+        variant: 'error',
+      });
+    }
   };
 
   // 화면
