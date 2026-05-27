@@ -22,13 +22,13 @@ export default StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#bcbcbc',
+    borderColor: '#989898',
     borderRadius: 10,
     backgroundColor: '#fff',
     marginBottom: 12,
   },
   speechText: {
-    fontSize: 13,
+    fontSize: 14,
     color: '#333',
     textAlign: 'center',
     lineHeight: 18,
@@ -54,7 +54,7 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   actionText: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#3d6b4f',
     fontWeight: '600',
   },
@@ -63,7 +63,7 @@ export default StyleSheet.create({
     borderColor: '#93d3a8',
   },
   actionPrimaryText: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#fff',
     fontWeight: '700',
   },
@@ -77,13 +77,13 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   hardwareText: {
-    fontSize: 13,
+    fontSize: 15,
     color: '#6c7a73',
     fontWeight: '600',
   },
   hardwareHint: {
     marginTop: 12,
-    fontSize: 12,
+    fontSize: 13,
     color: '#96a39d',
     textAlign: 'center',
   },
@@ -103,19 +103,19 @@ export default StyleSheet.create({
     gap: 8,
   },
   statIcon: {
-    width: 22,
-    height: 22,
+    width: 28,
+    height: 28,
     resizeMode: 'contain',
   },
   statLabel: {
     width: 62,
-    fontSize: 13,
+    fontSize: 15,
     color: '#1f1f1f',
     fontWeight: '700',
   },
   statValueWrap: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     width: 58,
   },
   statValue: {
@@ -158,7 +158,7 @@ export default StyleSheet.create({
     resizeMode: 'contain',
   },
   waterText: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#000000',
     fontWeight: '600',
   },

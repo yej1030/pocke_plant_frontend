@@ -75,7 +75,7 @@ export default function PlantDetail({ navigation, route }) {
     {
       type: 'light',
       label: '조도',
-      value: 360,
+      value: 36000,
       unit: 'lx',
       accent: '#c89b6d',
       icon: require('../assets/sensor_light.png'),
@@ -129,7 +129,7 @@ export default function PlantDetail({ navigation, route }) {
             style={styles.actionButton}
             activeOpacity={0.85}
           >
-            <Text style={styles.actionText}>💬 대화 모드</Text>
+            <Text style={styles.actionText}>💬 대화하기</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
