@@ -187,6 +187,15 @@ export default function Main({
 								key={p.id}
 								style={styles.plantCard}
 								activeOpacity={0.85}
+								onPress={() =>
+									navigation.navigate(
+										'PlantDetail',
+										{
+											plant: p,
+											plantId: p.id,
+										}
+									)
+								}
 								onLongPress={() => {
 									openActionSheet(p);
 								}}
