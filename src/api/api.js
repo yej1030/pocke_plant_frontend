@@ -10,8 +10,58 @@ export const loginUser =
 
     const response =
       await axios.post(
-        `${BASE_URL}/login`,
+        `${BASE_URL}/api/email/login`,
         data
+      );
+
+    return response.data;
+  };
+
+// 회원가입 API
+export const signUpUser =
+  async (data) => {
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/email/register`,
+        data
+      );
+
+    return response.data;
+  };
+
+// 이메일 인증번호 요청
+export const sendEmailCode =
+  async (email) => {
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/email/verify-request`,
+        null,
+        {
+          params: {
+            email,
+          },
+        }
+      );
+
+    return response.data;
+  };
+
+// 이메일 인증번호 확인
+export const verifyEmailCode =
+  async (email, code) => {
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/email/verify-code`,
+        null,
+        {
+          params: {
+            email,
+            code,
+          },
+        }
       );
 
     return response.data;

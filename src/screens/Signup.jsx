@@ -10,8 +10,8 @@ import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import {
-  checkEmailAvailability,
   signUpUser,
+  sendEmailCode,
 } from '../api/api';
 
 import styles from './style/Signup.style';
@@ -78,20 +78,28 @@ export default function SignUp({ navigation }) {
     }
 
     try {
-      await checkEmailAvailability(
+      const response =
+        await sendEmailCode(
         email.trim()
       );
-      setCertMessage(
-        '사용 가능한 이메일입니다.'
+      console.log(
+        '이메일 인증 응답:',
+        response
       );
 
+      setCertMessage(response);
+
     } catch (error) {
+      console.log(
+        '이메일 인증 실패:',
+        error.response?.data
+      );
+
       setCertMessage('');
       showAlert({
         title: '안내',
         message:
-          error.message ||
-          '이메일 확인에 실패했습니다.',
+          '이메일 인증 요청 실패',
         variant: 'error',
       });
     }
@@ -161,11 +169,17 @@ export default function SignUp({ navigation }) {
     try {
 
       // 회원가입 요청
-      await signUpUser({
-        email: email.trim(),
-        password,
-        name: name.trim(),
-      });
+      const response =
+        await signUpUser({
+          email: email.trim(),
+          password,
+          nickname: name.trim(),
+        });
+
+      console.log(
+        '회원가입 응답:',
+        response
+      );
 
       showAlert({
         title: '회원가입 완료',
@@ -177,10 +191,15 @@ export default function SignUp({ navigation }) {
       });
 
     } catch (error) {
+      console.log(
+        '회원가입 실패:',
+        error.response?.data
+      );
+
       showAlert({
         title: '안내',
         message:
-          error.message ||
+          error.response?.data ||
           '회원가입에 실패했습니다.',
         variant: 'error',
       });

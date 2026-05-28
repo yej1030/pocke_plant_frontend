@@ -25,6 +25,7 @@ import styles
 
 import {
   kakaoLoginApi,
+  loginUser,
 } from '../api/api';
 
 export default function Login_2({
@@ -93,20 +94,49 @@ export default function Login_2({
       return;
     }
 
-    // 임시 로그인 처리
-    showAlert({
-      title: '안내',
+    try {
 
-      message:
-        '로그인에 성공했습니다!',
+      const response =
+        await loginUser({
+          email: email.trim(),
+          password,
+        });
 
-      buttonText: '확인',
+      console.log(
+        '로그인 응답:',
+        response
+      );
 
-      onPress: () =>
-        navigation.replace('Main'),
+      showAlert({
+        title: '성공',
 
-      variant: 'success',
-    });
+        message:
+          '로그인에 성공했습니다!',
+
+        buttonText: '확인',
+
+        onPress: () =>
+          navigation.replace('Main'),
+
+        variant: 'success',
+      });
+
+    } catch (error) {
+
+      console.log(
+        '로그인 실패:',
+        error.response?.data
+      );
+
+      showAlert({
+        title: '실패',
+
+        message:
+          '로그인에 실패했습니다.',
+
+        variant: 'error',
+      });
+    }
   };
 
   // 카카오 로그인
