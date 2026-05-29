@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import AsyncStorage
+  from '@react-native-async-storage/async-storage';
+
 import {
   View,
   Text,
@@ -107,6 +110,27 @@ export default function Login_2({
         response
       );
 
+      // 자동로그인용 토큰 저장
+await AsyncStorage.setItem(
+  'serviceToken',
+  response.data.serviceToken
+);
+
+await AsyncStorage.setItem(
+  'userId',
+  String(response.data.userId)
+);
+
+await AsyncStorage.setItem(
+  'nickname',
+  response.data.nickname || ''
+);
+
+await AsyncStorage.setItem(
+  'email',
+  response.data.email || ''
+);
+
       showAlert({
         title: '성공',
 
@@ -164,6 +188,19 @@ export default function Login_2({
           '서버 응답:',
           response
         );
+
+        const serviceToken =
+          response?.data?.serviceToken ||
+          response?.serviceToken ||
+          response?.accessToken ||
+          response?.token;
+
+        if (serviceToken) {
+          await AsyncStorage.setItem(
+            'serviceToken',
+            serviceToken
+          );
+        }
 
         showAlert({
           title: '성공',

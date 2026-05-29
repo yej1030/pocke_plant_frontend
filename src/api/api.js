@@ -81,3 +81,21 @@ export const kakaoLoginApi =
 
     return response.data;
   };
+
+  // 내 정보 조회 (자동 로그인 검증)
+export const getMyInfo =
+  async (token) => {
+
+    const response =
+      await axios.get(
+        `${BASE_URL}/api/user/me`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };

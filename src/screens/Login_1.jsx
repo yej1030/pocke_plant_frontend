@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from '@react-native-seoul/kakao-login';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
@@ -13,7 +14,17 @@ export default function Login_1({ navigation }) {
     try {
       const token = await login();
 
-      await kakaoLoginApi(token.accessToken);
+      const response = await kakaoLoginApi(token.accessToken);
+
+      const serviceToken =
+        response?.data?.serviceToken ||
+        response?.serviceToken ||
+        response?.accessToken ||
+        response?.token;
+
+      if (serviceToken) {
+        await AsyncStorage.setItem('serviceToken', serviceToken);
+      }
 
       navigation.replace('Main');
     } catch (error) {
