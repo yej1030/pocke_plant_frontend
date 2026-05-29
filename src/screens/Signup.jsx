@@ -12,6 +12,7 @@ import useCustomAlert from '../components/useCustomAlert';
 import {
   signUpUser,
   sendEmailCode,
+  verifyEmailCode,
 } from '../api/api';
 
 import styles from './style/Signup.style';
@@ -24,6 +25,8 @@ export default function SignUp({ navigation }) {
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
   const [name, setName] = useState('');
+  const [isEmailVerified, setIsEmailVerified] =
+    useState(false);
 
   // 비밀번호 보기
   const [showPassword, setShowPassword] =
@@ -54,12 +57,67 @@ export default function SignUp({ navigation }) {
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,15}$/
       .test(value);
 
+  const isVerificationSuccess = responseData => {
+    if (responseData == null) {
+      return false;
+    }
+
+    if (typeof responseData === 'boolean') {
+      return responseData;
+    }
+
+    if (typeof responseData === 'string') {
+      const normalized = responseData
+        .trim()
+        .toLowerCase();
+
+      return normalized === 'true' ||
+        normalized.includes('success') ||
+        normalized.includes('성공') ||
+        normalized.includes('인증 완료');
+    }
+
+    if (typeof responseData === 'object') {
+      if ('success' in responseData) {
+        return responseData.success === true;
+      }
+
+      if ('verified' in responseData) {
+        return responseData.verified === true;
+      }
+
+      if ('valid' in responseData) {
+        return responseData.valid === true;
+      }
+
+      if ('isVerified' in responseData) {
+        return responseData.isVerified === true;
+      }
+
+      if ('result' in responseData) {
+        return String(responseData.result)
+          .toUpperCase() === 'SUCCESS';
+      }
+
+      if ('status' in responseData) {
+        const status = String(responseData.status)
+          .toUpperCase();
+
+        return status === 'SUCCESS' ||
+          status === 'OK';
+      }
+    }
+
+    return false;
+  };
+
   // 이메일 인증
   const handleCert = async () => {
 
     if (!email.trim()) {
 
       setCertMessage('');
+      setIsEmailVerified(false);
 
       showAlert({
         title: '안내',
@@ -70,6 +128,7 @@ export default function SignUp({ navigation }) {
 
     if (!isValidEmail(email)) {
       setCertMessage('');
+      setIsEmailVerified(false);
       showAlert({
         title: '안내',
         message: '이메일 형식으로 써주세요.',
@@ -88,6 +147,7 @@ export default function SignUp({ navigation }) {
       );
 
       setCertMessage(response);
+      setIsEmailVerified(false);
 
     } catch (error) {
       console.log(
@@ -105,6 +165,66 @@ export default function SignUp({ navigation }) {
     }
   };
 
+  // 인증번호 확인
+  const handleVerifyCode = async () => {
+
+    if (!email.trim()) {
+      showAlert({
+        title: '안내',
+        message: '이메일을 먼저 작성해 주세요.',
+      });
+      return;
+    }
+
+    if (!code.trim()) {
+      showAlert({
+        title: '안내',
+        message: '인증번호를 입력해 주세요.',
+      });
+      return;
+    }
+
+    try {
+      const response =
+        await verifyEmailCode(
+          email.trim(),
+          code.trim()
+        );
+
+      console.log(
+        '인증번호 확인 응답:',
+        response
+      );
+
+      if (!isVerificationSuccess(response)) {
+        throw new Error('인증번호가 올바르지 않습니다.');
+      }
+
+      showAlert({
+        title: '안내',
+        message: '이메일 인증이 완료되었습니다.',
+        variant: 'success',
+      });
+
+      setIsEmailVerified(true);
+    } catch (error) {
+      console.log(
+        '인증번호 확인 실패:',
+        error.response?.data
+      );
+
+      showAlert({
+        title: '안내',
+        message:
+          error.response?.data ||
+          '인증번호 확인에 실패했습니다.',
+        variant: 'error',
+      });
+
+      setIsEmailVerified(false);
+    }
+  };
+
   // 회원가입
   const handleSubmit = async () => {
     if (!email.trim()) {
@@ -119,6 +239,15 @@ export default function SignUp({ navigation }) {
       showAlert({
         title: '안내',
         message: '이메일 형식으로 써주세요.',
+      });
+      return;
+    }
+
+    if (!isEmailVerified) {
+      showAlert({
+        title: '안내',
+        message: '이메일 인증을 완료해 주세요.',
+        variant: 'warning',
       });
       return;
     }
@@ -224,7 +353,10 @@ export default function SignUp({ navigation }) {
             style={styles.inputFlex}
             placeholder="아이디 (이메일)"
             value={email}
-            onChangeText={setEmail}
+            onChangeText={text => {
+              setEmail(text);
+              setIsEmailVerified(false);
+            }}
             keyboardType="email-address"
           />
           <TouchableOpacity
@@ -244,13 +376,26 @@ export default function SignUp({ navigation }) {
         )}
 
         {/* 인증번호 */}
-        <TextInput
-          style={styles.input}
-          placeholder="인증번호"
-          value={code}
-          onChangeText={setCode}
-          keyboardType="number-pad"
-        />
+        <View style={styles.inputRow}>
+          <TextInput
+            style={styles.inputFlex}
+            placeholder="인증번호"
+            value={code}
+            onChangeText={text => {
+              setCode(text);
+              setIsEmailVerified(false);
+            }}
+            keyboardType="number-pad"
+          />
+          <TouchableOpacity
+            style={styles.certButton}
+            onPress={handleVerifyCode}
+          >
+            <Text style={styles.certText}>
+              인증하기
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         {/* 비밀번호 */}
         <View style={styles.passwordRow}>

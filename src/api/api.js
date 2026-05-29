@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // 백엔드 서버 주소
 const BASE_URL =
-  'http://10.0.2.2:8080';
+  'http://172.16.107.212:8080';
 
 // 일반 로그인 API
 export const loginUser =

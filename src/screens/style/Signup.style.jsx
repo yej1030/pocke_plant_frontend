@@ -38,6 +38,9 @@ export default StyleSheet.create({
   // 인증 버튼
   certButton: {
     paddingHorizontal: 10,
+    minWidth: 72,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   certText: {
     color: '#5CD79E',
