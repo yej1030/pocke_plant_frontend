@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import {
   View,
   Text,
@@ -6,10 +7,25 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+
+import {
+  login,
+} from '@react-native-seoul/kakao-login';
+
 import Header from '../components/Header';
-import CustomAlert from '../components/CustomAlert';
-import useCustomAlert from '../components/useCustomAlert';
-import styles from './style/Login_2.style';
+
+import CustomAlert
+  from '../components/CustomAlert';
+
+import useCustomAlert
+  from '../components/useCustomAlert';
+
+import styles
+  from './style/Login_2.style';
+
+import {
+  kakaoLoginApi,
+} from '../api/api';
 
 export default function Login_2({
   navigation,
@@ -38,41 +54,54 @@ export default function Login_2({
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       .test(value.trim());
 
-  // 로그인
+  // 일반 로그인
   const handleLogin = async () => {
 
     // 이메일 입력 확인
     if (!email.trim()) {
+
       showAlert({
         title: '안내',
-        message: '이메일을 작성해 주세요.',
+        message:
+          '이메일을 작성해 주세요.',
       });
+
       return;
     }
 
     // 이메일 형식 확인
     if (!isValidEmail(email)) {
+
       showAlert({
         title: '안내',
-        message: '이메일 형식으로 써주세요.',
+        message:
+          '이메일 형식으로 써주세요.',
       });
+
       return;
     }
 
     // 비밀번호 입력 확인
     if (!password.trim()) {
+
       showAlert({
         title: '안내',
-        message: '비밀번호를 작성해 주세요.',
+        message:
+          '비밀번호를 작성해 주세요.',
       });
+
       return;
     }
 
     // 임시 로그인 처리
     showAlert({
       title: '안내',
-      message: '로그인에 성공했습니다!',
+
+      message:
+        '로그인에 성공했습니다!',
+
       buttonText: '확인',
+
       onPress: () =>
         navigation.replace('Main'),
 
@@ -80,13 +109,63 @@ export default function Login_2({
     });
   };
 
-  const handleKakaoLogin = () => {
-    showAlert({
-      title: '카카오 로그인',
-      message: '카카오 소셜 로그인은 준비 중입니다.',
-      variant: 'warning',
-    });
-  };
+  // 카카오 로그인
+  const handleKakaoLogin =
+    async () => {
+
+      try {
+
+        // 카카오 로그인 실행
+        const token =
+          await login();
+
+        console.log(
+          '카카오 토큰:',
+          token
+        );
+
+        // 서버로 accessToken 전송
+        const response =
+          await kakaoLoginApi(
+            token.accessToken
+          );
+
+        console.log(
+          '서버 응답:',
+          response
+        );
+
+        showAlert({
+          title: '성공',
+
+          message:
+            '카카오 로그인에 성공했습니다!',
+
+          buttonText: '확인',
+
+          onPress: () =>
+            navigation.replace(
+              'Main'
+            ),
+
+          variant: 'success',
+        });
+
+      } catch (error) {
+
+        console.log(
+          '카카오 로그인 실패:',
+          error
+        );
+
+        showAlert({
+          title: '실패',
+          message:
+            '카카오 로그인에 실패했습니다.',
+          variant: 'error',
+        });
+      }
+    };
 
   return (
     <>
@@ -152,8 +231,6 @@ export default function Login_2({
 
         </TouchableOpacity>
 
-        {/* SNS LOGIN - placed ~30px below links (moved inside container) */}
-
         {/* 하단 링크 */}
         <View style={styles.footerLinks}>
 
@@ -187,18 +264,38 @@ export default function Login_2({
 
         </View>
 
+        {/* SNS 로그인 */}
         <View style={styles.snsContainer}>
+
           <View style={styles.snsHeader}>
+
             <View style={styles.snsLine} />
-            <Text style={styles.snsTitle}>SNS LOGIN</Text>
+
+            <Text style={styles.snsTitle}>
+              SNS LOGIN
+            </Text>
+
             <View style={styles.snsLine} />
+
           </View>
 
           <View style={styles.snsIconsRow}>
-            <TouchableOpacity style={styles.snsIconButton} onPress={handleKakaoLogin} activeOpacity={0.85}>
-              <Image source={require('../assets/Kakao.png')} style={styles.snsIconImage} />
+
+            <TouchableOpacity
+              style={styles.snsIconButton}
+              onPress={handleKakaoLogin}
+              activeOpacity={0.85}
+            >
+
+              <Image
+                source={require('../assets/Kakao.png')}
+                style={styles.snsIconImage}
+              />
+
             </TouchableOpacity>
+
           </View>
+
         </View>
 
       </View>
