@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 백엔드 서버 주소
 const BASE_URL =
-  'http://172.16.107.212:8080';
+  'http://172.16.114.163:8080';
 
 // 일반 로그인 API
 export const loginUser =
@@ -101,6 +101,7 @@ export const getMyInfo =
     return response.data;
   };
 
+  // 식물 등록
   export const registerPlant =
   async (plantData) => {
 
@@ -123,3 +124,51 @@ export const getMyInfo =
 
     return response.data;
   };
+
+  //식물 정보 가져오기
+  export const getMyPlants =
+  async () => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.get(
+        `${BASE_URL}/api/plants/my`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };
+
+  //북마크
+  export const toggleBookmarkApi =
+  async (plantId) => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.patch(
+        `${BASE_URL}/api/plants/${plantId}/bookmark`,
+        {},
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };
+

@@ -1,7 +1,13 @@
 import React, {
 	useContext,
 	useState,
+	useCallback,
 } from 'react';
+
+import {
+	useFocusEffect,
+} from '@react-navigation/native';
+
 import {
 	View,
 	Text,
@@ -18,16 +24,53 @@ import styles from './style/Main.style';
 import {
 	PlantsContext,
 } from '../context/PlantsContext';
+import {
+	getMyPlants,
+	toggleBookmarkApi,
+} from '../api/api';
 
 export default function Main({
 	navigation,
 }) {
 	// 식물 데이터
 	const {
-		plants,
 		removePlant,
 		toggleBookmark,
 	} = useContext(PlantsContext);
+	const [plants, setPlants] =
+		useState([]);
+
+	useFocusEffect(
+		useCallback(() => {
+
+			loadPlants();
+
+		}, [])
+	);
+
+	const loadPlants =
+		async () => {
+
+			try {
+
+				const response =
+					await getMyPlants();
+
+				console.log(
+					'식물 목록:',
+					response
+				);
+
+				setPlants(response);
+
+			} catch (error) {
+
+				console.log(
+					'목록 조회 실패:',
+					error.response?.data
+				);
+			}
+		};
 
 	// 커스텀 알림
 	const {
@@ -221,11 +264,11 @@ export default function Main({
 
 								{/* 식물 정보 */}
 								<View
-									style={ styles.plantTextWrap }
+									style={styles.plantTextWrap}
 								>
 
 									<Text
-										style={ styles.plantName }
+										style={styles.plantName}
 									>
 										{p.name}
 										{p.species
@@ -234,7 +277,7 @@ export default function Main({
 									</Text>
 
 									<Text
-										style={ styles.plantMeta }
+										style={styles.plantMeta}
 									>
 										{p.adoptDate
 											? p.adoptDate
@@ -248,10 +291,39 @@ export default function Main({
 
 								{/* 북마크 */}
 								<TouchableOpacity
-									style={ styles.settingsButton }
-									onPress={() =>
-										toggleBookmark(p.id)
+									style={styles.settingsButton}
+									onPress={async () => {
+
+									console.log('북마크 클릭:', p.id);
+
+									// optimistic update
+									setPlants(prev =>
+										prev.map(item =>
+											item.id === p.id
+												? { ...item, bookmarked: !item.bookmarked }
+												: item
+											)
+										);
+
+									try {
+										const result = await toggleBookmarkApi(p.id);
+
+										console.log('북마크 성공:', result);
+									} catch (error) {
+										console.log('북마크 실패:', error.response?.data);
+										console.log('상태코드:', error.response?.status);
+										console.log(error);
+
+										// revert optimistic update
+										setPlants(prev =>
+											prev.map(item =>
+												item.id === p.id
+													? { ...item, bookmarked: !item.bookmarked }
+													: item
+											)
+										);
 									}
+									} }
 									activeOpacity={0.8}
 								>
 
@@ -261,9 +333,9 @@ export default function Main({
 												? require('../assets/bookmarked.png')
 												: require('../assets/unbookmarked.png')
 										}
-										style={ styles.settingsIcon }
+										style={styles.settingsIcon}
 									/>
- 
+
 								</TouchableOpacity>
 
 							</TouchableOpacity>
@@ -291,11 +363,11 @@ export default function Main({
 				<View style={styles.actionContainer}>
 
 					<View
-						style={ styles.actionHandleWrap }
+						style={styles.actionHandleWrap}
 					>
 
 						<View
-							style={ styles.actionHandle }
+							style={styles.actionHandle}
 						/>
 
 					</View>
@@ -317,14 +389,14 @@ export default function Main({
 					</Pressable>
 
 					<View
-						style={ styles.actionDivider }
+						style={styles.actionDivider}
 					/>
 
 					{/* 삭제 */}
 					<Pressable
 						style={styles.actionItem}
 						onPress={onDelete}
-					> 
+					>
 
 						<Text
 							style={[
@@ -351,7 +423,7 @@ export default function Main({
 					</Pressable>
 
 					<View
-						style={ styles.actionSpacing }
+						style={styles.actionSpacing}
 					/>
 
 					{/* 취소 */}
@@ -361,7 +433,7 @@ export default function Main({
 					>
 
 						<Text
-							style={ styles.actionCancelText }
+							style={styles.actionCancelText}
 						>
 							취소
 						</Text>
