@@ -27,6 +27,7 @@ import {
 } from '../context/PlantsContext';
 import {
   registerPlant,
+  updatePlantApi,
 } from '../api/api';
 
 // 기본 성격 리스트
@@ -207,9 +208,8 @@ const handleSubmit = async () => {
   if (!name || name.trim() === '') {
     missing.push('이름');
   }
-
-  if (!imageUri) {
-    missing.push('이미지');
+  if (!species || species.trim() === '') {
+    missing.push('종');
   }
 
   if (missing.length > 0) {
@@ -259,28 +259,50 @@ const handleSubmit = async () => {
       plantData
     );
 
-    const response =
-      await registerPlant(
-        plantData
-      );
+let response;
 
-    console.log(
-      '식물 등록 성공:',
-      response
-    );
+if (editingId) {
+
+	response =
+		await updatePlantApi(
+			editingId,
+			plantData
+		);
+
+} else {
+
+	response =
+		await registerPlant(
+			plantData
+		);
+}
+
+    console.log('식물 등록 성공:', response);
+
+    // Update context so Main reflects change immediately
+    try {
+      if (editingId) {
+        // server likely returns updated plant
+        updatePlant(editingId, response || plantData);
+      } else {
+        // server likely returns created plant with id
+        addPlant(response || plantData);
+      }
+    } catch (e) {
+      console.log('Context update failed:', e.message);
+    }
 
     showAlert({
       title: '성공',
 
       message:
-        '식물이 등록되었습니다.',
+          editingId
+    ? '식물 정보가 수정되었습니다.'
+    : '식물이 등록되었습니다.',
 
       buttonText: '확인',
 
-      onPress: () =>
-        navigation.navigate(
-          'Main'
-        ),
+        onPress: () => navigation.replace('Main'),
 
       variant: 'success',
     });

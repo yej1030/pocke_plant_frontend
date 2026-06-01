@@ -27,50 +27,25 @@ import {
 import {
 	getMyPlants,
 	toggleBookmarkApi,
+	deletePlantApi,
 } from '../api/api';
 
 export default function Main({
 	navigation,
 }) {
-	// 식물 데이터
+	// 식물 데이터 (use context as single source of truth)
 	const {
+		plants,
 		removePlant,
 		toggleBookmark,
+		loadPlants,
 	} = useContext(PlantsContext);
-	const [plants, setPlants] =
-		useState([]);
 
 	useFocusEffect(
 		useCallback(() => {
-
 			loadPlants();
-
-		}, [])
+		}, [loadPlants])
 	);
-
-	const loadPlants =
-		async () => {
-
-			try {
-
-				const response =
-					await getMyPlants();
-
-				console.log(
-					'식물 목록:',
-					response
-				);
-
-				setPlants(response);
-
-			} catch (error) {
-
-				console.log(
-					'목록 조회 실패:',
-					error.response?.data
-				);
-			}
-		};
 
 	// 커스텀 알림
 	const {
@@ -156,18 +131,33 @@ export default function Main({
 					text: '삭제',
 					kind: 'destructive',
 
-					onPress: () => {
-						if (id) {
-							removePlant(id);
-						}
-					},
+					onPress: async () => {
+
+	try {
+
+		await deletePlantApi(id);
+
+		console.log(
+			'삭제 성공'
+		);
+
+		await loadPlants();
+
+	} catch (error) {
+
+		console.log(
+			'삭제 실패:',
+			error.response?.data
+		);
+	}
+},
 				},
 			],
 		});
 	};
 
 	// 북마크 식물 상단 정렬
-	const sortedPlants = [...plants]
+	const sortedPlants = [...(plants || [])]
 
 		.map((plant, index) => ({
 			plant,

@@ -172,3 +172,49 @@ export const getMyInfo =
     return response.data;
   };
 
+  // 수정
+  export const updatePlantApi =
+  async (plantId, plantData) => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.put(
+        `${BASE_URL}/api/plants/edit/${plantId}`,
+        plantData,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };
+
+  //삭제
+  export const deletePlantApi =
+  async (plantId) => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.delete(
+        `${BASE_URL}/api/plants/edit/${plantId}`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };
