@@ -1,4 +1,5 @@
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 백엔드 서버 주소
 const BASE_URL =
@@ -89,6 +90,29 @@ export const getMyInfo =
     const response =
       await axios.get(
         `${BASE_URL}/api/user/me`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };
+
+  export const registerPlant =
+  async (plantData) => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/plants/register`,
+        plantData,
         {
           headers: {
             Authorization:

@@ -25,6 +25,9 @@ import styles from './style/PlantRegister.style';
 import {
   PlantsContext,
 } from '../context/PlantsContext';
+import {
+  registerPlant,
+} from '../api/api';
 
 // 기본 성격 리스트
 const personalityList = [
@@ -196,66 +199,110 @@ export default function PlantRegister({
   };
 
   // 식물 등록
-  const handleSubmit = () => {
+// 식물 등록
+const handleSubmit = async () => {
 
-    // 필수 입력 확인
-    const missing = [];
+  const missing = [];
 
-    if (!name || name.trim() === '') {
-      missing.push('이름');
-    }
+  if (!name || name.trim() === '') {
+    missing.push('이름');
+  }
 
-    if (!imageUri) {
-      missing.push('이미지');
-    }
+  if (!imageUri) {
+    missing.push('이미지');
+  }
 
-    if (missing.length > 0) {
-      showAlert({
-        title: '필수 입력',
-        message:
-          `${missing.join(' 및 ')}을(를) 입력해주세요.`,
-        variant: 'warning',
-      });
-      return;
-    }
+  if (missing.length > 0) {
 
-    const plant = {
+    showAlert({
+      title: '필수 입력',
+      message:
+        `${missing.join(' 및 ')}을(를) 입력해주세요.`,
+      variant: 'warning',
+    });
+
+    return;
+  }
+
+  try {
+
+    const plantData = {
+
       name:
-        name || '이름 없음',
+        name || '',
 
       species:
         species || '',
 
-      adoptDate: adoptDate
-        ? adoptDate
-          .toISOString()
-          .slice(0, 10)
-        : '',
+      adoptDate:
+        adoptDate
+          ? adoptDate
+              .toISOString()
+              .slice(0, 10)
+          : '',
 
       age:
-        age || '',
+        age
+          ? Number(age)
+          : null,
 
       personality:
         customPersonality ||
         selectedPersonality,
 
       imageUri:
-        imageUri || null,
+        imageUri || '',
     };
 
-    // 수정 / 등록 분기
-    if (editingId !== null) {
-      updatePlant(
-        editingId,
-        plant
+    console.log(
+      '식물 등록 요청:',
+      plantData
+    );
+
+    const response =
+      await registerPlant(
+        plantData
       );
 
-    } else {
-      addPlant(plant);
-    }
+    console.log(
+      '식물 등록 성공:',
+      response
+    );
 
-    navigation.navigate('Main');
-  };
+    showAlert({
+      title: '성공',
+
+      message:
+        '식물이 등록되었습니다.',
+
+      buttonText: '확인',
+
+      onPress: () =>
+        navigation.navigate(
+          'Main'
+        ),
+
+      variant: 'success',
+    });
+
+  } catch (error) {
+
+    console.log(
+      '식물 등록 실패:',
+      error.response?.data
+    );
+
+    showAlert({
+      title: '실패',
+
+      message:
+        error.response?.data?.message ||
+        '식물 등록에 실패했습니다.',
+
+      variant: 'error',
+    });
+  }
+};
 
   // 수정 화면 데이터 세팅
   useEffect(() => {
