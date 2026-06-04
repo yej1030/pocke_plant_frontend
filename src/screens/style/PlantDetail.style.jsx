@@ -11,7 +11,7 @@ export default StyleSheet.create({
   },
   heroCard: {
     marginTop: 10,
-    paddingVertical: 20,
+    paddingVertical: 16,
     borderRadius: 22,
     borderWidth: 1,
     borderColor: '#e4ece7',
@@ -25,7 +25,7 @@ export default StyleSheet.create({
     borderColor: '#989898',
     borderRadius: 10,
     backgroundColor: '#fff',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   speechText: {
     fontSize: 14,
@@ -34,14 +34,14 @@ export default StyleSheet.create({
     lineHeight: 18,
   },
   heroImage: {
-    width: 180,
-    height: 180,
+    width: 250,
+    height: 250,
     resizeMode: 'contain',
   },
   actionRow: {
     flexDirection: 'row',
     gap: 10,
-    marginTop: 20,
+    marginTop: 14,
   },
   actionButton: {
     flex: 1,
@@ -68,7 +68,7 @@ export default StyleSheet.create({
     fontWeight: '700',
   },
   hardwareButton: {
-    marginTop: 12,
+    marginTop: 14,
     height: 40,
     borderRadius: 10,
     borderWidth: 1,
@@ -82,13 +82,13 @@ export default StyleSheet.create({
     fontWeight: '600',
   },
   hardwareHint: {
-    marginTop: 12,
+    marginTop: 10,
     fontSize: 13,
     color: '#96a39d',
     textAlign: 'center',
   },
   statsList: {
-    marginTop: 18,
+    marginTop: 14,
     gap: 10,
   },
   statCard: {
@@ -141,7 +141,7 @@ export default StyleSheet.create({
     borderRadius: 6,
   },
   waterButton: {
-    marginTop: 18,
+    marginTop: 14,
     height: 44,
     borderRadius: 22,
     borderWidth: 1,
@@ -172,4 +172,28 @@ export default StyleSheet.create({
     fontSize: 14,
     color: '#7b7b7b',
   },
+
+quickReplyWrap: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  gap: 8,
+  marginTop: 16,
+  paddingHorizontal: 16,
+},
+
+quickReplyButton: {
+  borderWidth: 1,
+  borderColor: '#79d791',
+  borderRadius: 18,
+  paddingHorizontal: 12,
+  paddingVertical: 6,
+  backgroundColor: '#fff',
+},
+
+quickReplyText: {
+  fontSize: 12,
+  color: '#1d1d1d',
+},
+
 });
