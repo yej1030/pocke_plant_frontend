@@ -217,4 +217,27 @@ aiResultDesc: {
   fontSize: 13,
   color: '#7BA892',
 }
+
+ ,
+ suggestionList: {
+   marginTop: 6,
+   backgroundColor: '#fff',
+   borderWidth: 1,
+   borderColor: '#e6e6e6',
+   borderRadius: 8,
+   overflow: 'hidden',
+   maxHeight: 200,
+ },
+
+ suggestionItem: {
+   paddingVertical: 10,
+   paddingHorizontal: 12,
+   borderBottomWidth: 1,
+   borderBottomColor: '#f1f1f1',
+ },
+
+ suggestionText: {
+   fontSize: 15,
+   color: '#333',
+ },
 });

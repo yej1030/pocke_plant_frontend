@@ -42,6 +42,22 @@ const personalityList = [
   '까칠한',
 ];
 
+// 임시 하드코딩 종 리스트 (나중에 백엔드에서 불러올 예정)
+const speciesList = [
+  '몬스테라',
+  '스투키',
+  '산세베리아',
+  '스킨답서스',
+  '필로덴드론',
+  '페퍼로미아',
+  '프레데리아',
+  '칼랑코에',
+  '페페로미아',
+  '아레카야자',
+  '관음죽',
+  '싱고니움',
+  '유칼립투스',
+];
 export default function PlantRegister({
   navigation,
   route,
@@ -70,6 +86,9 @@ export default function PlantRegister({
 
   const [species, setSpecies] =
     useState('');
+
+  const [filteredSpecies, setFilteredSpecies] =
+    useState([]);
 
   const [age, setAge] =
     useState('');
@@ -198,6 +217,27 @@ export default function PlantRegister({
     setSpecies(mockResult);
     setIsAnalyzed(true);
   };
+
+  // 종 입력에 따라 자동완성 후보 필터링
+  // api 연동 시 여기 수정
+  useEffect(() => {
+    const q = (species || '').trim();
+
+    if (q.length === 0) {
+      setFilteredSpecies([]);
+      return;
+    }
+
+    const lowered = q.toLowerCase();
+
+    const matches = speciesList
+      .filter((s) =>
+        s.toLowerCase().includes(lowered)
+      )
+      .slice(0, 8);
+
+    setFilteredSpecies(matches);
+  }, [species]);
 
   // 식물 등록
 // 식물 등록
@@ -537,8 +577,30 @@ if (editingId) {
               style={styles.input}
               placeholder="AI 분석 또는 직접 입력"
               value={species}
-              onChangeText={setSpecies}
+              onChangeText={(text) => {
+                setSpecies(text);
+              }}
             />
+
+            {filteredSpecies.length > 0 && (
+              <View style={styles.suggestionList}>
+                {filteredSpecies.map((item) => (
+                  <TouchableOpacity
+                    key={item}
+                    onPress={() => {
+                      setSpecies(item);
+                      setFilteredSpecies([]);
+                      setIsAnalyzed(false);
+                    }}
+                    style={styles.suggestionItem}
+                  >
+                    <Text style={styles.suggestionText}>
+                      {item}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
 
             {/* AI 결과 */}
             {isAnalyzed && (

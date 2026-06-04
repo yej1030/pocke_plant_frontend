@@ -16,6 +16,9 @@ export default function PlantDetail({ navigation, route }) {
   const [isHardwareConnected, setIsHardwareConnected] =
     useState(false);
 
+  const [speechMessage, setSpeechMessage] =
+  useState('오늘은\n기분이 좋아요!');
+
   const plant = useMemo(() => {
     if (route?.params?.plant) {
       return route.params.plant;
@@ -90,6 +93,8 @@ export default function PlantDetail({ navigation, route }) {
     },
   ];
 
+  
+
   return (
     <>
       <Header
@@ -105,9 +110,7 @@ export default function PlantDetail({ navigation, route }) {
         <View style={styles.heroCard}>
           <View style={styles.speechBubble}>
             <Text style={styles.speechText}>
-              오늘은
-              {'\n'}
-              기분이 좋아요!
+              {speechMessage}
             </Text>
           </View>
 
@@ -122,6 +125,25 @@ export default function PlantDetail({ navigation, route }) {
               style={styles.heroImage}
             />
           )}
+<View style={styles.quickReplyWrap}>
+  {[
+    '물 줄까?',
+    '햇빛은 안 부족해?',
+    '기분이 어때?',
+  ].map(text => (
+    <TouchableOpacity
+      key={text}
+      style={styles.quickReplyButton}
+      activeOpacity={0.85}
+      onPress={() => setSpeechMessage(text)}
+    >
+      <Text style={styles.quickReplyText}>
+        {text}
+      </Text>
+    </TouchableOpacity>
+  ))}
+</View>
+          
         </View>
 
         <View style={styles.actionRow}>
