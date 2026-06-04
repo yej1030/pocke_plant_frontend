@@ -12,11 +12,6 @@ import {
 import Header from '../components/Header';
 import styles from './style/Chat.style';
 
-const defaultQuickReplies = [
-  '물 줄까?',
-  '햇빛은 안 부족해?',
-  '기분이 어때?',
-];
 
 export default function Chat({ navigation, route }) {
   const plant = route?.params?.plant;
@@ -24,7 +19,7 @@ export default function Chat({ navigation, route }) {
     () => route?.params?.title || plant?.name || '',
     [plant, route]
   );
-  const quickReplies = route?.params?.quickReplies ?? defaultQuickReplies;
+  const quickReplies = route?.params?.quickReplies ?? [];
   const initialMessages = route?.params?.initialMessages ?? [];
   const flatListRef = useRef(null);
   const pendingAutoScrollRef = useRef(false);
@@ -212,19 +207,6 @@ export default function Chat({ navigation, route }) {
               <Text style={styles.scrollToBottomIcon}>↓</Text>
             </TouchableOpacity>
           )}
-
-          <View style={styles.quickReplyWrap}>
-            {quickReplies.map(reply => (
-              <TouchableOpacity
-                key={reply}
-                style={styles.quickReplyButton}
-                activeOpacity={0.85}
-                onPress={() => sendMessage(reply)}
-              >
-                <Text style={styles.quickReplyText}>{reply}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
 
           <View style={styles.inputRow}>
             <TextInput
