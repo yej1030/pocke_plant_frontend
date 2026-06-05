@@ -162,6 +162,7 @@ export default function PlantDetail({ navigation, route }) {
               styles.actionPrimary,
             ]}
             activeOpacity={0.85}
+            onPress={() => navigation.navigate('DiseasePredict', { plant })}
           >
             <Text style={styles.actionPrimaryText}>🔎 진단하기</Text>
           </TouchableOpacity>
