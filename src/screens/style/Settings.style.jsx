@@ -14,26 +14,28 @@ export default StyleSheet.create({
   },
 
   profileSection: {
-    marginBottom: 28,
+    marginBottom: 20,
   },
 
   name: {
-    fontSize: 32,
+    fontSize: 20,
     fontWeight: '700',
     color: '#111',
+    marginLeft: 8,
   },
 
   email: {
-    marginTop: 6,
+    marginTop: 2,
     fontSize: 15,
     color: '#8b8b8b',
+    marginLeft: 8,
   },
 
   groupTitle: {
-    fontSize: 15,
+    fontSize: 14,
     color: '#999',
-    marginBottom: 8,
-    marginLeft: 4,
+    marginBottom: 4,
+    marginLeft: 8,
   },
 
   card: {
@@ -50,7 +52,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 18,
+    paddingVertical: 12,
   },
 
   switchRow: {
@@ -58,7 +60,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 18,
+    paddingVertical: 10,
   },
 
   divider: {
@@ -73,7 +75,7 @@ export default StyleSheet.create({
   },
 
   subText: {
-    marginTop: 4,
+    marginTop: 2,
     fontSize: 13,
     color: '#999',
   },
@@ -84,7 +86,7 @@ export default StyleSheet.create({
   },
 
   logoutButton: {
-    height: 70,
+    height: 45,
     borderWidth: 1,
     borderColor: '#d87b7b',
     borderRadius: 8,
@@ -101,14 +103,14 @@ export default StyleSheet.create({
   },
 
   deleteButton: {
-    height: 70,
+    height: 45,
     borderWidth: 1,
     borderColor: '#d87b7b',
     borderRadius: 8,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 16,
+    marginTop: 12,
   },
 
   deleteText: {

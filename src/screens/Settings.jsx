@@ -79,15 +79,22 @@ showAlert({
     },
 
     {
-      text: '탈퇴',
-      kind: 'destructive',
+  text: '탈퇴',
+  kind: 'destructive',
 
-      onPress: () => {
-        console.log(
-          '회원탈퇴'
-        );
-      },
-    },
+  onPress: () => {
+
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'Login_1',
+        },
+      ],
+    });
+
+  },
+},
   ],
 });
 
@@ -102,7 +109,7 @@ return (
   <Header
     title="설정"
     navigation={navigation}
-    type="full"
+    type="auth"
   />
 
   <ScrollView
