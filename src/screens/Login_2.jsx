@@ -156,7 +156,8 @@ await AsyncStorage.setItem(
         title: '실패',
 
         message:
-          '로그인에 실패했습니다.',
+      error.response?.data?.message ||
+      '로그인에 실패했습니다.',
 
         variant: 'error',
       });

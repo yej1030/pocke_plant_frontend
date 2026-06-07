@@ -48,14 +48,22 @@ showAlert({
     },
 
     {
-      text: '로그아웃',
-      kind: 'destructive',
+  text: '로그아웃',
+  kind: 'destructive',
 
-      onPress: () =>
-        navigation.navigate(
-          'Login_1'
-        ),
-    },
+  onPress: () => {
+
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'Login_1',
+        },
+      ],
+    });
+
+  },
+},
   ],
 });
 
