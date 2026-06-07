@@ -10,7 +10,7 @@ ScrollView,
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './style/Settings.style';
 
 export default function Settings({ navigation }) {
@@ -51,18 +51,22 @@ showAlert({
   text: '로그아웃',
   kind: 'destructive',
 
-  onPress: () => {
+  onPress: async () => {
 
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: 'Login_1',
-        },
-      ],
-    });
+  await AsyncStorage.removeItem(
+    'serviceToken'
+  );
 
-  },
+  navigation.reset({
+    index: 0,
+    routes: [
+      {
+        name: 'Login_1',
+      },
+    ],
+  });
+
+},
 },
   ],
 });
