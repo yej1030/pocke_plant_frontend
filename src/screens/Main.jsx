@@ -286,32 +286,17 @@ export default function Main({
 
 									console.log('북마크 클릭:', p.id);
 
-									// optimistic update
-									setPlants(prev =>
-										prev.map(item =>
-											item.id === p.id
-												? { ...item, bookmarked: !item.bookmarked }
-												: item
-											)
-										);
 
 									try {
 										const result = await toggleBookmarkApi(p.id);
 
 										console.log('북마크 성공:', result);
+										await loadPlants();
 									} catch (error) {
 										console.log('북마크 실패:', error.response?.data);
 										console.log('상태코드:', error.response?.status);
 										console.log(error);
 
-										// revert optimistic update
-										setPlants(prev =>
-											prev.map(item =>
-												item.id === p.id
-													? { ...item, bookmarked: !item.bookmarked }
-													: item
-											)
-										);
 									}
 									} }
 									activeOpacity={0.8}
