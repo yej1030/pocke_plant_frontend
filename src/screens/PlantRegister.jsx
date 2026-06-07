@@ -25,6 +25,10 @@ import styles from './style/PlantRegister.style';
 import {
   PlantsContext,
 } from '../context/PlantsContext';
+import {
+  registerPlant,
+  updatePlantApi,
+} from '../api/api';
 
 // 기본 성격 리스트
 const personalityList = [
@@ -236,66 +240,131 @@ export default function PlantRegister({
   }, [species]);
 
   // 식물 등록
-  const handleSubmit = () => {
+// 식물 등록
+const handleSubmit = async () => {
 
-    // 필수 입력 확인
-    const missing = [];
+  const missing = [];
 
-    if (!name || name.trim() === '') {
-      missing.push('이름');
-    }
+  if (!name || name.trim() === '') {
+    missing.push('이름');
+  }
+  if (!species || species.trim() === '') {
+    missing.push('종');
+  }
 
-    if (!imageUri) {
-      missing.push('이미지');
-    }
+  if (missing.length > 0) {
 
-    if (missing.length > 0) {
-      showAlert({
-        title: '필수 입력',
-        message:
-          `${missing.join(' 및 ')}을(를) 입력해주세요.`,
-        variant: 'warning',
-      });
-      return;
-    }
+    showAlert({
+      title: '필수 입력',
+      message:
+        `${missing.join(' 및 ')}을(를) 입력해주세요.`,
+      variant: 'warning',
+    });
 
-    const plant = {
+    return;
+  }
+
+  try {
+
+    const plantData = {
+
       name:
-        name || '이름 없음',
+        name || '',
 
       species:
         species || '',
 
-      adoptDate: adoptDate
-        ? adoptDate
-          .toISOString()
-          .slice(0, 10)
-        : '',
+      adoptDate:
+        adoptDate
+          ? adoptDate
+              .toISOString()
+              .slice(0, 10)
+          : '',
 
       age:
-        age || '',
+        age
+          ? Number(age)
+          : null,
 
       personality:
         customPersonality ||
         selectedPersonality,
 
       imageUri:
-        imageUri || null,
+        imageUri || '',
     };
 
-    // 수정 / 등록 분기
-    if (editingId !== null) {
-      updatePlant(
-        editingId,
-        plant
-      );
+    console.log(
+      '식물 등록 요청:',
+      plantData
+    );
 
-    } else {
-      addPlant(plant);
+let response;
+
+if (editingId) {
+
+	response =
+		await updatePlantApi(
+			editingId,
+			plantData
+		);
+
+} else {
+
+	response =
+		await registerPlant(
+			plantData
+		);
+}
+
+    console.log('식물 등록 성공:', response);
+
+    // Update context so Main reflects change immediately
+    try {
+      if (editingId) {
+        // server likely returns updated plant
+        updatePlant(editingId, response || plantData);
+      } else {
+        // server likely returns created plant with id
+        addPlant(response || plantData);
+      }
+    } catch (e) {
+      console.log('Context update failed:', e.message);
     }
 
-    navigation.navigate('Main');
-  };
+    showAlert({
+      title: '성공',
+
+      message:
+          editingId
+    ? '식물 정보가 수정되었습니다.'
+    : '식물이 등록되었습니다.',
+
+      buttonText: '확인',
+
+        onPress: () => navigation.replace('Main'),
+
+      variant: 'success',
+    });
+
+  } catch (error) {
+
+    console.log(
+      '식물 등록 실패:',
+      error.response?.data
+    );
+
+    showAlert({
+      title: '실패',
+
+      message:
+        error.response?.data?.message ||
+        '식물 등록에 실패했습니다.',
+
+      variant: 'error',
+    });
+  }
+};
 
   // 수정 화면 데이터 세팅
   useEffect(() => {

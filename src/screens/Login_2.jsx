@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 
+import AsyncStorage
+  from '@react-native-async-storage/async-storage';
+
 import {
   View,
   Text,
@@ -25,6 +28,7 @@ import styles
 
 import {
   kakaoLoginApi,
+  loginUser,
 } from '../api/api';
 
 export default function Login_2({
@@ -93,20 +97,71 @@ export default function Login_2({
       return;
     }
 
-    // 임시 로그인 처리
-    showAlert({
-      title: '안내',
+    try {
 
-      message:
-        '로그인에 성공했습니다!',
+      const response =
+        await loginUser({
+          email: email.trim(),
+          password,
+        });
 
-      buttonText: '확인',
+      console.log(
+        '로그인 응답:',
+        response
+      );
 
-      onPress: () =>
-        navigation.replace('Main'),
+      // 자동로그인용 토큰 저장
+await AsyncStorage.setItem(
+  'serviceToken',
+  response.data.serviceToken
+);
 
-      variant: 'success',
-    });
+await AsyncStorage.setItem(
+  'userId',
+  String(response.data.userId)
+);
+
+await AsyncStorage.setItem(
+  'nickname',
+  response.data.nickname || ''
+);
+
+await AsyncStorage.setItem(
+  'email',
+  response.data.email || ''
+);
+
+      showAlert({
+        title: '성공',
+
+        message:
+          '로그인에 성공했습니다!',
+
+        buttonText: '확인',
+
+        onPress: () =>
+          navigation.replace('Main'),
+
+        variant: 'success',
+      });
+
+    } catch (error) {
+
+      console.log(
+        '로그인 실패:',
+        error.response?.data
+      );
+
+      showAlert({
+        title: '실패',
+
+        message:
+      error.response?.data?.message ||
+      '로그인에 실패했습니다.',
+
+        variant: 'error',
+      });
+    }
   };
 
   // 카카오 로그인
@@ -134,6 +189,19 @@ export default function Login_2({
           '서버 응답:',
           response
         );
+
+        const serviceToken =
+          response?.data?.serviceToken ||
+          response?.serviceToken ||
+          response?.accessToken ||
+          response?.token;
+
+        if (serviceToken) {
+          await AsyncStorage.setItem(
+            'serviceToken',
+            serviceToken
+          );
+        }
 
         showAlert({
           title: '성공',

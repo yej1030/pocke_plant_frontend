@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import { getMyPlants } from '../api/api';
 
 export const PlantsContext = createContext({
   plants: [],
@@ -8,8 +9,24 @@ export const PlantsContext = createContext({
 export function PlantsProvider({ children }) {
   const [plants, setPlants] = useState([]);
 
+  const loadPlants = async () => {
+    try {
+      const response = await getMyPlants();
+      if (Array.isArray(response)) {
+        setPlants(response);
+      } else if (response && response.data && Array.isArray(response.data)) {
+        setPlants(response.data);
+      } else {
+        // fallback: if API returns single object or wrapped shape
+        setPlants(response || []);
+      }
+    } catch (e) {
+      console.log('PlantsContext: loadPlants failed', e.response?.data || e.message);
+    }
+  };
+
   const addPlant = (plant) => {
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+    const id = plant?.id ?? `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
     setPlants((prev) => [{ ...plant, id, bookmarked: plant.bookmarked ?? false }, ...prev]);
   };
 
@@ -32,7 +49,7 @@ export function PlantsProvider({ children }) {
   };
 
   return (
-    <PlantsContext.Provider value={{ plants, addPlant, updatePlant, removePlant, toggleBookmark }}>
+    <PlantsContext.Provider value={{ plants, addPlant, updatePlant, removePlant, toggleBookmark, loadPlants }}>
       {children}
     </PlantsContext.Provider>
   );
