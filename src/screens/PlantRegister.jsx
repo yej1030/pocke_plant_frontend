@@ -42,6 +42,19 @@ const personalityList = [
   '까칠한',
 ];
 
+const characterList = [
+  require('../assets/Plant/plant_01_happy.png'),
+  require('../assets/Plant/plant_03_happy.png'),
+  require('../assets/Plant/plant_05_happy.png'),
+  require('../assets/Plant/plant_07_happy.png'),
+  require('../assets/Plant/plant_09_happy.png'),
+  require('../assets/Plant/plant_11_happy.png'),
+  require('../assets/Plant/plant_13_happy.png'),
+  require('../assets/Plant/plant_16_happy.png'),
+  require('../assets/Plant/plant_17_happy.png'),
+  require('../assets/Plant/plant_19_happy.png'),
+];
+
 // 임시 하드코딩 종 리스트 (나중에 백엔드에서 불러올 예정)
 const speciesList = [
   '몬스테라',
@@ -126,6 +139,9 @@ export default function PlantRegister({
     isAnalyzed,
     setIsAnalyzed,
   ] = useState(false);
+
+  const [selectedCharacter, setSelectedCharacter] =
+  useState(1);
 
   // 이미지 선택
   const handleImagePress = () => {
@@ -292,6 +308,9 @@ const handleSubmit = async () => {
 
       imageUri:
         imageUri || '',
+
+      characterId:
+  selectedCharacter,
     };
 
     console.log(
@@ -792,6 +811,106 @@ if (editingId) {
 
           </View>
         </View>
+
+        {/* 캐릭터 선택 */}
+<View style={styles.row}>
+
+  <Text style={styles.label}>
+    캐릭터
+  </Text>
+
+  <View style={styles.contentWrap}>
+
+    <Text style={styles.characterTitle}>
+      캐릭터 선택하기
+    </Text>
+
+    <Text style={styles.characterSub}>
+      내 식물의 캐릭터를 골라주세요.
+    </Text>
+
+    <View style={styles.characterSelector}>
+
+      <TouchableOpacity
+        style={styles.arrowButton}
+        onPress={() => {
+
+          if (selectedCharacter > 1) {
+
+            setSelectedCharacter(
+              prev => prev - 1
+            );
+
+          }
+
+        }}
+      >
+        <Text style={styles.arrowText}>
+          {'<'}
+        </Text>
+      </TouchableOpacity>
+
+      <Image
+        source={
+          characterList[
+            selectedCharacter - 1
+          ]
+        }
+        style={styles.characterImage}
+      />
+
+      <TouchableOpacity
+        style={styles.arrowButton}
+        onPress={() => {
+
+          if (
+            selectedCharacter <
+            characterList.length
+          ) {
+
+            setSelectedCharacter(
+              prev => prev + 1
+            );
+
+          }
+
+        }}
+      >
+        <Text style={styles.arrowText}>
+          {'>'}
+        </Text>
+      </TouchableOpacity>
+
+    </View>
+
+    <Text style={styles.characterCount}>
+      {selectedCharacter} / {characterList.length}
+    </Text>
+
+    <View style={styles.dotContainer}>
+
+      {characterList.map(
+        (_, index) => (
+
+          <View
+            key={index}
+            style={[
+              styles.dot,
+
+              selectedCharacter ===
+                index + 1 &&
+                styles.activeDot,
+            ]}
+          />
+
+        )
+      )}
+
+    </View>
+
+  </View>
+
+</View>
 
       </ScrollView>
 
