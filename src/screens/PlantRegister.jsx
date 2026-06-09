@@ -122,7 +122,7 @@ export default function PlantRegister({
   const [
     selectedPersonality,
     setSelectedPersonality,
-  ] = useState('느긋한');
+  ] = useState('활발한');
 
   const [
     customPersonality,
@@ -820,14 +820,14 @@ if (editingId) {
   </Text>
 
   <View style={styles.contentWrap}>
-
+{/* 
     <Text style={styles.characterTitle}>
       캐릭터 선택하기
     </Text>
 
     <Text style={styles.characterSub}>
       내 식물의 캐릭터를 골라주세요.
-    </Text>
+    </Text> */}
 
     <View style={styles.characterSelector}>
 
