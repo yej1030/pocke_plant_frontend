@@ -310,7 +310,7 @@ const handleSubmit = async () => {
       imageUri:
         imageUri || '',
 
-      characterId:
+      character_id:
   selectedCharacter,
     };
 
@@ -440,6 +440,11 @@ if (editingId) {
           );
         }
       }
+      if (p.character_id) {
+  setSelectedCharacter(
+    p.character_id
+  );
+}
     }
 
   }, [route]);

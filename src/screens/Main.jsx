@@ -30,6 +30,19 @@ import {
 	deletePlantApi,
 } from '../api/api';
 
+const characterImages = {
+	1: require('../assets/Plant/plant_01_happy.png'),
+	2: require('../assets/Plant/plant_03_happy.png'),
+	3: require('../assets/Plant/plant_05_happy.png'),
+	4: require('../assets/Plant/plant_07_happy.png'),
+	5: require('../assets/Plant/plant_09_happy.png'),
+	6: require('../assets/Plant/plant_11_happy.png'),
+	7: require('../assets/Plant/plant_13_happy.png'),
+	8: require('../assets/Plant/plant_16_happy.png'),
+	9: require('../assets/Plant/plant_17_happy.png'),
+	10: require('../assets/Plant/plant_19_happy.png'),
+};
+
 export default function Main({
 	navigation,
 }) {
@@ -133,24 +146,24 @@ export default function Main({
 
 					onPress: async () => {
 
-	try {
+						try {
 
-		await deletePlantApi(id);
+							await deletePlantApi(id);
 
-		console.log(
-			'삭제 성공'
-		);
+							console.log(
+								'삭제 성공'
+							);
 
-		await loadPlants();
+							await loadPlants();
 
-	} catch (error) {
+						} catch (error) {
 
-		console.log(
-			'삭제 실패:',
-			error.response?.data
-		);
-	}
-},
+							console.log(
+								'삭제 실패:',
+								error.response?.data
+							);
+						}
+					},
 				},
 			],
 		});
@@ -191,6 +204,8 @@ export default function Main({
 			);
 		});
 
+
+
 	return (
 		<>
 			<Header
@@ -213,76 +228,66 @@ export default function Main({
 						등록된 식물이 없습니다.
 					</Text>
 				) : (
-					sortedPlants.map(
-						({ plant: p }) => (
+					sortedPlants.map(({ plant: p }) => (
+						<TouchableOpacity
+							key={p.id}
+							style={styles.plantCard}
+							activeOpacity={0.85}
+							onPress={() =>
+								navigation.navigate(
+									'PlantDetail',
+									{
+										plant: p,
+										plantId: p.id,
+									}
+								)
+							}
+							onLongPress={() => {
+								openActionSheet(p);
+							}}
+						>
 
-							<TouchableOpacity
-								key={p.id}
-								style={styles.plantCard}
-								activeOpacity={0.85}
-								onPress={() =>
-									navigation.navigate(
-										'PlantDetail',
-										{
-											plant: p,
-											plantId: p.id,
-										}
-									)
+							{/* 식물 이미지 */}
+							<Image
+								source={
+									characterImages[
+									p.character_id
+									] || require('../assets/persona.png')
 								}
-								onLongPress={() => {
-									openActionSheet(p);
-								}}
+								style={styles.plantImage}
+							/>
+
+							{/* 식물 정보 */}
+							<View
+								style={styles.plantTextWrap}
 							>
-								{/* 식물 이미지 */}
-								{p.imageUri ? (
-									<Image
-										source={{
-											uri: p.imageUri,
-										}}
-										style={
-											styles.plantImage
-										}
-									/>
-								) : (
-									<Image
-										source={require('../assets/persona.png')}
-										style={
-											styles.plantImage
-										}
-									/>
-								)}
 
-								{/* 식물 정보 */}
-								<View
-									style={styles.plantTextWrap}
+								<Text
+									style={styles.plantName}
 								>
+									{p.name}
+									{p.species
+										? ` (${p.species})`
+										: ''}
+								</Text>
 
-									<Text
-										style={styles.plantName}
-									>
-										{p.name}
-										{p.species
-											? ` (${p.species})`
-											: ''}
-									</Text>
+								<Text
+									style={styles.plantMeta}
+								>
+									{p.adoptDate
+										? p.adoptDate
+										: ''}
+									{p.age
+										? ` / ${p.age}세`
+										: ''}
+								</Text>
 
-									<Text
-										style={styles.plantMeta}
-									>
-										{p.adoptDate
-											? p.adoptDate
-											: ''}
-										{p.age
-											? ` / ${p.age}세`
-											: ''}
-									</Text>
+							</View>
 
-								</View>
-
-								{/* 북마크 */}
-								<TouchableOpacity
-									style={styles.settingsButton}
-									onPress={async () => {
+							{/* 북마크 */}
+							<TouchableOpacity
+								style={styles.settingsButton}
+								onPress={async () => {
 
 									console.log('북마크 클릭:', p.id);
 
@@ -298,23 +303,23 @@ export default function Main({
 										console.log(error);
 
 									}
-									} }
-									activeOpacity={0.8}
-								>
+								}}
+								activeOpacity={0.8}
+							>
 
-									<Image
-										source={
-											p.bookmarked
-												? require('../assets/bookmarked.png')
-												: require('../assets/unbookmarked.png')
-										}
-										style={styles.settingsIcon}
-									/>
-
-								</TouchableOpacity>
+								<Image
+									source={
+										p.bookmarked
+											? require('../assets/bookmarked.png')
+											: require('../assets/unbookmarked.png')
+									}
+									style={styles.settingsIcon}
+								/>
 
 							</TouchableOpacity>
-						)
+
+						</TouchableOpacity>
+					)
 					)
 				)}
 
@@ -448,4 +453,4 @@ export default function Main({
 			/>
 		</>
 	);
-}
+} 

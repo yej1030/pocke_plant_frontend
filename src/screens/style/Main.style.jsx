@@ -22,7 +22,9 @@ export default StyleSheet.create({
 		resizeMode: 'contain',
 		marginRight: 14,
 		borderRadius: 36,
-		backgroundColor: '#f5f5f5',
+		backgroundColor: '#ffffff',
+		borderWidth: 0.7,
+		borderColor: '#bcbcbc',
 	},
 	plantTextWrap: {
 		flex: 1,

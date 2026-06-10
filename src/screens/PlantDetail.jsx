@@ -10,6 +10,58 @@ import Header from '../components/Header';
 import { PlantsContext } from '../context/PlantsContext';
 import styles from './style/PlantDetail.style';
 
+const characterImages = {
+  1: {
+    happy: require('../assets/Plant/plant_01_happy.png'),
+    sad: require('../assets/Plant/plant_02_sad.png'),
+  },
+
+  2: {
+    happy: require('../assets/Plant/plant_03_happy.png'),
+    sad: require('../assets/Plant/plant_04_sad.png'),
+  },
+
+  3: {
+    happy: require('../assets/Plant/plant_05_happy.png'),
+    sad: require('../assets/Plant/plant_06_sad.png'),
+  },
+
+  4: {
+    happy: require('../assets/Plant/plant_07_happy.png'),
+    sad: require('../assets/Plant/plant_08_sad.png'),
+  },
+
+  5: {
+    happy: require('../assets/Plant/plant_09_happy.png'),
+    sad: require('../assets/Plant/plant_10_sad.png'),
+  },
+
+  6: {
+    happy: require('../assets/Plant/plant_11_happy.png'),
+    sad: require('../assets/Plant/plant_12_sad.png'),
+  },
+
+  7: {
+    happy: require('../assets/Plant/plant_13_happy.png'),
+    sad: require('../assets/Plant/plant_14_sad.png'),
+  },
+
+  8: {
+    happy: require('../assets/Plant/plant_16_happy.png'),
+    sad: require('../assets/Plant/plant_15_sad.png'),
+  },
+
+  9: {
+    happy: require('../assets/Plant/plant_17_happy.png'),
+    sad: require('../assets/Plant/plant_18_sad.png'),
+  },
+
+  10: {
+    happy: require('../assets/Plant/plant_19_happy.png'),
+    sad: require('../assets/Plant/plant_20_sad.png'),
+  },
+};
+
 export default function PlantDetail({ navigation, route }) {
   const { plants } = useContext(PlantsContext);
 
@@ -17,7 +69,7 @@ export default function PlantDetail({ navigation, route }) {
     useState(false);
 
   const [speechMessage, setSpeechMessage] =
-  useState('오늘은\n기분이 좋아요!');
+    useState('오늘은\n기분이 좋아요!');
 
   const plant = useMemo(() => {
     if (route?.params?.plant) {
@@ -32,6 +84,8 @@ export default function PlantDetail({ navigation, route }) {
   }, [plants, route]);
 
   const title = plant?.name || '식물 상세';
+
+  const mood = 'happy';
 
   if (!plant) {
     return (
@@ -93,7 +147,7 @@ export default function PlantDetail({ navigation, route }) {
     },
   ];
 
-  
+
 
   return (
     <>
@@ -114,36 +168,35 @@ export default function PlantDetail({ navigation, route }) {
             </Text>
           </View>
 
-          {plant.imageUri ? (
-            <Image
-              source={{ uri: plant.imageUri }}
-              style={styles.heroImage}
-            />
-          ) : (
-            <Image
-              source={require('../assets/persona.png')}
-              style={styles.heroImage}
-            />
-          )}
-<View style={styles.quickReplyWrap}>
-  {[
-    '물 줄까?',
-    '햇빛은 안 부족해?',
-    '기분이 어때?',
-  ].map(text => (
-    <TouchableOpacity
-      key={text}
-      style={styles.quickReplyButton}
-      activeOpacity={0.85}
-      onPress={() => setSpeechMessage(text)}
-    >
-      <Text style={styles.quickReplyText}>
-        {text}
-      </Text>
-    </TouchableOpacity>
-  ))}
-</View>
-          
+          <Image
+            source={
+              characterImages[
+              plant.character_id || 1
+              ]?.[mood] ||
+              require('../assets/persona.png')
+            }
+            style={styles.heroImage}
+          />
+
+          <View style={styles.quickReplyWrap}>
+            {[
+              '물 줄까?',
+              '햇빛은 안 부족해?',
+              '기분이 어때?',
+            ].map(text => (
+              <TouchableOpacity
+                key={text}
+                style={styles.quickReplyButton}
+                activeOpacity={0.85}
+                onPress={() => setSpeechMessage(text)}
+              >
+                <Text style={styles.quickReplyText}>
+                  {text}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
         </View>
 
         <View style={styles.actionRow}>
