@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
@@ -413,9 +414,12 @@ export default function SignUp({ navigation }) {
               setShowPassword(prev => !prev)
             }
           >
-            <Text style={styles.eyeText}>
-              {showPassword ? '🙈' : '👁'}
-            </Text>
+            <Ionicons
+              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+              size={22}
+              color="#888"
+              style={styles.eyeText}
+            />
           </TouchableOpacity>
         </View>
 
@@ -447,11 +451,12 @@ export default function SignUp({ navigation }) {
               setShowPasswordCheck(prev => !prev)
             }
           >
-            <Text style={styles.eyeText}>
-              {showPasswordCheck
-                ? '🙈'
-                : '👁'}
-            </Text>
+            <Ionicons
+              name={showPasswordCheck ? 'eye-off-outline' : 'eye-outline'}
+              size={22}
+              color="#888"
+              style={styles.eyeText}
+            />
           </TouchableOpacity>
         </View>
 

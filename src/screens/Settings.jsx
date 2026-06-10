@@ -6,6 +6,7 @@ TouchableOpacity,
 Switch,
 ScrollView,
 } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
@@ -161,9 +162,12 @@ return (
           비밀번호 변경
         </Text>
 
-        <Text style={styles.arrow}>
-          {'>'}
-        </Text>
+        <Ionicons
+          name="chevron-forward"
+          size={18}
+          color="#999"
+          style={styles.arrow}
+        />
 
       </TouchableOpacity>
 
@@ -247,9 +251,12 @@ return (
 
         </View>
 
-        <Text style={styles.arrow}>
-          {'>'}
-        </Text>
+        <Ionicons
+          name="chevron-forward"
+          size={18}
+          color="#999"
+          style={styles.arrow}
+        />
 
       </TouchableOpacity>
 
