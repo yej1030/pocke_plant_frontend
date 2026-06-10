@@ -7,20 +7,28 @@ import {
   ScrollView,
 } from 'react-native';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './style/Settings.style';
 import { getMyInfo } from '../api/api';
 
 export default function Settings({ navigation }) {
-  const [waterAlert, setWaterAlert] = useState(true);
-  const [dailyReport, setDailyReport] = useState(true);
-  const [pumpEnabled, setPumpEnabled] = useState(true);
+  const [waterAlert, setWaterAlert] =
+    useState(true);
 
-  const [userInfo, setUserInfo] = useState(null);
+  const [dailyReport, setDailyReport] =
+    useState(true);
+
+  const [pumpEnabled, setPumpEnabled] =
+    useState(true);
+
+  const [userInfo, setUserInfo] =
+    useState(null);
 
   const {
     alertConfig,
@@ -28,58 +36,68 @@ export default function Settings({ navigation }) {
     closeAlert,
   } = useCustomAlert();
 
-  const loadUserInfo = async () => {
-    try {
-      const token =
-        await AsyncStorage.getItem(
-          'serviceToken'
+  const loadUserInfo =
+    async () => {
+
+      try {
+
+        const token =
+          await AsyncStorage.getItem(
+            'serviceToken'
+          );
+
+        if (!token) {
+          return;
+        }
+
+        const response =
+          await getMyInfo(token);
+
+        console.log(
+          '내 정보:',
+          JSON.stringify(
+            response,
+            null,
+            2
+          )
         );
 
-      if (!token) {
-        return;
+        setUserInfo(response);
+
+      } catch (error) {
+
+        console.log(
+          '내 정보 조회 실패:',
+          error.response?.data
+        );
+
       }
-
-      const response =
-        await getMyInfo(token);
-
-      console.log(
-        '내 정보:',
-        JSON.stringify(
-          response,
-          null,
-          2
-        )
-      );
-
-      setUserInfo(response);
-
-    } catch (error) {
-
-      console.log(
-        '내 정보 조회 실패:',
-        error.response?.data
-      );
-
-    }
-  };
+    };
 
   useEffect(() => {
     loadUserInfo();
   }, []);
 
   const onLogout = () => {
+
     showAlert({
       title: '로그아웃',
-      message: '로그아웃 하시겠습니까?',
+
+      message:
+        '로그아웃 하시겠습니까?',
+
       variant: 'warning',
+
       actions: [
         {
           text: '취소',
           kind: 'cancel',
         },
+
         {
           text: '로그아웃',
           kind: 'destructive',
+
           onPress: async () => {
 
             await AsyncStorage.removeItem(
@@ -94,6 +112,7 @@ export default function Settings({ navigation }) {
                 },
               ],
             });
+
           },
         },
       ],
@@ -101,18 +120,25 @@ export default function Settings({ navigation }) {
   };
 
   const onDeleteAccount = () => {
+
     showAlert({
       title: '회원탈퇴',
-      message: '정말 탈퇴하시겠습니까?',
+
+      message:
+        '정말 탈퇴하시겠습니까?',
+
       variant: 'error',
+
       actions: [
         {
           text: '취소',
           kind: 'cancel',
         },
+
         {
           text: '탈퇴',
           kind: 'destructive',
+
           onPress: () => {
 
             navigation.reset({
@@ -131,6 +157,7 @@ export default function Settings({ navigation }) {
   };
 
   return (
+
     <View style={styles.container}>
 
       <Header
@@ -149,6 +176,7 @@ export default function Settings({ navigation }) {
         <View
           style={styles.profileSection}
         >
+
           <Text style={styles.name}>
             {userInfo?.nickname || ''}
           </Text>
@@ -157,6 +185,7 @@ export default function Settings({ navigation }) {
             {userInfo?.email ||
               '카카오 로그인 사용자'}
           </Text>
+
         </View>
 
         {/* 계정 */}
@@ -179,9 +208,12 @@ export default function Settings({ navigation }) {
               비밀번호 변경
             </Text>
 
-            <Text style={styles.arrow}>
-              {'>'}
-            </Text>
+            <Ionicons
+              name="chevron-forward"
+              size={18}
+              color="#999"
+              style={styles.arrow}
+            />
 
           </TouchableOpacity>
 
@@ -265,9 +297,12 @@ export default function Settings({ navigation }) {
 
             </View>
 
-            <Text style={styles.arrow}>
-              {'>'}
-            </Text>
+            <Ionicons
+              name="chevron-forward"
+              size={18}
+              color="#999"
+              style={styles.arrow}
+            />
 
           </TouchableOpacity>
 
