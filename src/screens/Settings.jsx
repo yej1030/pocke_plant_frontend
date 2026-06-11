@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from 'react-native';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Header from '../components/Header';
@@ -208,12 +207,9 @@ export default function Settings({ navigation }) {
               비밀번호 변경
             </Text>
 
-            <Ionicons
-              name="chevron-forward"
-              size={18}
-              color="#999"
-              style={styles.arrow}
-            />
+            <Text style={styles.arrow}>
+              {'>'}
+            </Text>
 
           </TouchableOpacity>
 
@@ -297,12 +293,9 @@ export default function Settings({ navigation }) {
 
             </View>
 
-            <Ionicons
-              name="chevron-forward"
-              size={18}
-              color="#999"
-              style={styles.arrow}
-            />
+            <Text style={styles.arrow}>
+              {'>'}
+            </Text>
 
           </TouchableOpacity>
 

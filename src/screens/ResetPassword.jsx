@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import styles from './style/ResetPassword.style';
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
@@ -135,12 +134,11 @@ export default function ResetPassword({
               )
             }
           >
-            <Ionicons
-              name={showNewPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={22}
-              color="#888"
-              style={styles.eyeText}
-            />
+            <Text style={styles.eyeText}>
+              {showNewPassword
+                ? '🙈'
+                : '👁'}
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -181,12 +179,11 @@ export default function ResetPassword({
             }
           >
 
-            <Ionicons
-              name={showNewPasswordCheck ? 'eye-off-outline' : 'eye-outline'}
-              size={22}
-              color="#888"
-              style={styles.eyeText}
-            />
+            <Text style={styles.eyeText}>
+              {showNewPasswordCheck
+                ? '🙈'
+                : '👁'}
+            </Text>
 
           </TouchableOpacity>
 

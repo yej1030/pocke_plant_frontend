@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function Header({ title, navigation, type = 'auth' }) {
   // type = 'auth'  -> 뒤로가기, 타이틀
@@ -16,12 +15,7 @@ export default function Header({ title, navigation, type = 'auth' }) {
           <Text style={styles.mainTitle}>{title}</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-          <Ionicons
-            name="menu"
-            size={26}
-            color="#222"
-            style={styles.menu}
-          />
+          <Text style={styles.menu}>{'≡'}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -31,21 +25,11 @@ export default function Header({ title, navigation, type = 'auth' }) {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons
-            name="chevron-back"
-            size={26}
-            color="#222"
-            style={styles.back}
-          />
+          <Text style={styles.back}>{'<'}</Text>
         </TouchableOpacity>
         <Text style={styles.title}>{title}</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-          <Ionicons
-            name="menu"
-            size={26}
-            color="#222"
-            style={styles.menu}
-          />
+          <Text style={styles.menu}>{'≡'}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -55,12 +39,7 @@ export default function Header({ title, navigation, type = 'auth' }) {
 return (
   <View style={styles.container}>
     <TouchableOpacity onPress={() => navigation.goBack()}>
-      <Ionicons
-        name="chevron-back"
-        size={26}
-        color="#222"
-        style={styles.back}
-      />
+      <Text style={styles.back}>{'<'}</Text>
     </TouchableOpacity>
     <Text style={styles.title}>{title}</Text>
     <View style={styles.empty} />

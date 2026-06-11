@@ -12,7 +12,6 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   launchCamera,
   launchImageLibrary,
@@ -851,12 +850,9 @@ if (editingId) {
 
         }}
       >
-        <Ionicons
-          name="chevron-back"
-          size={22}
-          color="#555"
-          style={styles.arrowText}
-        />
+        <Text style={styles.arrowText}>
+          {'<'}
+        </Text>
       </TouchableOpacity>
 
       <Image
@@ -885,12 +881,9 @@ if (editingId) {
 
         }}
       >
-        <Ionicons
-          name="chevron-forward"
-          size={22}
-          color="#555"
-          style={styles.arrowText}
-        />
+        <Text style={styles.arrowText}>
+          {'>'}
+        </Text>
       </TouchableOpacity>
 
     </View>

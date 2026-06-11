@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {
   login,
@@ -278,12 +277,11 @@ await AsyncStorage.setItem(
             }
           >
 
-            <Ionicons
-              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-              size={22}
-              color="#888"
-              style={styles.eyeText}
-            />
+            <Text style={styles.eyeText}>
+              {showPassword
+                ? '🙈'
+                : '👁'}
+            </Text>
 
           </TouchableOpacity>
 
