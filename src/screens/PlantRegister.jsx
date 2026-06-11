@@ -50,7 +50,7 @@ const characterList = [
   require('../assets/Plant/plant_09_happy.png'),
   require('../assets/Plant/plant_11_happy.png'),
   require('../assets/Plant/plant_13_happy.png'),
-  require('../assets/Plant/plant_16_happy.png'),
+  require('../assets/Plant/plant_15_happy.png'),
   require('../assets/Plant/plant_17_happy.png'),
   require('../assets/Plant/plant_19_happy.png'),
 ];

@@ -47,8 +47,8 @@ const characterImages = {
   },
 
   8: {
-    happy: require('../assets/Plant/plant_16_happy.png'),
-    sad: require('../assets/Plant/plant_15_sad.png'),
+    happy: require('../assets/Plant/plant_15_happy.png'),
+    sad: require('../assets/Plant/plant_16_sad.png'),
   },
 
   9: {
