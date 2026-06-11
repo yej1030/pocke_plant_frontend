@@ -1,4 +1,4 @@
-import React, { useState, useEffect, } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,15 +7,16 @@ import {
   ScrollView,
 } from 'react-native';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import styles from './style/Settings.style';
-import { getMyInfo, } from '../api/api';
+import { getMyInfo } from '../api/api';
 
 export default function Settings({ navigation }) {
-
   const [waterAlert, setWaterAlert] =
     useState(true);
 
@@ -34,7 +35,50 @@ export default function Settings({ navigation }) {
     closeAlert,
   } = useCustomAlert();
 
+  const loadUserInfo =
+    async () => {
+
+      try {
+
+        const token =
+          await AsyncStorage.getItem(
+            'serviceToken'
+          );
+
+        if (!token) {
+          return;
+        }
+
+        const response =
+          await getMyInfo(token);
+
+        console.log(
+          '내 정보:',
+          JSON.stringify(
+            response,
+            null,
+            2
+          )
+        );
+
+        setUserInfo(response);
+
+      } catch (error) {
+
+        console.log(
+          '내 정보 조회 실패:',
+          error.response?.data
+        );
+
+      }
+    };
+
+  useEffect(() => {
+    loadUserInfo();
+  }, []);
+
   const onLogout = () => {
+
     showAlert({
       title: '로그아웃',
 
@@ -72,10 +116,10 @@ export default function Settings({ navigation }) {
         },
       ],
     });
-
   };
 
   const onDeleteAccount = () => {
+
     showAlert({
       title: '회원탈퇴',
 
@@ -111,51 +155,7 @@ export default function Settings({ navigation }) {
     });
   };
 
-  const loadUserInfo =
-  async () => {
-
-    try {
-
-      const token =
-        await AsyncStorage.getItem(
-          'serviceToken'
-        );
-
-      if (!token) {
-        return;
-      }
-
-      const response =
-        await getMyInfo(token);
-
-      console.log(
-        '내 정보:',
-        JSON.stringify(
-          response,
-          null,
-          2
-        )
-      );
-
-      setUserInfo(response);
-
-    } catch (error) {
-
-      console.log(
-        '내 정보 조회 실패:',
-        error.response?.data
-      );
-
-    }
-
-  };
-
-  useEffect(() => {
-    loadUserInfo();
-  }, []);
-
   return (
-
 
     <View style={styles.container}>
 
@@ -181,7 +181,8 @@ export default function Settings({ navigation }) {
           </Text>
 
           <Text style={styles.email}>
-            {userInfo?.email || '카카오 로그인 사용자'}
+            {userInfo?.email ||
+              '카카오 로그인 사용자'}
           </Text>
 
         </View>
@@ -381,7 +382,5 @@ export default function Settings({ navigation }) {
       />
 
     </View>
-
-
   );
 }

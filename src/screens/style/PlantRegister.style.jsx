@@ -240,4 +240,71 @@ aiResultDesc: {
    fontSize: 15,
    color: '#333',
  },
+
+characterTitle: {
+  fontSize: 16,
+  fontWeight: '700',
+  color: '#222',
+},
+
+characterSub: {
+  fontSize: 13,
+  color: '#888',
+  marginTop: 4,
+  marginBottom: 12,
+},
+
+characterSelector: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+},
+
+arrowButton: {
+  width: 42,
+  height: 42,
+  borderRadius: 21,
+  backgroundColor: '#F3F7F3',
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+arrowText: {
+  fontSize: 20,
+  color: '#555',
+  fontWeight: '700',
+},
+
+characterImage: {
+  width: 140,
+  height: 140,
+  resizeMode: 'contain',
+},
+
+characterCount: {
+  textAlign: 'center',
+  marginTop: 8,
+  fontSize: 15,
+  fontWeight: '600',
+  color: '#333',
+},
+
+dotContainer: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  marginTop: 10,
+},
+
+dot: {
+  width: 8,
+  height: 8,
+  borderRadius: 4,
+  backgroundColor: '#D9D9D9',
+  marginHorizontal: 4,
+},
+
+activeDot: {
+  backgroundColor: '#99DDAA',
+},
+
 });

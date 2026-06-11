@@ -111,25 +111,25 @@ export default function Login_2({
       );
 
       // 자동로그인용 토큰 저장
-await AsyncStorage.setItem(
-  'serviceToken',
-  response.data.serviceToken
-);
+      await AsyncStorage.setItem(
+        'serviceToken',
+        response.data.serviceToken
+      );
 
-await AsyncStorage.setItem(
-  'userId',
-  String(response.data.userId)
-);
+      await AsyncStorage.setItem(
+        'userId',
+        String(response.data.userId)
+      );
 
-await AsyncStorage.setItem(
-  'nickname',
-  response.data.nickname || ''
-);
+      await AsyncStorage.setItem(
+        'nickname',
+        response.data.nickname || ''
+      );
 
-await AsyncStorage.setItem(
-  'email',
-  response.data.email || ''
-);
+      await AsyncStorage.setItem(
+        'email',
+        response.data.email || ''
+      );
 
       showAlert({
         title: '성공',
@@ -140,7 +140,14 @@ await AsyncStorage.setItem(
         buttonText: '확인',
 
         onPress: () =>
-          navigation.replace('Main'),
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'Main',
+              },
+            ],
+          }),
 
         variant: 'success',
       });
@@ -156,8 +163,8 @@ await AsyncStorage.setItem(
         title: '실패',
 
         message:
-      error.response?.data?.message ||
-      '로그인에 실패했습니다.',
+          error.response?.data?.message ||
+          '로그인에 실패했습니다.',
 
         variant: 'error',
       });
@@ -212,9 +219,14 @@ await AsyncStorage.setItem(
           buttonText: '확인',
 
           onPress: () =>
-            navigation.replace(
-              'Main'
-            ),
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Main',
+                },
+              ],
+            }),
 
           variant: 'success',
         });
