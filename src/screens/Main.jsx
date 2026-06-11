@@ -38,7 +38,7 @@ const characterImages = {
 	5: require('../assets/Plant/plant_09_happy.png'),
 	6: require('../assets/Plant/plant_11_happy.png'),
 	7: require('../assets/Plant/plant_13_happy.png'),
-	8: require('../assets/Plant/plant_16_happy.png'),
+	8: require('../assets/Plant/plant_15_happy.png'),
 	9: require('../assets/Plant/plant_17_happy.png'),
 	10: require('../assets/Plant/plant_19_happy.png'),
 };
