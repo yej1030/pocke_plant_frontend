@@ -368,7 +368,7 @@ export default function Login_2({
             >
 
               <Image
-                source={require('../assets/Kakao.png')}
+                source={require('../assets/logo/Kakao.png')}
                 style={styles.snsIconImage}
               />
 

@@ -111,7 +111,7 @@ export default function PlantDetail({ navigation, route }) {
       value: 35,
       unit: '%',
       accent: '#c89b6d',
-      icon: require('../assets/sensor_soil.png'),
+      icon: require('../assets/sensor/sensor_soil.png'),
     },
     {
       type: 'temp',
@@ -119,7 +119,7 @@ export default function PlantDetail({ navigation, route }) {
       value: 22,
       unit: '°C',
       accent: '#6fcf97',
-      icon: require('../assets/sensor_temp.png'),
+      icon: require('../assets/sensor/sensor_temp.png'),
     },
     {
       type: 'humidity',
@@ -127,7 +127,7 @@ export default function PlantDetail({ navigation, route }) {
       value: 58,
       unit: '%',
       accent: '#6fcf97',
-      icon: require('../assets/sensor_humidity.png'),
+      icon: require('../assets/sensor/sensor_humidity.png'),
     },
     {
       type: 'light',
@@ -135,7 +135,7 @@ export default function PlantDetail({ navigation, route }) {
       value: 36000,
       unit: 'lx',
       accent: '#c89b6d',
-      icon: require('../assets/sensor_light.png'),
+      icon: require('../assets/sensor/sensor_light.png'),
     },
     {
       type: 'bio',
@@ -143,7 +143,7 @@ export default function PlantDetail({ navigation, route }) {
       value: 360,
       unit: 'mV',
       accent: '#c89b6d',
-      icon: require('../assets/sensor_bio.png'),
+      icon: require('../assets/sensor/sensor_bio.png'),
     },
   ];
 
@@ -172,8 +172,7 @@ export default function PlantDetail({ navigation, route }) {
             source={
               characterImages[
               plant.character_id || 1
-              ]?.[mood] ||
-              require('../assets/persona.png')
+              ]?.[mood]
             }
             style={styles.heroImage}
           />
@@ -281,7 +280,7 @@ export default function PlantDetail({ navigation, route }) {
               activeOpacity={0.85}
             >
               <Image
-                source={require('../assets/sensor_humidity.png')}
+                source={require('../assets/sensor/sensor_humidity.png')}
                 style={styles.waterIcon}
               />
               <Text style={styles.waterText}>물주기</Text>

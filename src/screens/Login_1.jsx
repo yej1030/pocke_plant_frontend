@@ -50,7 +50,7 @@ export default function Login_1({ navigation }) {
 
       {/* 로고 이미지 */}
       <Image
-        source={require('../assets/logo_2.png')}
+        source={require('../assets/logo/logo_2.png')}
         style={styles.image}
       />
 
@@ -64,7 +64,7 @@ export default function Login_1({ navigation }) {
           activeOpacity={0.85}
         >
           <Image
-            source={require('../assets/Kakao.png')}
+            source={require('../assets/logo/Kakao.png')}
             style={styles.kakaoIcon}
           />
           <Text style={styles.kakaoText}>카카오로 시작하기</Text>

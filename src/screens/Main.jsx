@@ -252,7 +252,7 @@ export default function Main({
 								source={
 									characterImages[
 									p.character_id
-									] || require('../assets/persona.png')
+									]
 								}
 								style={styles.plantImage}
 							/>
@@ -310,8 +310,8 @@ export default function Main({
 								<Image
 									source={
 										p.bookmarked
-											? require('../assets/bookmarked.png')
-											: require('../assets/unbookmarked.png')
+											? require('../assets/icon/bookmarked.png')
+											: require('../assets/icon/unbookmarked.png')
 									}
 									style={styles.settingsIcon}
 								/>

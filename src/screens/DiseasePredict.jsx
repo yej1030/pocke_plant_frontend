@@ -206,7 +206,7 @@ return ( <View style={styles.background}>
           >
 
             <Image
-              source={require('../assets/placeholder.png')}
+              source={require('../assets/icon/placeholder.png')}
               style={styles.imageIcon}
             />
 

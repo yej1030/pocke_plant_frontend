@@ -718,7 +718,7 @@ if (editingId) {
                 >
 
                   <Image
-                    source={require('../assets/placeholder.png')}
+                    source={require('../assets/icon/placeholder.png')}
 
                     style={styles.imageIcon}
                   />
