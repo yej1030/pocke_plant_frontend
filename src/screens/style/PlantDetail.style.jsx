@@ -11,6 +11,7 @@ export default StyleSheet.create({
   },
   heroCard: {
     marginTop: 10,
+    paddingTop: 30,
     paddingVertical: 16,
     borderRadius: 22,
     borderWidth: 1,
@@ -25,7 +26,6 @@ export default StyleSheet.create({
     borderColor: '#989898',
     borderRadius: 10,
     backgroundColor: '#fff',
-    marginBottom: 16,
   },
   speechText: {
     fontSize: 14,
@@ -178,8 +178,8 @@ quickReplyWrap: {
   flexWrap: 'wrap',
   justifyContent: 'center',
   gap: 8,
-  marginTop: 16,
   paddingHorizontal: 16,
+  paddingBottom: 12,
 },
 
 quickReplyButton: {
