@@ -289,11 +289,15 @@ export default function Login_2({
             }
           >
 
-            <Text style={styles.eyeText}>
-              {showPassword
-                ? '🙈'
-                : '👁'}
-            </Text>
+          <Image
+            source={
+              showPassword
+                ? require('../assets/icon/open.png')
+                : require('../assets/icon/close.png')
+            }
+            style={styles.eyeIcon}
+            resizeMode="contain"
+          />
 
           </TouchableOpacity>
 

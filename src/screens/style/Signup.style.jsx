@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 
+
 export default StyleSheet.create({
 
   // 전체 컨테이너
@@ -89,9 +90,10 @@ export default StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 4,
   },
-  eyeText: {
-    fontSize: 18,
-  },
+eyeIcon: {
+  width: 20,
+  height: 20,
+},
 
   // 힌트 텍스트
   hint: {

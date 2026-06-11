@@ -47,9 +47,10 @@ export default StyleSheet.create({
   },
 
   // 눈 아이콘
-  eyeText: {
-    fontSize: 18,
-  },
+eyeIcon: {
+  width: 20,
+  height: 20,
+},
 
   // 로그인 버튼
   loginSubmitButton: {

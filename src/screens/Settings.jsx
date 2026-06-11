@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Switch,
   ScrollView,
+  Image,
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -207,9 +208,11 @@ export default function Settings({ navigation }) {
               비밀번호 변경
             </Text>
 
-            <Text style={styles.arrow}>
-              {'>'}
-            </Text>
+            <Image
+              source={require('../assets/icon/chevron.png')}
+              style={styles.arrowIcon}
+              resizeMode="contain"
+            />
 
           </TouchableOpacity>
 
@@ -293,9 +296,11 @@ export default function Settings({ navigation }) {
 
             </View>
 
-            <Text style={styles.arrow}>
-              {'>'}
-            </Text>
+            <Image
+              source={require('../assets/icon/chevron.png')}
+              style={styles.arrowIcon}
+              resizeMode="contain"
+            />
 
           </TouchableOpacity>
 

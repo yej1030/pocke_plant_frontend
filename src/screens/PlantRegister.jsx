@@ -546,9 +546,11 @@ if (editingId) {
                     : '날짜 선택'}
                 </Text>
 
-                <Text style={styles.dateArrow}>
-                  ▼
-                </Text>
+<Image
+  source={require('../assets/icon/down.png')}
+  style={styles.dateArrowIcon}
+  resizeMode="contain"
+/>
 
               </TouchableOpacity>
 
