@@ -189,7 +189,8 @@ aiResultCard: {
   marginTop: 14,
   backgroundColor: '#F7FCF8',
   borderRadius: 14,
-  padding: 14,
+  paddingVertical: 10,
+  paddingHorizontal: 14,
   borderWidth: 1,
   borderColor: '#DDF3E4',
 },
@@ -210,6 +211,7 @@ aiRetry: {
   fontSize: 13,
   color: '#777777',
   fontWeight: '600',
+  transform: [{ translateY: 12 }],
 },
 
 aiResultDesc: {
