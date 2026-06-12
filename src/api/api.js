@@ -264,3 +264,54 @@ export const identifyPlantApi =
 
     return response.data;
   };
+
+  // AI 채팅방 생성
+  export const createAiChatRoom =
+  async () => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/ai-chat/room`,
+        {},
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };
+
+  // AI 채팅방 메시지 전송
+  export const sendAiMessage =
+  async (roomId, message) => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/ai-chat/send-message`,
+        {
+          roomId,
+          message,
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };

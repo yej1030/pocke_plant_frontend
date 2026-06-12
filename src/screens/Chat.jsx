@@ -8,12 +8,50 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Image,
 } from 'react-native';
 import Header from '../components/Header';
 import styles from './style/Chat.style';
+import {
+  createAiChatRoom,
+  sendAiMessage,
+} from '../api/api';
 
 
 export default function Chat({ navigation, route }) {
+  const characterImages = {
+  1: {
+    happy: require('../assets/Plant/plant_01_happy.png'),
+  },
+  2: {
+    happy: require('../assets/Plant/plant_03_happy.png'),
+  },
+  3: {
+    happy: require('../assets/Plant/plant_05_happy.png'),
+  },
+  4: {
+    happy: require('../assets/Plant/plant_07_happy.png'),
+  },
+  5: {
+    happy: require('../assets/Plant/plant_09_happy.png'),
+  },
+  6: {
+    happy: require('../assets/Plant/plant_11_happy.png'),
+  },
+  7: {
+    happy: require('../assets/Plant/plant_13_happy.png'),
+  },
+  8: {
+    happy: require('../assets/Plant/plant_15_happy.png'),
+  },
+  9: {
+    happy: require('../assets/Plant/plant_17_happy.png'),
+  },
+  10: {
+    happy: require('../assets/Plant/plant_19_happy.png'),
+  },
+};
+  const [roomId, setRoomId] = useState(null);
   const plant = route?.params?.plant;
   const title = useMemo(
     () => route?.params?.title || plant?.name || '',
@@ -67,43 +105,95 @@ export default function Chat({ navigation, route }) {
     return () => clearTimeout(timer);
   }, [messages]);
 
-  const sendMessage = text => {
-    const trimmed = String(text ?? '').trim();
-    if (!trimmed) {
-      return;
-    }
+  const sendMessage = async text => {
 
-    pendingAutoScrollRef.current = true;
+  const trimmed =
+    String(text ?? '').trim();
 
-    const now = new Date();
-    const time = now
-      .toTimeString()
-      .slice(0, 5);
+  if (!trimmed) {
+    return;
+  }
+
+  if (!roomId) {
+
+    console.log(
+      '채팅방이 아직 생성되지 않았습니다.'
+    );
+
+    return;
+  }
+
+  pendingAutoScrollRef.current =
+    true;
+
+  const now = new Date();
+
+  const time =
+    now.toTimeString().slice(0, 5);
+
+  // 사용자 메시지 추가
+  setMessages(current => [
+    ...current,
+    {
+      id:
+        `${now.getTime()}-${Math.random()
+          .toString(16)
+          .slice(2)}`,
+
+      ...buildMessagePayload(
+        trimmed,
+        time
+      ),
+    },
+  ]);
+
+  setMessage('');
+
+  try {
+
+    const aiAnswer =
+      await sendAiMessage(
+        roomId,
+        trimmed
+      );
 
     setMessages(current => [
       ...current,
       {
-        id: `${now.getTime()}-${Math.random().toString(16).slice(2)}`,
-        ...buildMessagePayload(trimmed, time),
-      },
-      {
-        id: `${now.getTime()}-${Math.random().toString(16).slice(2)}-plant`,
-        text: trimmed,
+        id:
+          `${Date.now()}-ai`,
+
+        text: aiAnswer,
+
         time,
+
         role: 'other',
-        context: {
-          plant: plant
-            ? {
-                id: plant.id ?? null,
-                name: plant.name ?? null,
-                imageUri: plant.imageUri ?? null,
-              }
-            : null,
-        },
       },
     ]);
-    setMessage('');
-  };
+
+  } catch (error) {
+
+    console.log(
+      'AI 응답 실패:',
+      error.response?.data
+    );
+
+    setMessages(current => [
+      ...current,
+      {
+        id:
+          `${Date.now()}-error`,
+
+        text:
+          'AI 응답을 가져오지 못했습니다.',
+
+        time,
+
+        role: 'other',
+      },
+    ]);
+  }
+};
 
   const renderItem = ({ item }) => {
     const isMe = item.role === 'me';
@@ -115,7 +205,18 @@ export default function Chat({ navigation, route }) {
           isMe ? styles.messageRowMe : styles.messageRowOther,
         ]}
       >
-        {!isMe && <View style={styles.avatar} />}
+        {!isMe && (
+  <View style={styles.avatar}>
+    <Image
+      source={
+        characterImages[
+          plant?.character_id || 1
+        ]?.happy
+      }
+      style={styles.avatarImage}
+    />
+  </View>
+)}
         <View
           style={[
             styles.messageColumn,
@@ -149,6 +250,37 @@ export default function Chat({ navigation, route }) {
       </View>
     );
   };
+
+  useEffect(() => {
+
+  const createRoom =
+    async () => {
+
+      try {
+
+        const room =
+          await createAiChatRoom();
+
+        console.log(
+          '채팅방 생성:',
+          room
+        );
+
+        setRoomId(room.id);
+
+      } catch (error) {
+
+        console.log(
+          '채팅방 생성 실패:',
+          error.response?.data
+        );
+
+      }
+    };
+
+  createRoom();
+
+}, []);
 
   return (
     <View style={styles.screen}>
