@@ -40,9 +40,11 @@ export default StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 4,
   },
-  eyeText: {
-    fontSize: 18,
-  },
+  // 눈 아이콘
+eyeIcon: {
+  width: 20,
+  height: 20,
+},
 
   // 힌트 텍스트
   hint: {

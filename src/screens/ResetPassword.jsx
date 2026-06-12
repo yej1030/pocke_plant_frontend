@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
 import styles from './style/ResetPassword.style';
 import Header from '../components/Header';
@@ -134,11 +135,15 @@ export default function ResetPassword({
               )
             }
           >
-            <Text style={styles.eyeText}>
-              {showNewPassword
-                ? '🙈'
-                : '👁'}
-            </Text>
+          <Image
+            source={
+              showPassword
+                ? require('../assets/icon/open.png')
+                : require('../assets/icon/close.png')
+            }
+            style={styles.eyeIcon}
+            resizeMode="contain"
+          />
           </TouchableOpacity>
         </View>
 
@@ -179,11 +184,15 @@ export default function ResetPassword({
             }
           >
 
-            <Text style={styles.eyeText}>
-              {showNewPasswordCheck
-                ? '🙈'
-                : '👁'}
-            </Text>
+          <Image
+            source={
+              showPassword
+                ? require('../assets/icon/open.png')
+                : require('../assets/icon/close.png')
+            }
+            style={styles.eyeIcon}
+            resizeMode="contain"
+          />
 
           </TouchableOpacity>
 

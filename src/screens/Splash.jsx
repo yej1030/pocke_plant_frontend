@@ -112,7 +112,7 @@ export default function SplashScreen({
 
       <Animated.Image
         source={
-          require('../assets/logo.png')
+          require('../assets/logo/logo.png')
         }
         style={[
           styles.image,

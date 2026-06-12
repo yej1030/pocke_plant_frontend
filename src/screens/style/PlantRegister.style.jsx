@@ -75,10 +75,10 @@ export default StyleSheet.create({
     color: '#222',
   },
 
-  dateArrow: {
-    marginLeft: 8,
-    color: '#888',
-  },
+dateArrowIcon: {
+  width: 24,
+  height: 24,
+},
 
   ageWrap: {
     width: 95,
@@ -270,9 +270,9 @@ arrowButton: {
 },
 
 arrowText: {
-  fontSize: 20,
-  color: '#555',
-  fontWeight: '700',
+  fontSize: 18,
+  color: '#444',
+  fontWeight: '500',
 },
 
 characterImage: {

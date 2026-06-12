@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from 'react-native';
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
@@ -413,9 +414,15 @@ export default function SignUp({ navigation }) {
               setShowPassword(prev => !prev)
             }
           >
-            <Text style={styles.eyeText}>
-              {showPassword ? '🙈' : '👁'}
-            </Text>
+          <Image
+            source={
+              showPassword
+                ? require('../assets/icon/open.png')
+                : require('../assets/icon/close.png')
+            }
+            style={styles.eyeIcon}
+            resizeMode="contain"
+          />
           </TouchableOpacity>
         </View>
 
@@ -447,11 +454,15 @@ export default function SignUp({ navigation }) {
               setShowPasswordCheck(prev => !prev)
             }
           >
-            <Text style={styles.eyeText}>
-              {showPasswordCheck
-                ? '🙈'
-                : '👁'}
-            </Text>
+          <Image
+            source={
+              showPasswordCheck
+                ? require('../assets/icon/open.png')
+                : require('../assets/icon/close.png')
+            }
+            style={styles.eyeIcon}
+            resizeMode="contain"
+          />
           </TouchableOpacity>
         </View>
 

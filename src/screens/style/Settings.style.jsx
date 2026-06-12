@@ -80,10 +80,11 @@ export default StyleSheet.create({
     color: '#999',
   },
 
-  arrow: {
-    fontSize: 16,
-    color: '#999',
-  },
+arrowIcon: {
+  width: 18,
+  height: 18,
+  opacity: 0.6,
+},
 
   logoutButton: {
     height: 45,
