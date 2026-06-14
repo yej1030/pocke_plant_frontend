@@ -154,18 +154,28 @@ const askPlant = async question => {
 
   try {
 
-    const answer =
-      await sendAiMessage(
-        roomId,
-        question
-      );
+const answer =
+  await sendAiMessage(
+    roomId,
+    question
+  );
 
-    setSpeechMessage(answer);
+console.log(
+  '식물 AI 응답:',
+  JSON.stringify(answer, null, 2)
+);
+
+const content =
+  answer?.choices?.[0]
+    ?.message?.content
+  ?? '응답 없음';
+
+setSpeechMessage(content);
 //이거는 센서값을 기준으로 바꿔야해~~
     if (
-      answer.includes('좋') ||
-      answer.includes('행복') ||
-      answer.includes('고마')
+      content.includes('좋') ||
+      content.includes('행복') ||
+      content.includes('고마')
     ) {
       setMood('happy');
     } else {
@@ -178,23 +188,23 @@ const askPlant = async question => {
       'AI 응답 실패:',
       error.response?.data
     );
-// 여기부터 
-    if (question === '물 줄까?') {
+// // 여기부터 
+//     if (question === '물 줄까?') {
 
-      setSpeechMessage(
-        '물은 아직 괜찮아! 😊'
-      );
+//       setSpeechMessage(
+//         '물은 아직 괜찮아! 😊'
+//       );
 
-      setMood('happy');
+//       setMood('happy');
 
-    } else {
-// 여기까지 ai 채팅 서버 키면 주석처리 해야해~~
+//     } else {
+// // 여기까지 ai 채팅 서버 키면 주석처리 해야해~~
       setSpeechMessage(
         '지금은 대답할 수 없어요 😢'
       );
 
       setMood('sad');
-    }
+    // }
   }
 };
   

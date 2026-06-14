@@ -131,7 +131,6 @@ export default function Chat({ navigation, route }) {
   const time =
     now.toTimeString().slice(0, 5);
 
-  // 사용자 메시지 추가
   setMessages(current => [
     ...current,
     {
@@ -157,13 +156,25 @@ export default function Chat({ navigation, route }) {
         trimmed
       );
 
+    console.log(
+      'AI 응답 전체:',
+      JSON.stringify(
+        aiAnswer,
+        null,
+        2
+      )
+    );
+
     setMessages(current => [
       ...current,
       {
         id:
           `${Date.now()}-ai`,
 
-        text: aiAnswer,
+        text:
+  aiAnswer?.choices?.[0]
+    ?.message?.content
+  ?? '응답 없음',
 
         time,
 
@@ -174,8 +185,22 @@ export default function Chat({ navigation, route }) {
   } catch (error) {
 
     console.log(
-      'AI 응답 실패:',
+      '===== AI ERROR ====='
+    );
+
+    console.log(
+      'status:',
+      error.response?.status
+    );
+
+    console.log(
+      'data:',
       error.response?.data
+    );
+
+    console.log(
+      'message:',
+      error.message
     );
 
     setMessages(current => [
