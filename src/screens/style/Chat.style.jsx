@@ -69,15 +69,21 @@ export default StyleSheet.create({
   messageColumnOther: {
     alignItems: 'flex-start',
   },
-  avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#d6e8d9',
-    backgroundColor: '#eef7ef',
-    marginRight: 4,
-  },
+avatar: {
+  width: 40,
+  height: 40,
+  borderRadius: 20,
+  borderWidth: 1,
+  borderColor: '#d6e8d9',
+  backgroundColor: '#eef7ef',
+  marginRight: 4,
+  overflow: 'hidden',
+},
+avatarImage: {
+  width: '100%',
+  height: '100%',
+  resizeMode: 'contain',
+},
   messageBubble: {
     paddingHorizontal: 14,
     paddingVertical: 9,

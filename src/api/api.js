@@ -226,3 +226,92 @@ export const getMyInfo =
 
     return response.data;
   };
+
+  // 식물 종 분석
+export const identifyPlantApi =
+  async (imageUri) => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const formData =
+      new FormData();
+
+    formData.append(
+      'image',
+      {
+        uri: imageUri,
+        type: 'image/jpeg',
+        name: 'plant.jpg',
+      }
+    );
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/plants/identify`,
+        formData,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+            'Content-Type':
+              'multipart/form-data',
+          },
+        }
+      );
+
+    return response.data;
+  };
+
+  // AI 채팅방 생성
+  export const createAiChatRoom =
+  async () => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/ai-chat/room`,
+        {},
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };
+
+  // AI 채팅방 메시지 전송
+  export const sendAiMessage =
+  async (roomId, message) => {
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.post(
+        `${BASE_URL}/api/ai-chat/send-message`,
+        {
+          roomId,
+          message,
+        },
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };

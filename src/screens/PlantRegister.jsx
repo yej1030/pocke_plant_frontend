@@ -28,6 +28,7 @@ import {
 import {
   registerPlant,
   updatePlantApi,
+  identifyPlantApi,
 } from '../api/api';
 
 // 기본 성격 리스트
@@ -140,8 +141,13 @@ export default function PlantRegister({
     setIsAnalyzed,
   ] = useState(false);
 
+  const [
+  analysisAccuracy,
+  setAnalysisAccuracy,
+] = useState('');
+
   const [selectedCharacter, setSelectedCharacter] =
-  useState(1);
+    useState(1);
 
   // 이미지 선택
   const handleImagePress = () => {
@@ -176,6 +182,8 @@ export default function PlantRegister({
                   );
                   setIsAnalyzed(false);
                   setAnalyzedSpecies('');
+                  setAnalysisAccuracy('');
+                  setAnalysisAccuracy('');
                 }
               }
             );
@@ -208,6 +216,7 @@ export default function PlantRegister({
                   );
                   setIsAnalyzed(false);
                   setAnalyzedSpecies('');
+                  setAnalysisAccuracy('');
                 }
               }
             );
@@ -223,16 +232,70 @@ export default function PlantRegister({
   };
 
   // AI 종 분석
-  const handleAnalyzeSpecies = () => {
+  const handleAnalyzeSpecies =
+    async () => {
 
-    // 임시 하드코딩
-    const mockResult =
-      '몬스테라';
+      if (!imageUri) {
 
-    setAnalyzedSpecies(mockResult);
-    setSpecies(mockResult);
-    setIsAnalyzed(true);
-  };
+        showAlert({
+          title: '이미지 필요',
+          message:
+            '먼저 식물 사진을 선택해주세요.',
+          variant: 'warning',
+        });
+
+        return;
+      }
+
+      try {
+
+        const result =
+          await identifyPlantApi(
+            imageUri
+          );
+
+        console.log(
+          '종 분석 결과:',
+          result
+        );
+
+
+        const speciesName =
+  result.koreanName ||
+  result.scientificName ||
+  '';
+
+setAnalyzedSpecies(
+  speciesName
+);
+
+setAnalysisAccuracy(
+  result.accuracy || ''
+);
+
+setSpecies(
+  speciesName
+);
+
+setIsAnalyzed(true);
+
+      } catch (error) {
+
+        console.log(
+          '종 분석 실패:',
+          error.response?.data
+
+        );
+
+
+        showAlert({
+          title: '분석 실패',
+          message:
+            '식물 종 분석에 실패했습니다.',
+          variant: 'error',
+        });
+      }
+    };
 
   // 종 입력에 따라 자동완성 후보 필터링
   // api 연동 시 여기 수정
@@ -256,134 +319,133 @@ export default function PlantRegister({
   }, [species]);
 
   // 식물 등록
-// 식물 등록
-const handleSubmit = async () => {
+  const handleSubmit = async () => {
 
-  const missing = [];
+    const missing = [];
 
-  if (!name || name.trim() === '') {
-    missing.push('이름');
-  }
-  if (!species || species.trim() === '') {
-    missing.push('종');
-  }
-
-  if (missing.length > 0) {
-
-    showAlert({
-      title: '필수 입력',
-      message:
-        `${missing.join(' 및 ')}을(를) 입력해주세요.`,
-      variant: 'warning',
-    });
-
-    return;
-  }
-
-  try {
-
-    const plantData = {
-
-      name:
-        name || '',
-
-      species:
-        species || '',
-
-      adoptDate:
-        adoptDate
-          ? adoptDate
-              .toISOString()
-              .slice(0, 10)
-          : '',
-
-      age:
-        age
-          ? Number(age)
-          : null,
-
-      personality:
-        customPersonality ||
-        selectedPersonality,
-
-      imageUri:
-        imageUri || '',
-
-      character_id:
-  selectedCharacter,
-    };
-
-    console.log(
-      '식물 등록 요청:',
-      plantData
-    );
-
-let response;
-
-if (editingId) {
-
-	response =
-		await updatePlantApi(
-			editingId,
-			plantData
-		);
-
-} else {
-
-	response =
-		await registerPlant(
-			plantData
-		);
-}
-
-    console.log('식물 등록 성공:', response);
-
-    // Update context so Main reflects change immediately
-    try {
-      if (editingId) {
-        // server likely returns updated plant
-        updatePlant(editingId, response || plantData);
-      } else {
-        // server likely returns created plant with id
-        addPlant(response || plantData);
-      }
-    } catch (e) {
-      console.log('Context update failed:', e.message);
+    if (!name || name.trim() === '') {
+      missing.push('이름');
+    }
+    if (!species || species.trim() === '') {
+      missing.push('종');
     }
 
-    showAlert({
-      title: '성공',
+    if (missing.length > 0) {
 
-      message:
+      showAlert({
+        title: '필수 입력',
+        message:
+          `${missing.join(' 및 ')}을(를) 입력해주세요.`,
+        variant: 'warning',
+      });
+
+      return;
+    }
+
+    try {
+
+      const plantData = {
+
+        name:
+          name || '',
+
+        species:
+          species || '',
+
+        adoptDate:
+          adoptDate
+            ? adoptDate
+              .toISOString()
+              .slice(0, 10)
+            : '',
+
+        age:
+          age
+            ? Number(age)
+            : null,
+
+        personality:
+          customPersonality ||
+          selectedPersonality,
+
+        imageUri:
+          imageUri || '',
+
+        character_id:
+          selectedCharacter,
+      };
+
+      console.log(
+        '식물 등록 요청:',
+        plantData
+      );
+
+      let response;
+
+      if (editingId) {
+
+        response =
+          await updatePlantApi(
+            editingId,
+            plantData
+          );
+
+      } else {
+
+        response =
+          await registerPlant(
+            plantData
+          );
+      }
+
+      console.log('식물 등록 성공:', response);
+
+      // Update context so Main reflects change immediately
+      try {
+        if (editingId) {
+          // server likely returns updated plant
+          updatePlant(editingId, response || plantData);
+        } else {
+          // server likely returns created plant with id
+          addPlant(response || plantData);
+        }
+      } catch (e) {
+        console.log('Context update failed:', e.message);
+      }
+
+      showAlert({
+        title: '성공',
+
+        message:
           editingId
-    ? '식물 정보가 수정되었습니다.'
-    : '식물이 등록되었습니다.',
+            ? '식물 정보가 수정되었습니다.'
+            : '식물이 등록되었습니다.',
 
-      buttonText: '확인',
+        buttonText: '확인',
 
         onPress: () => navigation.replace('Main'),
 
-      variant: 'success',
-    });
+        variant: 'success',
+      });
 
-  } catch (error) {
+    } catch (error) {
 
-    console.log(
-      '식물 등록 실패:',
-      error.response?.data
-    );
+      console.log(
+        '식물 등록 실패:',
+        error.response?.data
+      );
 
-    showAlert({
-      title: '실패',
+      showAlert({
+        title: '실패',
 
-      message:
-        error.response?.data?.message ||
-        '식물 등록에 실패했습니다.',
+        message:
+          error.response?.data?.message ||
+          '식물 등록에 실패했습니다.',
 
-      variant: 'error',
-    });
-  }
-};
+        variant: 'error',
+      });
+    }
+  };
 
   // 수정 화면 데이터 세팅
   useEffect(() => {
@@ -440,10 +502,10 @@ if (editingId) {
         }
       }
       if (p.character_id) {
-  setSelectedCharacter(
-    p.character_id
-  );
-}
+        setSelectedCharacter(
+          p.character_id
+        );
+      }
     }
 
   }, [route]);
@@ -546,11 +608,11 @@ if (editingId) {
                     : '날짜 선택'}
                 </Text>
 
-<Image
-  source={require('../assets/icon/down.png')}
-  style={styles.dateArrowIcon}
-  resizeMode="contain"
-/>
+                <Image
+                  source={require('../assets/icon/down.png')}
+                  style={styles.dateArrowIcon}
+                  resizeMode="contain"
+                />
 
               </TouchableOpacity>
 
@@ -640,18 +702,21 @@ if (editingId) {
                   </Text>
 
                   <TouchableOpacity
-                    onPress={
-                      handleAnalyzeSpecies
-                    }
+                    style={{
+    justifyContent: 'center',
+  }}
+                    onPress={handleAnalyzeSpecies}
                   >
-
                     <Text style={styles.aiRetry}>
                       다시 분석하기
                     </Text>
-
                   </TouchableOpacity>
 
                 </View>
+
+                <Text style={styles.aiResultDesc}>
+                  신뢰도: {analysisAccuracy}
+                </Text>
 
               </View>
             )}
@@ -820,14 +885,14 @@ if (editingId) {
         </View>
 
         {/* 캐릭터 선택 */}
-<View style={styles.row}>
+        <View style={styles.row}>
 
-  <Text style={styles.label}>
-    캐릭터
-  </Text>
+          <Text style={styles.label}>
+            캐릭터
+          </Text>
 
-  <View style={styles.contentWrap}>
-{/* 
+          <View style={styles.contentWrap}>
+            {/* 
     <Text style={styles.characterTitle}>
       캐릭터 선택하기
     </Text>
@@ -836,88 +901,88 @@ if (editingId) {
       내 식물의 캐릭터를 골라주세요.
     </Text> */}
 
-    <View style={styles.characterSelector}>
+            <View style={styles.characterSelector}>
 
-      <TouchableOpacity
-        style={styles.arrowButton}
-        onPress={() => {
+              <TouchableOpacity
+                style={styles.arrowButton}
+                onPress={() => {
 
-          if (selectedCharacter > 1) {
+                  if (selectedCharacter > 1) {
 
-            setSelectedCharacter(
-              prev => prev - 1
-            );
+                    setSelectedCharacter(
+                      prev => prev - 1
+                    );
 
-          }
+                  }
 
-        }}
-      >
-        <Text style={styles.arrowText}>
-          {'<'}
-        </Text>
-      </TouchableOpacity>
+                }}
+              >
+                <Text style={styles.arrowText}>
+                  {'<'}
+                </Text>
+              </TouchableOpacity>
 
-      <Image
-        source={
-          characterList[
-            selectedCharacter - 1
-          ]
-        }
-        style={styles.characterImage}
-      />
+              <Image
+                source={
+                  characterList[
+                  selectedCharacter - 1
+                  ]
+                }
+                style={styles.characterImage}
+              />
 
-      <TouchableOpacity
-        style={styles.arrowButton}
-        onPress={() => {
+              <TouchableOpacity
+                style={styles.arrowButton}
+                onPress={() => {
 
-          if (
-            selectedCharacter <
-            characterList.length
-          ) {
+                  if (
+                    selectedCharacter <
+                    characterList.length
+                  ) {
 
-            setSelectedCharacter(
-              prev => prev + 1
-            );
+                    setSelectedCharacter(
+                      prev => prev + 1
+                    );
 
-          }
+                  }
 
-        }}
-      >
-        <Text style={styles.arrowText}>
-          {'>'}
-        </Text>
-      </TouchableOpacity>
+                }}
+              >
+                <Text style={styles.arrowText}>
+                  {'>'}
+                </Text>
+              </TouchableOpacity>
 
-    </View>
+            </View>
 
-    <Text style={styles.characterCount}>
-      {selectedCharacter} / {characterList.length}
-    </Text>
+            <Text style={styles.characterCount}>
+              {selectedCharacter} / {characterList.length}
+            </Text>
 
-    <View style={styles.dotContainer}>
+            <View style={styles.dotContainer}>
 
-      {characterList.map(
-        (_, index) => (
+              {characterList.map(
+                (_, index) => (
 
-          <View
-            key={index}
-            style={[
-              styles.dot,
+                  <View
+                    key={index}
+                    style={[
+                      styles.dot,
 
-              selectedCharacter ===
-                index + 1 &&
-                styles.activeDot,
-            ]}
-          />
+                      selectedCharacter ===
+                      index + 1 &&
+                      styles.activeDot,
+                    ]}
+                  />
 
-        )
-      )}
+                )
+              )}
 
-    </View>
+            </View>
 
-  </View>
+          </View>
 
-</View>
+        </View>
 
       </ScrollView>
 

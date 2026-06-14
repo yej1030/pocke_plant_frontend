@@ -1,4 +1,9 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, {
+  useContext,
+  useMemo,
+  useState,
+  useEffect
+} from 'react';
 import {
   View,
   Text,
@@ -9,6 +14,10 @@ import {
 import Header from '../components/Header';
 import { PlantsContext } from '../context/PlantsContext';
 import styles from './style/PlantDetail.style';
+import {
+  createAiChatRoom,
+  sendAiMessage,
+} from '../api/api';
 
 const characterImages = {
   1: {
@@ -71,6 +80,9 @@ export default function PlantDetail({ navigation, route }) {
   const [speechMessage, setSpeechMessage] =
     useState('오늘은\n기분이 좋아요!');
 
+  const [roomId, setRoomId] =
+  useState(null);
+
   const plant = useMemo(() => {
     if (route?.params?.plant) {
       return route.params.plant;
@@ -85,7 +97,34 @@ export default function PlantDetail({ navigation, route }) {
 
   const title = plant?.name || '식물 상세';
 
-  const mood = 'happy';
+const [mood, setMood] =
+  useState('happy');
+
+  useEffect(() => {
+
+  const createRoom =
+    async () => {
+
+      try {
+
+        const room =
+          await createAiChatRoom();
+
+        setRoomId(room.id);
+
+      } catch (error) {
+
+        console.log(
+          '채팅방 생성 실패',
+          error
+        );
+
+      }
+    };
+
+  createRoom();
+
+}, []);
 
   if (!plant) {
     return (
@@ -103,6 +142,72 @@ export default function PlantDetail({ navigation, route }) {
       </>
     );
   }
+
+const askPlant = async question => {
+
+  if (!roomId) {
+    console.log('채팅방 없음');
+    return;
+  }
+
+  setSpeechMessage('생각중...');
+
+  try {
+
+const answer =
+  await sendAiMessage(
+    roomId,
+    question
+  );
+
+console.log(
+  '식물 AI 응답:',
+  JSON.stringify(answer, null, 2)
+);
+
+const content =
+  answer?.choices?.[0]
+    ?.message?.content
+  ?? '응답 없음';
+
+setSpeechMessage(content);
+//이거는 센서값을 기준으로 바꿔야해~~
+    if (
+      content.includes('좋') ||
+      content.includes('행복') ||
+      content.includes('고마')
+    ) {
+      setMood('happy');
+    } else {
+      setMood('sad');
+    }
+
+  } catch (error) {
+
+    console.log(
+      'AI 응답 실패:',
+      error.response?.data
+    );
+// // 여기부터 
+//     if (question === '물 줄까?') {
+
+//       setSpeechMessage(
+//         '물은 아직 괜찮아! 😊'
+//       );
+
+//       setMood('happy');
+
+//     } else {
+// // 여기까지 ai 채팅 서버 키면 주석처리 해야해~~
+      setSpeechMessage(
+        '지금은 대답할 수 없어요 😢'
+      );
+
+      setMood('sad');
+    // }
+  }
+};
+  
 
   const stats = [
     {
@@ -187,7 +292,7 @@ export default function PlantDetail({ navigation, route }) {
                 key={text}
                 style={styles.quickReplyButton}
                 activeOpacity={0.85}
-                onPress={() => setSpeechMessage(text)}
+                onPress={() => askPlant(text)}
               >
                 <Text style={styles.quickReplyText}>
                   {text}
