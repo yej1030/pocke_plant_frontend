@@ -11,6 +11,7 @@ export default function Header({
   title,
   navigation,
   type = 'auth',
+  onBackPress,
 }) {
 
   // 메인
@@ -52,8 +53,10 @@ export default function Header({
       <View style={styles.container}>
 
         <TouchableOpacity
-          onPress={() =>
-            navigation.goBack()
+          onPress={
+            onBackPress
+              ? onBackPress
+              : () => navigation.goBack()
           }
         >
 
@@ -94,8 +97,10 @@ export default function Header({
     <View style={styles.container}>
 
       <TouchableOpacity
-        onPress={() =>
-          navigation.goBack()
+        onPress={
+          onBackPress
+            ? onBackPress
+            : () => navigation.goBack()
         }
       >
 

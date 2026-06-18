@@ -14,6 +14,7 @@ import DiseaseResult from '../screens/DiseaseResult';
 import Settings from '../screens/Settings';
 import FindPassword from '../screens/FindPassword';
 import ResetPassword from '../screens/ResetPassword';
+import HardwareConnect from '../screens/HardwareConnect';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +35,7 @@ export default function AppNavigator() {
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="FindPassword" component={FindPassword} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
-        
+        <Stack.Screen name="HardwareConnect" component={HardwareConnect} />
       </Stack.Navigator>
     </NavigationContainer>
   );

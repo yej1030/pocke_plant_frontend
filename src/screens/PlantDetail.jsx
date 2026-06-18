@@ -75,13 +75,18 @@ export default function PlantDetail({ navigation, route }) {
   const { plants } = useContext(PlantsContext);
 
   const [isHardwareConnected, setIsHardwareConnected] =
-    useState(false);
+    useState(route?.params?.hardwareConnected || false);
+  useEffect(() => {
+    if (route?.params?.hardwareConnected) {
+      setIsHardwareConnected(true);
+    }
+  }, [route?.params?.hardwareConnected]);
 
   const [speechMessage, setSpeechMessage] =
     useState('오늘은\n기분이 좋아요!');
 
   const [roomId, setRoomId] =
-  useState(null);
+    useState(null);
 
   const plant = useMemo(() => {
     if (route?.params?.plant) {
@@ -97,34 +102,34 @@ export default function PlantDetail({ navigation, route }) {
 
   const title = plant?.name || '식물 상세';
 
-const [mood, setMood] =
-  useState('happy');
+  const [mood, setMood] =
+    useState('happy');
 
   useEffect(() => {
 
-  const createRoom =
-    async () => {
+    const createRoom =
+      async () => {
 
-      try {
+        try {
 
-        const room =
-          await createAiChatRoom();
+          const room =
+            await createAiChatRoom();
 
-        setRoomId(room.id);
+          setRoomId(room.id);
 
-      } catch (error) {
+        } catch (error) {
 
-        console.log(
-          '채팅방 생성 실패',
-          error
-        );
+          console.log(
+            '채팅방 생성 실패',
+            error
+          );
 
-      }
-    };
+        }
+      };
 
-  createRoom();
+    createRoom();
 
-}, []);
+  }, []);
 
   if (!plant) {
     return (
@@ -143,71 +148,71 @@ const [mood, setMood] =
     );
   }
 
-const askPlant = async question => {
+  const askPlant = async question => {
 
-  if (!roomId) {
-    console.log('채팅방 없음');
-    return;
-  }
-
-  setSpeechMessage('생각중...');
-
-  try {
-
-const answer =
-  await sendAiMessage(
-    roomId,
-    question
-  );
-
-console.log(
-  '식물 AI 응답:',
-  JSON.stringify(answer, null, 2)
-);
-
-const content =
-  answer?.choices?.[0]
-    ?.message?.content
-  ?? '응답 없음';
-
-setSpeechMessage(content);
-//이거는 센서값을 기준으로 바꿔야해~~
-    if (
-      content.includes('좋') ||
-      content.includes('행복') ||
-      content.includes('고마')
-    ) {
-      setMood('happy');
-    } else {
-      setMood('sad');
+    if (!roomId) {
+      console.log('채팅방 없음');
+      return;
     }
 
-  } catch (error) {
+    setSpeechMessage('생각중...');
 
-    console.log(
-      'AI 응답 실패:',
-      error.response?.data
-    );
-// // 여기부터 
-//     if (question === '물 줄까?') {
+    try {
 
-//       setSpeechMessage(
-//         '물은 아직 괜찮아! 😊'
-//       );
+      const answer =
+        await sendAiMessage(
+          roomId,
+          question
+        );
 
-//       setMood('happy');
+      console.log(
+        '식물 AI 응답:',
+        JSON.stringify(answer, null, 2)
+      );
 
-//     } else {
-// // 여기까지 ai 채팅 서버 키면 주석처리 해야해~~
+      const content =
+        answer?.choices?.[0]
+          ?.message?.content
+        ?? '응답 없음';
+
+      setSpeechMessage(content);
+      //이거는 센서값을 기준으로 바꿔야해~~
+      if (
+        content.includes('좋') ||
+        content.includes('행복') ||
+        content.includes('고마')
+      ) {
+        setMood('happy');
+      } else {
+        setMood('sad');
+      }
+
+    } catch (error) {
+
+      console.log(
+        'AI 응답 실패:',
+        error.response?.data
+      );
+      // // 여기부터 
+      //     if (question === '물 줄까?') {
+
+      //       setSpeechMessage(
+      //         '물은 아직 괜찮아! 😊'
+      //       );
+
+      //       setMood('happy');
+
+      //     } else {
+      // // 여기까지 ai 채팅 서버 키면 주석처리 해야해~~
       setSpeechMessage(
         '지금은 대답할 수 없어요 😢'
       );
 
       setMood('sad');
-    // }
-  }
-};
-  
+      // }
+    }
+  };
+
 
   const stats = [
     {
@@ -330,7 +335,9 @@ setSpeechMessage(content);
             style={styles.hardwareButton}
             activeOpacity={0.85}
             onPress={() => {
-              setIsHardwareConnected(true);
+              navigation.navigate('HardwareConnect', {
+                plant,
+              });
             }}
           >
             <Text style={styles.hardwareText}>
@@ -392,7 +399,9 @@ setSpeechMessage(content);
             </TouchableOpacity>
           </>
         ) : (
-          <Text style={styles.hardwareHint}>
+          <Text style={styles.hardwareHint}
+            onPress={() => navigation.navigate('HardwareConnect')}>
+
             하드웨어 연결 후 센서 데이터가 표시됩니다.
           </Text>
         )}
