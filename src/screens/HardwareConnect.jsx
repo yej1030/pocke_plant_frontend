@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
     View,
     Text,
@@ -52,7 +52,6 @@ export default function HardwareConnect({
     const [wifiName, setWifiName] = useState('');
     const [wifiPassword, setWifiPassword] = useState('');
     const [selectedDevice, setSelectedDevice] = useState(false);
-
     const { alertConfig, showAlert, closeAlert } = useCustomAlert(); // ✅ 추가
 
     const stepInfo = steps[step];
@@ -103,23 +102,31 @@ export default function HardwareConnect({
 
         if (step === 3) {
             if (route?.params?.plant) {
-                // ✅ replace로 뒤로가기 시 하드웨어 연결 화면 안 나오게
-                navigation.replace(
-                    'PlantDetail',
-                    {
-                        plant: route.params.plant,
-                        hardwareConnected: true,
-                    }
-                );
+
+                navigation.reset({
+                    index: 1,
+                    routes: [
+                        {
+                            name: 'Main',
+                        },
+                        {
+                            name: 'PlantDetail',
+                            params: {
+                                plant: route.params.plant,
+                                hardwareConnected: true,
+                            },
+                        },
+                    ],
+                });
+
             } else {
                 navigation.goBack();
             }
+
             return;
         }
-
         setStep(step + 1);
     };
-
     // ✅ STEP1은 자동 진행이라 뒤로가기 시 그냥 뒤로
     useEffect(() => {
         const backAction = () => {
@@ -142,6 +149,7 @@ export default function HardwareConnect({
         <KeyboardAvoidingView
             style={styles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={-60}
         >
             <Header
                 title="하드웨어 연결"
@@ -186,7 +194,7 @@ export default function HardwareConnect({
                                 style={styles.iotIcon}
                             />
                         </View>
-                        <Text style={styles.title}>{stepInfo.title}</Text>
+                        <Text style={styles.title_1}>{stepInfo.title}</Text>
                         <Text style={styles.subtitle}>{stepInfo.subtitle}</Text>
                     </View>
                 )}
@@ -236,7 +244,7 @@ export default function HardwareConnect({
                             <Text style={styles.wifiIcon}>📶</Text>
                         </View>
                         <Text style={styles.title}>{stepInfo.title}</Text>
-                        <Text style={styles.subtitle}>{stepInfo.subtitle}</Text>
+                        <Text style={styles.subtitle_3}>{stepInfo.subtitle}</Text>
 
                         <TextInput
                             value={wifiName}

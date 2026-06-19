@@ -10,6 +10,7 @@ export default StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 15,
+    alignItems: 'center',
   },
 
   progressWrap: {
@@ -30,6 +31,15 @@ export default StyleSheet.create({
   },
 
   /* STEP1 */
+
+  
+  title_1: {
+    marginTop: 100,
+    fontSize: 30,
+    fontWeight: '700',
+    color: '#333',
+    textAlign: 'center',
+  },
 
   scanWrap: {
     alignItems: 'center',
@@ -66,7 +76,6 @@ export default StyleSheet.create({
     borderColor: '#5CD79E',
   },
 
-  // ✅ marginTop 줄여서 아이콘 서클 안으로
   iconCircle: {
     marginTop: 50,
     width: 60,
@@ -85,7 +94,7 @@ export default StyleSheet.create({
   /* 공통 */
 
   title: {
-    marginTop: 50,
+    marginTop: 30,
     fontSize: 30,
     fontWeight: '700',
     color: '#333',
@@ -104,17 +113,18 @@ export default StyleSheet.create({
 
   deviceWrap: {
     alignItems: 'center',
+    width: '100%',
   },
 
   deviceIconCircle: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     borderWidth: 1.5,
     borderColor: '#5CD79E',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 50,
   },
 
   partyIcon: {
@@ -181,10 +191,20 @@ radioInner: {
 
   wifiWrap: {
     alignItems: 'center',
+    width: '100%',
   },
 
   wifiIcon: {
     fontSize: 30,
+  },
+
+    subtitle_3: {
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 14,
+    color: '#999',
+    lineHeight: 20,
+    textAlign: 'center',
   },
 
   input: {
@@ -219,17 +239,18 @@ radioInner: {
 
   doneWrap: {
     alignItems: 'center',
+    width: '100%',
   },
 
   doneCircle: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     borderWidth: 1.5,
     borderColor: '#5CD79E',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 50,
   },
 
   doneIcon: {
