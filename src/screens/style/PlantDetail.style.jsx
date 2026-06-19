@@ -91,55 +91,7 @@ export default StyleSheet.create({
     marginTop: 14,
     gap: 10,
   },
-  statCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#d6ded9',
-    backgroundColor: '#fff',
-    paddingHorizontal: 17,
-    paddingVertical: 6,
-    gap: 8,
-  },
-  statIcon: {
-    width: 28,
-    height: 28,
-    resizeMode: 'contain',
-  },
-  statLabel: {
-    width: 62,
-    fontSize: 15,
-    color: '#1f1f1f',
-    fontWeight: '700',
-  },
-  statValueWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: 58,
-  },
-  statValue: {
-    fontSize: 20,
-    color: '#1f1f1f',
-    fontWeight: '800',
-  },
-  statUnit: {
-    marginLeft: 2,
-    fontSize: 12,
-    color: '#7a7a7a',
-    fontWeight: '600',
-  },
-  statBarTrack: {
-    flex: 1,
-    height: 6,
-    borderRadius: 6,
-    backgroundColor: '#e7efe9',
-    overflow: 'hidden',
-  },
-  statBarFill: {
-    height: '100%',
-    borderRadius: 6,
-  },
+  
   waterButton: {
     marginTop: 14,
     height: 44,
@@ -194,6 +146,72 @@ quickReplyButton: {
 quickReplyText: {
   fontSize: 12,
   color: '#1d1d1d',
+},
+
+sensorCard: {
+  borderWidth: 1,
+  borderColor: '#dcdcdc',
+  borderRadius: 16,
+  backgroundColor: '#fff',
+  padding: 16,
+},
+
+sensorTop: {
+  flexDirection: 'row',
+  justifyContent:
+    'space-between',
+  alignItems: 'center',
+},
+
+sensorLeft: {
+  flexDirection: 'row',
+  alignItems: 'center',
+},
+
+sensorIcon: {
+  width: 40,
+  height: 40,
+  resizeMode: 'contain',
+},
+
+sensorLabel: {
+  marginLeft: 12,
+  fontSize: 20,
+  fontWeight: '700',
+  color: '#222',
+},
+
+sensorRight: {
+  alignItems: 'flex-end',
+},
+
+sensorTarget: {
+  fontSize: 14,
+  color: '#999',
+  fontWeight: '600',
+},
+
+sensorValue: {
+  fontSize: 34,
+  fontWeight: '800',
+  color: '#222',
+},
+
+sensorUnit: {
+  fontSize: 20,
+},
+
+sensorBarTrack: {
+  marginTop: 12,
+  height: 16,
+  borderRadius: 10,
+  backgroundColor: '#DDE8D9',
+  overflow: 'hidden',
+},
+
+sensorBarFill: {
+  height: '100%',
+  borderRadius: 10,
 },
 
 });

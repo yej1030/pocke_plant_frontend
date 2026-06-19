@@ -17,6 +17,7 @@ import styles from './style/PlantDetail.style';
 import {
   createAiChatRoom,
   sendAiMessage,
+  getLatestSensorData,
 } from '../api/api';
 
 const characterImages = {
@@ -81,7 +82,7 @@ export default function PlantDetail({ navigation, route }) {
     useState('오늘은\n기분이 좋아요!');
 
   const [roomId, setRoomId] =
-  useState(null);
+    useState(null);
 
   const plant = useMemo(() => {
     if (route?.params?.plant) {
@@ -97,34 +98,76 @@ export default function PlantDetail({ navigation, route }) {
 
   const title = plant?.name || '식물 상세';
 
-const [mood, setMood] =
-  useState('happy');
+  const [mood, setMood] =
+    useState('happy');
+
+  const [sensorData, setSensorData] =
+    useState(null);
 
   useEffect(() => {
 
-  const createRoom =
-    async () => {
+    const createRoom =
+      async () => {
 
-      try {
+        try {
 
-        const room =
-          await createAiChatRoom();
+          const room =
+            await createAiChatRoom();
 
-        setRoomId(room.id);
+          setRoomId(room.id);
 
-      } catch (error) {
+        } catch (error) {
 
-        console.log(
-          '채팅방 생성 실패',
-          error
-        );
+          console.log(
+            '채팅방 생성 실패',
+            error
+          );
 
-      }
-    };
+        }
+      };
 
-  createRoom();
+    createRoom();
 
-}, []);
+  }, []);
+
+  useEffect(() => {
+
+    const fetchSensorData =
+      async () => {
+
+        try {
+
+          const data =
+            await getLatestSensorData();
+
+          console.log(
+            '센서 데이터:',
+            data
+          );
+
+          setSensorData(data);
+
+        } catch (error) {
+
+          console.log(
+            '센서 조회 실패',
+            error
+          );
+        }
+      };
+
+    fetchSensorData();
+
+    const interval =
+      setInterval(
+        fetchSensorData,
+        5000
+      );
+
+    return () =>
+      clearInterval(interval);
+
+  }, []);
 
   if (!plant) {
     return (
@@ -143,77 +186,77 @@ const [mood, setMood] =
     );
   }
 
-const askPlant = async question => {
+  const askPlant = async question => {
 
-  if (!roomId) {
-    console.log('채팅방 없음');
-    return;
-  }
-
-  setSpeechMessage('생각중...');
-
-  try {
-
-const answer =
-  await sendAiMessage(
-    roomId,
-    question
-  );
-
-console.log(
-  '식물 AI 응답:',
-  JSON.stringify(answer, null, 2)
-);
-
-const content =
-  answer?.choices?.[0]
-    ?.message?.content
-  ?? '응답 없음';
-
-setSpeechMessage(content);
-//이거는 센서값을 기준으로 바꿔야해~~
-    if (
-      content.includes('좋') ||
-      content.includes('행복') ||
-      content.includes('고마')
-    ) {
-      setMood('happy');
-    } else {
-      setMood('sad');
+    if (!roomId) {
+      console.log('채팅방 없음');
+      return;
     }
 
-  } catch (error) {
+    setSpeechMessage('생각중...');
 
-    console.log(
-      'AI 응답 실패:',
-      error.response?.data
-    );
-// // 여기부터 
-//     if (question === '물 줄까?') {
+    try {
 
-//       setSpeechMessage(
-//         '물은 아직 괜찮아! 😊'
-//       );
+      const answer =
+        await sendAiMessage(
+          roomId,
+          question
+        );
 
-//       setMood('happy');
+      console.log(
+        '식물 AI 응답:',
+        JSON.stringify(answer, null, 2)
+      );
 
-//     } else {
-// // 여기까지 ai 채팅 서버 키면 주석처리 해야해~~
+      const content =
+        answer?.choices?.[0]
+          ?.message?.content
+        ?? '응답 없음';
+
+      setSpeechMessage(content);
+      //이거는 센서값을 기준으로 바꿔야해~~
+      if (
+        content.includes('좋') ||
+        content.includes('행복') ||
+        content.includes('고마')
+      ) {
+        setMood('happy');
+      } else {
+        setMood('sad');
+      }
+
+    } catch (error) {
+
+      console.log(
+        'AI 응답 실패:',
+        error.response?.data
+      );
+      // // 여기부터 
+      //     if (question === '물 줄까?') {
+
+      //       setSpeechMessage(
+      //         '물은 아직 괜찮아! 😊'
+      //       );
+
+      //       setMood('happy');
+
+      //     } else {
+      // // 여기까지 ai 채팅 서버 키면 주석처리 해야해~~
       setSpeechMessage(
         '지금은 대답할 수 없어요 😢'
       );
 
       setMood('sad');
-    // }
-  }
-};
-  
+      // }
+    }
+  };
+
 
   const stats = [
     {
       type: 'soil',
       label: '토양 수분',
-      value: 35,
+      value: sensorData?.soil ?? 0,
       unit: '%',
       accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_soil.png'),
@@ -221,7 +264,7 @@ setSpeechMessage(content);
     {
       type: 'temp',
       label: '온도',
-      value: 22,
+      value: sensorData?.temp ?? 0,
       unit: '°C',
       accent: '#6fcf97',
       icon: require('../assets/sensor/sensor_temp.png'),
@@ -229,7 +272,7 @@ setSpeechMessage(content);
     {
       type: 'humidity',
       label: '습도',
-      value: 58,
+      value: sensorData?.humidity ?? 0,
       unit: '%',
       accent: '#6fcf97',
       icon: require('../assets/sensor/sensor_humidity.png'),
@@ -237,7 +280,7 @@ setSpeechMessage(content);
     {
       type: 'light',
       label: '조도',
-      value: 36000,
+      value: sensorData?.light ?? 0,
       unit: 'lx',
       accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_light.png'),
@@ -245,7 +288,7 @@ setSpeechMessage(content);
     {
       type: 'bio',
       label: '바이오',
-      value: 360,
+      value: sensorData?.bio ?? 0,
       unit: 'mV',
       accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_bio.png'),
@@ -355,26 +398,80 @@ setSpeechMessage(content);
                 else fontSize = 12;
 
                 return (
-                  <View key={item.label} style={styles.statCard}>
-                    <Image source={item.icon} style={styles.statIcon} />
-                    <Text style={styles.statLabel}>{item.label}</Text>
+                  <View
+                    key={item.label}
+                    style={styles.sensorCard}
+                  >
 
-                    <View style={styles.statValueWrap}>
-                      <Text style={[styles.statValue, { fontSize }]}> {item.value}</Text>
-                      <Text style={styles.statUnit}>{item.unit}</Text>
+                    <View
+                      style={styles.sensorTop}
+                    >
+
+                      <View
+                        style={styles.sensorLeft}
+                      >
+
+                        <Image
+                          source={item.icon}
+                          style={styles.sensorIcon}
+                        />
+
+                        <Text
+                          style={styles.sensorLabel}
+                        >
+                          {item.label}
+                        </Text>
+
+                      </View>
+
+                      <View
+                        style={styles.sensorRight}
+                      >
+
+                        <Text
+                          style={styles.sensorTarget}
+                        >
+                          적정 {item.target}
+                          {item.unit}
+                        </Text>
+
+                        <Text
+                          style={styles.sensorValue}
+                        >
+                          {item.value}
+                          <Text
+                            style={
+                              styles.sensorUnit
+                            }
+                          >
+                            {item.unit}
+                          </Text>
+                        </Text>
+
+                      </View>
+
                     </View>
 
-                    <View style={styles.statBarTrack}>
+                    <View
+                      style={styles.sensorBarTrack}
+                    >
+
                       <View
                         style={[
-                          styles.statBarFill,
+                          styles.sensorBarFill,
                           {
-                            width: `${Math.min(item.value, 100)}%`,
-                            backgroundColor: item.accent,
+                            width: `${Math.min(
+                              item.value,
+                              100
+                            )}%`,
+                            backgroundColor:
+                              item.accent,
                           },
                         ]}
                       />
+
                     </View>
+
                   </View>
                 );
               })}
