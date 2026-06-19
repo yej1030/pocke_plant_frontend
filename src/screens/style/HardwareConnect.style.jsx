@@ -66,8 +66,9 @@ export default StyleSheet.create({
     borderColor: '#5CD79E',
   },
 
+  // ✅ marginTop 줄여서 아이콘 서클 안으로
   iconCircle: {
-    marginTop: 60,
+    marginTop: 50,
     width: 60,
     height: 60,
     borderRadius: 30,
@@ -153,13 +154,28 @@ export default StyleSheet.create({
     color: '#999',
   },
 
-  radio: {
+radio: {
     width: 18,
     height: 18,
     borderRadius: 9,
     borderWidth: 2,
     borderColor: '#5CD79E',
-  },
+    justifyContent: 'center', // ✅ 추가
+    alignItems: 'center',     // ✅ 추가
+},
+
+  // ✅ 선택됐을 때 카드 테두리 색 변경
+deviceCardSelected: {
+    borderColor: '#5CD79E',
+},
+
+// ✅ 라디오 버튼 내부 점
+radioInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#5CD79E',
+},
 
   /* STEP3 */
 
@@ -238,6 +254,10 @@ export default StyleSheet.create({
     paddingVertical: 14,
     borderBottomWidth: 1,
     borderBottomColor: '#EFEFEF',
+  },
+
+  summaryRowLast: {
+    borderBottomWidth: 0,
   },
 
   summaryLabel: {

@@ -7,6 +7,8 @@ import {
     TextInput,
     ScrollView,
     BackHandler,
+    KeyboardAvoidingView, // ✅ 추가
+    Platform, // ✅ 추가
 } from 'react-native';
 
 import Header from '../components/Header';
@@ -57,6 +59,9 @@ export default function HardwareConnect({
     const stepInfo =
         steps[step];
 
+    // ✅ 상단 state에 추가
+    const [selectedDevice, setSelectedDevice] = useState(false);
+
     const details = useMemo(
         () => [
             {
@@ -69,7 +74,7 @@ export default function HardwareConnect({
             },
             {
                 label: '데이터 주기',
-                value: '10분마다 자동 갱신',
+                value: '5분?마다 자동 갱신',
             },
             {
                 label: '상태',
@@ -112,10 +117,10 @@ export default function HardwareConnect({
         const backAction = () => {
             if (step > 0) {
                 setStep(prev => prev - 1);
-                return true; // 기본 뒤로가기 막기
+                return true;
             }
 
-            return false; // step 0이면 원래 뒤로가기 실행
+            return false;
         };
 
         const backHandler =
@@ -128,8 +133,11 @@ export default function HardwareConnect({
     }, [step]);
 
     return (
-        <View style={styles.container}>
-
+        // ✅ KeyboardAvoidingView로 감싸기
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
             <Header
                 title="하드웨어 연결"
                 navigation={navigation}
@@ -150,6 +158,7 @@ export default function HardwareConnect({
                 showsVerticalScrollIndicator={
                     false
                 }
+                keyboardShouldPersistTaps="handled" // ✅ 추가
             >
 
                 {/* 진행바 */}
@@ -199,6 +208,7 @@ export default function HardwareConnect({
                             }
                         />
 
+                        {/* ✅ iconCircle을 pulseInner 안쪽 위치로 올림 */}
                         <View
                             style={
                                 styles.iconCircle
@@ -238,99 +248,104 @@ export default function HardwareConnect({
                 )}
 
                 {/* STEP 2 */}
-                {step === 1 && (
-                    <View
-                        style={
-                            styles.deviceWrap
-                        }
-                    >
+{step === 1 && (
+    <View
+        style={
+            styles.deviceWrap
+        }
+    >
 
-                        <View
-                            style={
-                                styles.deviceIconCircle
-                            }
-                        >
+        <View
+            style={
+                styles.deviceIconCircle
+            }
+        >
 
-                            <Text
-                                style={
-                                    styles.partyIcon
-                                }
-                            >
-                                🎉
-                            </Text>
+            <Text
+                style={
+                    styles.partyIcon
+                }
+            >
+                🎉
+            </Text>
 
-                        </View>
+        </View>
 
-                        <Text
-                            style={
-                                styles.title
-                            }
-                        >
-                            {
-                                stepInfo.title
-                            }
-                        </Text>
+        <Text
+            style={
+                styles.title
+            }
+        >
+            {
+                stepInfo.title
+            }
+        </Text>
 
-                        <Text
-                            style={
-                                styles.subtitle
-                            }
-                        >
-                            {
-                                stepInfo.subtitle
-                            }
-                        </Text>
+        <Text
+            style={
+                styles.subtitle
+            }
+        >
+            {
+                stepInfo.subtitle
+            }
+        </Text>
 
-                        <TouchableOpacity
-                            style={
-                                styles.deviceCard
-                            }
-                        >
+        {/* ✅ TouchableOpacity + 선택 상태 */}
+        <TouchableOpacity
+            style={[
+                styles.deviceCard,
+                selectedDevice && styles.deviceCardSelected,
+            ]}
+            onPress={() => setSelectedDevice(true)}
+            activeOpacity={0.8}
+        >
 
-                            <Image
-                                source={require('../assets/icon/iot.png')}
-                                style={
-                                    styles.deviceIcon
-                                }
-                            />
+            <Image
+                source={require('../assets/icon/iot.png')}
+                style={
+                    styles.deviceIcon
+                }
+            />
 
-                            <View
-                                style={
-                                    styles.deviceInfo
-                                }
-                            >
+            <View
+                style={
+                    styles.deviceInfo
+                }
+            >
 
-                                <Text
-                                    style={
-                                        styles.deviceName
-                                    }
-                                >
-                                    PocketPlant -
-                                    ESP32
-                                </Text>
+                <Text
+                    style={
+                        styles.deviceName
+                    }
+                >
+                    PocketPlant -
+                    ESP32
+                </Text>
 
-                                <Text
-                                    style={
-                                        styles.deviceIp
-                                    }
-                                >
-                                    123.41.66
-                                    포켓플랜트
-                                    전용 기기
-                                </Text>
+                <Text
+                    style={
+                        styles.deviceIp
+                    }
+                >
+                    123.41.66
+                    포켓플랜트
+                    전용 기기
+                </Text>
 
-                            </View>
+            </View>
 
-                            <View
-                                style={
-                                    styles.radio
-                                }
-                            />
-
-                        </TouchableOpacity>
-
-                    </View>
+            {/* ✅ 선택되면 속이 채워진 라디오 */}
+            <View style={styles.radio}>
+                {selectedDevice && (
+                    <View style={styles.radioInner} />
                 )}
+            </View>
+
+        </TouchableOpacity>
+
+    </View>
+)}
 
                 {/* STEP 3 */}
                 {step === 2 && (
@@ -340,12 +355,12 @@ export default function HardwareConnect({
                         }
                     >
 
+                        {/* ✅ STEP2처럼 서클 안에 이모지 */}
                         <View
                             style={
-                                styles.iconCircle
+                                styles.deviceIconCircle
                             }
                         >
-
                             <Text
                                 style={
                                     styles.wifiIcon
@@ -353,7 +368,6 @@ export default function HardwareConnect({
                             >
                                 📶
                             </Text>
-
                         </View>
 
                         <Text
@@ -376,6 +390,7 @@ export default function HardwareConnect({
                             }
                         </Text>
 
+                        {/* ✅ maxLength={20} 추가 */}
                         <TextInput
                             value={wifiName}
                             onChangeText={
@@ -385,6 +400,7 @@ export default function HardwareConnect({
                             style={
                                 styles.input
                             }
+                            maxLength={20}
                         />
 
                         <TextInput
@@ -399,6 +415,7 @@ export default function HardwareConnect({
                             style={
                                 styles.input
                             }
+                            maxLength={20}
                         />
 
                         <View
@@ -412,9 +429,8 @@ export default function HardwareConnect({
                                     styles.noticeText
                                 }
                             >
-                                ESP32는
-                                2.4GHz만
-                                지원해요.
+                                ESP32는 2.4GHz Wi-Fi만 지원해요.{'\n'}
+                                5GHz 전용 공유기라면 2.4GHz 대역을 따로 켜주세요.
                             </Text>
 
                         </View>
@@ -473,14 +489,16 @@ export default function HardwareConnect({
                         >
 
                             {details.map(
-                                item => (
+                                (item, index) => (
                                     <View
                                         key={
                                             item.label
                                         }
-                                        style={
-                                            styles.summaryRow
-                                        }
+                                        style={[
+                                            styles.summaryRow,
+                                            index === details.length - 1 &&
+                                            styles.summaryRowLast,
+                                        ]}
                                     >
 
                                         <Text
@@ -523,6 +541,6 @@ export default function HardwareConnect({
                 }
             />
 
-        </View>
+        </KeyboardAvoidingView>
     );
 }
