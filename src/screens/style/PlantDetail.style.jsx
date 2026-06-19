@@ -91,7 +91,6 @@ export default StyleSheet.create({
     marginTop: 14,
     gap: 10,
   },
-  
   waterButton: {
     marginTop: 14,
     height: 44,
@@ -124,94 +123,93 @@ export default StyleSheet.create({
     fontSize: 14,
     color: '#7b7b7b',
   },
+  quickReplyWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+  },
+  quickReplyButton: {
+    borderWidth: 1,
+    borderColor: '#79d791',
+    borderRadius: 18,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: '#fff',
+  },
+  quickReplyText: {
+    fontSize: 12,
+    color: '#1d1d1d',
+  },
 
-quickReplyWrap: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-  gap: 8,
-  paddingHorizontal: 16,
-  paddingBottom: 12,
-},
-
-quickReplyButton: {
-  borderWidth: 1,
-  borderColor: '#79d791',
-  borderRadius: 18,
-  paddingHorizontal: 12,
-  paddingVertical: 6,
-  backgroundColor: '#fff',
-},
-
-quickReplyText: {
-  fontSize: 12,
-  color: '#1d1d1d',
-},
-
-sensorCard: {
-  borderWidth: 1,
-  borderColor: '#dcdcdc',
-  borderRadius: 16,
-  backgroundColor: '#fff',
-  padding: 16,
-},
-
-sensorTop: {
-  flexDirection: 'row',
-  justifyContent:
-    'space-between',
-  alignItems: 'center',
-},
-
-sensorLeft: {
-  flexDirection: 'row',
-  alignItems: 'center',
-},
-
-sensorIcon: {
-  width: 40,
-  height: 40,
-  resizeMode: 'contain',
-},
-
-sensorLabel: {
-  marginLeft: 12,
-  fontSize: 20,
-  fontWeight: '700',
-  color: '#222',
-},
-
-sensorRight: {
-  alignItems: 'flex-end',
-},
-
-sensorTarget: {
-  fontSize: 14,
-  color: '#999',
-  fontWeight: '600',
-},
-
-sensorValue: {
-  fontSize: 34,
-  fontWeight: '800',
-  color: '#222',
-},
-
-sensorUnit: {
-  fontSize: 20,
-},
-
-sensorBarTrack: {
-  marginTop: 12,
-  height: 16,
-  borderRadius: 10,
-  backgroundColor: '#DDE8D9',
-  overflow: 'hidden',
-},
-
-sensorBarFill: {
-  height: '100%',
-  borderRadius: 10,
-},
-
+  // ✅ 센서 카드 — 이미지 디자인 반영
+  sensorCard: {
+    borderWidth: 1,
+    borderColor: '#e8e8e8',
+    borderRadius: 16,
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 1,
+  },
+  sensorTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  sensorLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  sensorIcon: {
+    width: 32,
+    height: 32,
+    resizeMode: 'contain',
+  },
+  sensorLabel: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1a1a1a',
+  },
+  sensorRight: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 2,
+  },
+  sensorTarget: {
+    fontSize: 12,
+    color: '#aaa',
+    fontWeight: '500',
+    paddingRight: 20,
+    paddingBottom: 3,
+  },
+  sensorValue: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#1a1a1a',
+    lineHeight: 28,
+  },
+  sensorUnit: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1a1a1a',
+  },
+  sensorBarTrack: {
+    height: 10,
+    borderRadius: 30,
+    backgroundColor: '#E8F5EC',
+    overflow: 'hidden',
+  },
+  sensorBarFill: {
+    height: '100%',
+    borderRadius: 30,
+  },
 });

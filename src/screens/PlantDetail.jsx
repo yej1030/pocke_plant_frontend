@@ -18,6 +18,7 @@ import {
   createAiChatRoom,
   sendAiMessage,
   getLatestSensorData,
+  getPlantEnv,
 } from '../api/api';
 
 const characterImages = {
@@ -169,6 +170,21 @@ export default function PlantDetail({ navigation, route }) {
 
   }, []);
 
+  const [plantEnv, setPlantEnv] = useState(null);
+
+  useEffect(() => {
+    if (!plant?.name) return;
+    const fetchEnv = async () => {
+      try {
+        const env = await getPlantEnv(plant.name);
+        setPlantEnv(env);
+      } catch (error) {
+        console.log('식물 환경 데이터 조회 실패', error);
+      }
+    };
+    fetchEnv();
+  }, [plant]);
+
   if (!plant) {
     return (
       <>
@@ -251,51 +267,48 @@ export default function PlantDetail({ navigation, route }) {
     }
   };
 
-
   const stats = [
     {
       type: 'soil',
       label: '토양 수분',
-      value: sensorData?.soil ?? 0,
+      value: sensorData?.soil ?? '-',
+      target: plantEnv?.waterCycleSpring ?? '-',
       unit: '%',
-      accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_soil.png'),
     },
     {
       type: 'temp',
       label: '온도',
-      value: sensorData?.temp ?? 0,
+      value: sensorData?.temp ?? '-',
+      target: plantEnv?.growhTp ?? '-',
       unit: '°C',
-      accent: '#6fcf97',
       icon: require('../assets/sensor/sensor_temp.png'),
     },
     {
       type: 'humidity',
       label: '습도',
-      value: sensorData?.humidity ?? 0,
+      value: sensorData?.humidity ?? '-',
+      target: plantEnv?.humidity ?? '-',
       unit: '%',
-      accent: '#6fcf97',
       icon: require('../assets/sensor/sensor_humidity.png'),
     },
     {
       type: 'light',
       label: '조도',
-      value: sensorData?.light ?? 0,
+      value: sensorData?.light ?? '-',
+      target: '-',   // PlantData에 조도 필드 없음
       unit: 'lx',
-      accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_light.png'),
     },
     {
       type: 'bio',
       label: '바이오',
-      value: sensorData?.bio ?? 0,
+      value: sensorData?.bio ?? '-',
+      target: '-',   // PlantData에 바이오 필드 없음
       unit: 'mV',
-      accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_bio.png'),
     },
   ];
-
-
 
   return (
     <>
@@ -464,8 +477,11 @@ export default function PlantDetail({ navigation, route }) {
                               item.value,
                               100
                             )}%`,
-                            backgroundColor:
-                              item.accent,
+                            backgroundColor: (() => {
+                              if (typeof item.value !== 'number') return 'transparent';
+                              if (item.value >= item.min && item.value <= item.max) return '#6fcf97';
+                              return '#c89b6d';
+                            })(),
                           },
                         ]}
                       />
