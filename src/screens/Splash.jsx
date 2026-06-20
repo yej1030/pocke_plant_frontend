@@ -1,135 +1,164 @@
 import React, {
-  useEffect,
-  useRef,
+	useEffect,
+	useRef,
 } from 'react';
 
 import {
-  View,
-  Text,
-  Animated,
+	View,
+	Text,
+	Animated,
 } from 'react-native';
 
 import AsyncStorage
-  from '@react-native-async-storage/async-storage';
+	from '@react-native-async-storage/async-storage';
 
 import {
-  getMyInfo,
+	getMyInfo,
 } from '../api/api';
 
 import styles
-  from './style/Splash.style';
+	from './style/Splash.style';
 
 export default function SplashScreen({
-  navigation,
+	navigation,
 } = {}) {
 
-  const scaleAnim =
-    useRef(
-      new Animated.Value(0.5)
-    ).current;
+	const scaleAnim =
+		useRef(
+			new Animated.Value(0.5)
+		).current;
 
-  useEffect(() => {
+	const floatAnim =
+		useRef(
+			new Animated.Value(0)
+		).current;
 
-    Animated.spring(
-      scaleAnim,
-      {
-        toValue: 1,
-        friction: 3,
-        tension: 40,
-        useNativeDriver: true,
-      }
-    ).start();
+	useEffect(() => {
 
-    checkAutoLogin();
+		Animated.spring(
+			scaleAnim,
+			{
+				toValue: 1,
+				friction: 3,
+				tension: 40,
+				useNativeDriver: true,
+			}
+		).start();
 
-  }, []);
+		Animated.loop(
+			Animated.sequence([
+				Animated.timing(
+					floatAnim,
+					{
+						toValue: -8,
+						duration: 1500,
+						useNativeDriver: true,
+					}
+				),
+				Animated.timing(
+					floatAnim,
+					{
+						toValue: 0,
+						duration: 1500,
+						useNativeDriver: true,
+					}
+				),
+			])
+		).start();
 
-  const checkAutoLogin =
-    async () => {
+		checkAutoLogin();
 
-      try {
+	}, []);
 
-        const token =
-          await AsyncStorage.getItem(
-            'serviceToken'
-          );
+	const checkAutoLogin =
+		async () => {
 
-        console.log(
-          '저장된 토큰:',
-          token
-        );
+			try {
 
-        if (!token) {
+				const token =
+					await AsyncStorage.getItem(
+						'serviceToken'
+					);
 
-          setTimeout(() => {
+				console.log(
+					'저장된 토큰:',
+					token
+				);
 
-            navigation.replace(
-              'Login_1'
-            );
+				if (!token) {
 
-          }, 3000);
+					setTimeout(() => {
 
-          return;
-        }
+						navigation.replace(
+							'Login_1'
+						);
 
-        await getMyInfo(token);
+					}, 3000);
 
-        console.log(
-          '자동로그인 성공'
-        );
+					return;
+				}
 
-        setTimeout(() => {
+				await getMyInfo(token);
 
-          navigation.replace(
-            'Main'
-          );
+				console.log(
+					'자동로그인 성공'
+				);
 
-        }, 3000);
+				setTimeout(() => {
 
-      } catch (error) {
+					navigation.replace(
+						'Main'
+					);
 
-        console.log(
-          '자동로그인 실패:',
-          error.response?.data
-        );
+				}, 3000);
 
-        await AsyncStorage.removeItem(
-          'serviceToken'
-        );
+			} catch (error) {
 
-        setTimeout(() => {
+				console.log(
+					'자동로그인 실패:',
+					error.response?.data
+				);
 
-          navigation.replace(
-            'Login_1'
-          );
+				await AsyncStorage.removeItem(
+					'serviceToken'
+				);
 
-        }, 3000);
-      }
-    };
+				setTimeout(() => {
 
-  return (
-    <View style={styles.container}>
+					navigation.replace(
+						'Login_1'
+					);
 
-      <Animated.Image
-        source={
-          require('../assets/logo/logo.png')
-        }
-        style={[
-          styles.image,
-          {
-            transform: [
-              {
-                scale: scaleAnim,
-              },
-            ],
-          },
-        ]}
-      />
+				}, 3000);
+			}
+		};
 
-      <Text style={styles.title}>
-        Pocket Plants
-      </Text>
+	return (
+		<View style={styles.container}>
 
-    </View>
-  );
+			<Animated.Image
+				source={
+					require('../assets/logo/logo.png')
+				}
+				style={[
+					styles.image,
+					{
+						transform: [
+							{
+								scale: scaleAnim,
+							},
+							{
+								translateY: floatAnim,
+							},
+						],
+					},
+				]}
+			/>
+
+			<Text style={styles.title}>
+				Pocket Plants
+			</Text>
+
+		</View>
+	);
 }
