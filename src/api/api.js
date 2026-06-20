@@ -315,3 +315,24 @@ export const identifyPlantApi =
 
     return response.data;
   };
+
+  // 최신 센서 데이터 조회
+export const getLatestSensorData =
+  async () => {
+    const response =
+      await axios.get(
+        `${BASE_URL}/api/sensor/latest`
+      );
+    return response.data;
+  };
+
+  // 식물 환경 데이터 조회
+export const getPlantEnv =
+  async (plantName) => {
+    const response =
+      await axios.get(
+        `${BASE_URL}/api/plant/env`,
+        { params: { name: plantName } }
+      );
+    return response.data;
+  };
