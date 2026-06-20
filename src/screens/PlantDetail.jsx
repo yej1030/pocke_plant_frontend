@@ -138,57 +138,82 @@ export default function PlantDetail({ navigation, route }) {
 
   useEffect(() => {
 
-    const fetchSensorData =
-      async () => {
+  if (!isHardwareConnected) {
+    return;
+  }
 
-        try {
+  const fetchSensorData =
+    async () => {
 
-          const data =
-            await getLatestSensorData();
+      try {
 
-          console.log(
-            '센서 데이터:',
-            data
-          );
+        const data =
+          await getLatestSensorData();
 
-          setSensorData(data);
+        console.log(
+          '센서 데이터:',
+          data
+        );
 
-        } catch (error) {
+        setSensorData(data);
 
-          console.log(
-            '센서 조회 실패',
-            error
-          );
-        }
-      };
+      } catch (error) {
 
-    fetchSensorData();
+        console.log(
+          '센서 조회 실패',
+          error
+        );
+      }
+    };
 
-    const interval =
-      setInterval(
-        fetchSensorData,
-        5000
-      );
+  fetchSensorData();
 
-    return () =>
-      clearInterval(interval);
+  const interval =
+    setInterval(
+      fetchSensorData,
+      5000
+    );
 
-  }, []);
+  return () =>
+    clearInterval(interval);
+
+}, [isHardwareConnected]);
 
   const [plantEnv, setPlantEnv] = useState(null);
 
-  useEffect(() => {
-    if (!plant?.name) return;
-    const fetchEnv = async () => {
-      try {
-        const env = await getPlantEnv(plant.name);
-        setPlantEnv(env);
-      } catch (error) {
-        console.log('식물 환경 데이터 조회 실패', error);
-      }
-    };
-    fetchEnv();
-  }, [plant]);
+useEffect(() => {
+
+  if (!isHardwareConnected) {
+    return;
+  }
+
+  if (!plant?.name) {
+    return;
+  }
+
+  const fetchEnv = async () => {
+
+    try {
+
+      const env =
+        await getPlantEnv(
+          plant.name
+        );
+
+      setPlantEnv(env);
+
+    } catch (error) {
+
+      console.log(
+        '식물 환경 데이터 조회 실패',
+        error
+      );
+    }
+  };
+
+  fetchEnv();
+
+}, [plant, isHardwareConnected]);
 
   if (!plant) {
     return (
