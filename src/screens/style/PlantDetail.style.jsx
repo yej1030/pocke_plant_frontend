@@ -9,66 +9,133 @@ export default StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 30,
   },
+
+  // ── 히어로 카드 ─────────────────────────────────────
   heroCard: {
     marginTop: 10,
     paddingTop: 30,
     paddingVertical: 16,
-    borderRadius: 22,
+    borderRadius: 26,
     borderWidth: 1,
     borderColor: '#e4ece7',
-    backgroundColor: '#F7FFFF',
+    backgroundColor: '#f9fffc',
     alignItems: 'center',
+    overflow: 'hidden',
+    shadowColor: '#5CD79E',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 16,
+    elevation: 4,
   },
+  // 배경 장식 블롭
+  heroBlobTopRight: {
+    position: 'absolute',
+    top: -60,
+    right: -50,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: '#5CD79E',
+    opacity: 0.16,
+  },
+  heroBlobBottomLeft: {
+    position: 'absolute',
+    bottom: -50,
+    left: -40,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: '#FFD66B',
+    opacity: 0.14,
+  },
+
+  // ── 말풍선 ──────────────────────────────────────────
   speechBubble: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#989898',
-    borderRadius: 10,
+    borderColor: '#cfe6da',
+    borderRadius: 16,
     backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 2,
   },
   speechText: {
     fontSize: 14,
     color: '#333',
     textAlign: 'center',
     lineHeight: 18,
+    fontWeight: '600',
   },
+
   heroImage: {
     width: 250,
     height: 250,
     resizeMode: 'contain',
   },
+
+  // ── 빠른 질문 버튼 ──────────────────────────────────
+  quickReplyWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingBottom: 12,
+  },
+  quickReplyButton: {
+    borderWidth: 1,
+    borderColor: '#79d791',
+    borderRadius: 18,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: '#fff',
+  },
+  quickReplyText: {
+    fontSize: 12.5,
+    color: '#1d1d1d',
+    fontWeight: '600',
+  },
+
+  // ── 액션 버튼 행 ────────────────────────────────────
   actionRow: {
     flexDirection: 'row',
-    gap: 10,
-    marginTop: 14,
+    width: '100%',
+    justifyContent: 'space-between',
+    marginTop: 20,
   },
   actionButton: {
-    flex: 1,
-    height: 44,
-    borderRadius: 12,
+    width: '48%',
+    height: 45,
+    borderRadius: 14,
+    paddingHorizontal: 20,
     borderWidth: 1,
-    borderColor: '#bfe3c9',
+    borderColor: '#79d791',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#fff',
   },
   actionText: {
     fontSize: 16,
-    color: '#3d6b4f',
+    color: '#000000',
     fontWeight: '600',
   },
   actionPrimary: {
-    backgroundColor: '#93d3a8',
-    borderColor: '#93d3a8',
+    backgroundColor: '#79d791',
+    borderColor: '#79d791',
   },
   actionPrimaryText: {
     fontSize: 16,
     color: '#fff',
     fontWeight: '700',
   },
+
+  // ── 하드웨어 버튼 ────────────────────────────────────
   hardwareButton: {
-    marginTop: 14,
+    marginTop: 20,
     height: 40,
     borderRadius: 10,
     borderWidth: 1,
@@ -87,70 +154,18 @@ export default StyleSheet.create({
     color: '#96a39d',
     textAlign: 'center',
   },
+
+  // ── 센서 카드 ────────────────────────────────────────
   statsList: {
-    marginTop: 14,
+    marginTop: 20,
     gap: 10,
   },
-  waterButton: {
-    marginTop: 14,
-    height: 44,
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: '#c7c7c7',
-    borderStyle: 'dashed',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 8,
-  },
-  waterIcon: {
-    width: 18,
-    height: 18,
-    resizeMode: 'contain',
-  },
-  waterText: {
-    fontSize: 15,
-    color: '#000000',
-    fontWeight: '600',
-  },
-  emptyWrap: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#7b7b7b',
-  },
-  quickReplyWrap: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-  },
-  quickReplyButton: {
-    borderWidth: 1,
-    borderColor: '#79d791',
-    borderRadius: 18,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: '#fff',
-  },
-  quickReplyText: {
-    fontSize: 12,
-    color: '#1d1d1d',
-  },
-
-  // ✅ 센서 카드 — 이미지 디자인 반영
   sensorCard: {
     borderWidth: 1,
     borderColor: '#e8e8e8',
     borderRadius: 16,
     backgroundColor: '#fff',
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     paddingVertical: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -211,5 +226,46 @@ export default StyleSheet.create({
   sensorBarFill: {
     height: '100%',
     borderRadius: 30,
+  },
+
+  // ── 물주기 버튼 ──────────────────────────────────────
+  waterButton: {
+    marginTop: 20,
+    height: 50,
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: '#79d791',
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 8,
+    shadowColor: '#79d791',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  waterIcon: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+  },
+  waterText: {
+    fontSize: 15,
+    color: '#1d8a55',
+    fontWeight: '700',
+  },
+
+  // ── 빈 상태 ──────────────────────────────────────────
+  emptyWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  emptyText: {
+    fontSize: 14,
+    color: '#7b7b7b',
   },
 });
