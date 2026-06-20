@@ -77,7 +77,12 @@ export default function PlantDetail({ navigation, route }) {
   const { plants } = useContext(PlantsContext);
 
   const [isHardwareConnected, setIsHardwareConnected] =
-    useState(false);
+    useState(route?.params?.hardwareConnected || false);
+  useEffect(() => {
+    if (route?.params?.hardwareConnected) {
+      setIsHardwareConnected(true);
+    }
+  }, [route?.params?.hardwareConnected]);
 
   const [speechMessage, setSpeechMessage] =
     useState('오늘은\n기분이 좋아요!');
@@ -292,6 +297,7 @@ useEffect(() => {
     }
   };
 
+
   const stats = [
     {
       type: 'soil',
@@ -411,7 +417,9 @@ useEffect(() => {
             style={styles.hardwareButton}
             activeOpacity={0.85}
             onPress={() => {
-              setIsHardwareConnected(true);
+              navigation.navigate('HardwareConnect', {
+                plant,
+              });
             }}
           >
             <Text style={styles.hardwareText}>
@@ -530,7 +538,9 @@ useEffect(() => {
             </TouchableOpacity>
           </>
         ) : (
-          <Text style={styles.hardwareHint}>
+          <Text style={styles.hardwareHint}
+            onPress={() => navigation.navigate('HardwareConnect')}>
+
             하드웨어 연결 후 센서 데이터가 표시됩니다.
           </Text>
         )}
