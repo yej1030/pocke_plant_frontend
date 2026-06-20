@@ -17,6 +17,8 @@ import styles from './style/PlantDetail.style';
 import {
   createAiChatRoom,
   sendAiMessage,
+  getLatestSensorData,
+  getPlantEnv,
 } from '../api/api';
 
 const characterImages = {
@@ -105,6 +107,9 @@ export default function PlantDetail({ navigation, route }) {
   const [mood, setMood] =
     useState('happy');
 
+  const [sensorData, setSensorData] =
+    useState(null);
+
   useEffect(() => {
 
     const createRoom =
@@ -130,6 +135,60 @@ export default function PlantDetail({ navigation, route }) {
     createRoom();
 
   }, []);
+
+  useEffect(() => {
+
+    const fetchSensorData =
+      async () => {
+
+        try {
+
+          const data =
+            await getLatestSensorData();
+
+          console.log(
+            '센서 데이터:',
+            data
+          );
+
+          setSensorData(data);
+
+        } catch (error) {
+
+          console.log(
+            '센서 조회 실패',
+            error
+          );
+        }
+      };
+
+    fetchSensorData();
+
+    const interval =
+      setInterval(
+        fetchSensorData,
+        5000
+      );
+
+    return () =>
+      clearInterval(interval);
+
+  }, []);
+
+  const [plantEnv, setPlantEnv] = useState(null);
+
+  useEffect(() => {
+    if (!plant?.name) return;
+    const fetchEnv = async () => {
+      try {
+        const env = await getPlantEnv(plant.name);
+        setPlantEnv(env);
+      } catch (error) {
+        console.log('식물 환경 데이터 조회 실패', error);
+      }
+    };
+    fetchEnv();
+  }, [plant]);
 
   if (!plant) {
     return (
@@ -218,46 +277,44 @@ export default function PlantDetail({ navigation, route }) {
     {
       type: 'soil',
       label: '토양 수분',
-      value: 35,
+      value: sensorData?.soil ?? '-',
+      target: plantEnv?.waterCycleSpring ?? '-',
       unit: '%',
-      accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_soil.png'),
     },
     {
       type: 'temp',
       label: '온도',
-      value: 22,
+      value: sensorData?.temp ?? '-',
+      target: plantEnv?.growhTp ?? '-',
       unit: '°C',
-      accent: '#6fcf97',
       icon: require('../assets/sensor/sensor_temp.png'),
     },
     {
       type: 'humidity',
       label: '습도',
-      value: 58,
+      value: sensorData?.humidity ?? '-',
+      target: plantEnv?.humidity ?? '-',
       unit: '%',
-      accent: '#6fcf97',
       icon: require('../assets/sensor/sensor_humidity.png'),
     },
     {
       type: 'light',
       label: '조도',
-      value: 36000,
+      value: sensorData?.light ?? '-',
+      target: '-',   // PlantData에 조도 필드 없음
       unit: 'lx',
-      accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_light.png'),
     },
     {
       type: 'bio',
       label: '바이오',
-      value: 360,
+      value: sensorData?.bio ?? '-',
+      target: '-',   // PlantData에 바이오 필드 없음
       unit: 'mV',
-      accent: '#c89b6d',
       icon: require('../assets/sensor/sensor_bio.png'),
     },
   ];
-
-
 
   return (
     <>
@@ -362,26 +419,83 @@ export default function PlantDetail({ navigation, route }) {
                 else fontSize = 12;
 
                 return (
-                  <View key={item.label} style={styles.statCard}>
-                    <Image source={item.icon} style={styles.statIcon} />
-                    <Text style={styles.statLabel}>{item.label}</Text>
+                  <View
+                    key={item.label}
+                    style={styles.sensorCard}
+                  >
 
-                    <View style={styles.statValueWrap}>
-                      <Text style={[styles.statValue, { fontSize }]}> {item.value}</Text>
-                      <Text style={styles.statUnit}>{item.unit}</Text>
+                    <View
+                      style={styles.sensorTop}
+                    >
+
+                      <View
+                        style={styles.sensorLeft}
+                      >
+
+                        <Image
+                          source={item.icon}
+                          style={styles.sensorIcon}
+                        />
+
+                        <Text
+                          style={styles.sensorLabel}
+                        >
+                          {item.label}
+                        </Text>
+
+                      </View>
+
+                      <View
+                        style={styles.sensorRight}
+                      >
+
+                        <Text
+                          style={styles.sensorTarget}
+                        >
+                          적정 {item.target}
+                          {item.unit}
+                        </Text>
+
+                        <Text
+                          style={styles.sensorValue}
+                        >
+                          {item.value}
+                          <Text
+                            style={
+                              styles.sensorUnit
+                            }
+                          >
+                            {item.unit}
+                          </Text>
+                        </Text>
+
+                      </View>
+
                     </View>
 
-                    <View style={styles.statBarTrack}>
+                    <View
+                      style={styles.sensorBarTrack}
+                    >
+
                       <View
                         style={[
-                          styles.statBarFill,
+                          styles.sensorBarFill,
                           {
-                            width: `${Math.min(item.value, 100)}%`,
-                            backgroundColor: item.accent,
+                            width: `${Math.min(
+                              item.value,
+                              100
+                            )}%`,
+                            backgroundColor: (() => {
+                              if (typeof item.value !== 'number') return 'transparent';
+                              if (item.value >= item.min && item.value <= item.max) return '#6fcf97';
+                              return '#c89b6d';
+                            })(),
                           },
                         ]}
                       />
+
                     </View>
+
                   </View>
                 );
               })}
