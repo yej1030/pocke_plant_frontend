@@ -1,7 +1,8 @@
 import React, {
 	useContext,
-	useState,
 	useCallback,
+	useRef,
+	useEffect,
 } from 'react';
 
 import {
@@ -13,8 +14,8 @@ import {
 	Text,
 	Image,
 	TouchableOpacity,
-	Modal,
-	Pressable,
+	Animated,
+	Easing,
 } from 'react-native';
 import Header from '../components/Header';
 import BottomButton from '../components/Bottombutton';
@@ -25,10 +26,10 @@ import {
 	PlantsContext,
 } from '../context/PlantsContext';
 import {
-	getMyPlants,
 	toggleBookmarkApi,
 	deletePlantApi,
 } from '../api/api';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const characterImages = {
 	1: require('../assets/Plant/plant_01_happy.png'),
@@ -43,14 +44,65 @@ const characterImages = {
 	10: require('../assets/Plant/plant_19_happy.png'),
 };
 
+// 카드가 한 줄씩 아래에서 위로 스며들 듯 등장
+function AnimatedPlantCard({ index, children }) {
+	const enterAnim = useRef(new Animated.Value(0)).current;
+
+	useEffect(() => {
+		Animated.timing(enterAnim, {
+			toValue: 1,
+			duration: 420,
+			delay: index * 80,
+			easing: Easing.out(Easing.cubic),
+			useNativeDriver: true,
+		}).start();
+	}, []);
+
+	return (
+		<Animated.View
+			style={{
+				opacity: enterAnim,
+				transform: [
+					{
+						translateY: enterAnim.interpolate({
+							inputRange: [0, 1],
+							outputRange: [16, 0],
+						}),
+					},
+				],
+			}}
+		>
+			{children}
+		</Animated.View>
+	);
+}
+
+function BookmarkButton({ bookmarked, onPress, style, iconStyle }) {
+	return (
+		<TouchableOpacity
+			style={style}
+			onPress={onPress}
+			activeOpacity={0.8}
+		>
+			<Image
+				source={
+					bookmarked
+						? require('../assets/icon/bookmarked.png')
+						: require('../assets/icon/unbookmarked.png')
+				}
+				style={iconStyle}
+			/>
+		</TouchableOpacity>
+	);
+}
+
+
 export default function Main({
 	navigation,
 }) {
 	// 식물 데이터 (use context as single source of truth)
 	const {
 		plants,
-		removePlant,
-		toggleBookmark,
 		loadPlants,
 	} = useContext(PlantsContext);
 
@@ -60,114 +112,79 @@ export default function Main({
 		}, [loadPlants])
 	);
 
-	// 커스텀 알림
+		// 커스텀 알림
 	const {
 		alertConfig,
 		showAlert,
 		closeAlert,
 	} = useCustomAlert();
 
-	// 액션 시트 상태
-	const [
-		actionVisible,
-		setActionVisible,
-	] = useState(false);
-
-	const [
-		selectedPlant,
-		setSelectedPlant,
-	] = useState(null);
-
-	const [
-		selectedPlantId,
-		setSelectedPlantId,
-	] = useState(null);
-
-	// 수정 / 삭제 메뉴 열기
-	const openActionSheet = (p) => {
-
-		setSelectedPlant(p);
-
-		setSelectedPlantId(p.id);
-
-		setActionVisible(true);
-	};
-
-	// 수정 / 삭제 메뉴 닫기
-	const closeActionSheet = () => {
-
-		setActionVisible(false);
-
-		setSelectedPlant(null);
-
-		setSelectedPlantId(null);
-	};
-
-	// 수정 화면 이동
-	const onEdit = () => {
-
-		closeActionSheet();
-
-		if (
-			selectedPlant ||
-			selectedPlantId
-		) {
-
-			navigation.navigate(
-				'PlantRegister',
-				{
-					plant: selectedPlant,
-					plantId: selectedPlantId,
-				}
-			);
-		}
-	};
-
-	// 식물 삭제
-	const onDelete = () => {
-
-		const id =
-			selectedPlantId;
-
-		closeActionSheet();
-
-		showAlert({
-			title: '삭제',
-			message: '삭제하시겠습니까?',
-			variant: 'error',
-			actions: [
-				{
-					text: '취소',
-					kind: 'cancel',
-				},
-				{
-					text: '삭제',
-					kind: 'destructive',
-
-					onPress: async () => {
-
-						try {
-
-							await deletePlantApi(id);
-
-							console.log(
-								'삭제 성공'
-							);
-
-							await loadPlants();
-
-						} catch (error) {
-
-							console.log(
-								'삭제 실패:',
-								error.response?.data
-							);
+	const renderRightActions = (plant) => {
+	return (
+		<View style={styles.swipeActionContainer}>
+			<TouchableOpacity style={styles.editAction}
+				onPress={() => {
+					navigation.navigate(
+						'PlantRegister',
+						{
+							plant,
+							plantId: plant.id,
 						}
-					},
-				},
-			],
-		});
-	};
+					);
+				}}
+			>
+				<Text style={styles.swipeActionText}
+				>
+					수정
+				</Text>
+			</TouchableOpacity>
+
+			<TouchableOpacity
+				style={styles.deleteAction}
+				onPress={() => {
+
+					showAlert({
+						title: '삭제',
+						message: '삭제하시겠습니까?',
+						variant: 'error',
+						actions: [
+							{
+								text: '취소',
+								kind: 'cancel',
+							},
+							{
+								text: '삭제',
+								kind: 'destructive',
+								onPress: async () => {
+									try {
+										await deletePlantApi(
+											plant.id
+										);
+
+										await loadPlants();
+
+									} catch (error) {
+
+										console.log(
+											error
+										);
+									}
+								},
+							},
+						],
+					});
+				}}
+			>
+				<Text
+					style={styles.swipeActionText}
+				>
+					삭제
+				</Text>
+			</TouchableOpacity>
+		</View>
+	);
+};
+
 
 	// 북마크 식물 상단 정렬
 	const sortedPlants = [...(plants || [])]
@@ -228,201 +245,100 @@ export default function Main({
 						등록된 식물이 없습니다.
 					</Text>
 				) : (
-					sortedPlants.map(({ plant: p }) => (
-						<TouchableOpacity
-							key={p.id}
-							style={styles.plantCard}
-							activeOpacity={0.85}
-							onPress={() =>
-								navigation.navigate(
-									'PlantDetail',
-									{
-										plant: p,
-										plantId: p.id,
-									}
-								)
-							}
-							onLongPress={() => {
-								openActionSheet(p);
-							}}
-						>
+					sortedPlants.map(({ plant: p }, idx) => (
+<AnimatedPlantCard key={p.id} index={idx}>
 
-							{/* 식물 이미지 */}
-							<Image
-								source={
-									characterImages[
-									p.character_id
-									]
+	<Swipeable
+		renderRightActions={() =>
+			renderRightActions(p)
+		}
+		overshootRight={false}
+	>
+
+		<TouchableOpacity
+			style={styles.plantCard}
+								activeOpacity={0.85}
+								onPress={() =>
+									navigation.navigate(
+										'PlantDetail',
+										{
+											plant: p,
+											plantId: p.id,
+										}
+									)
 								}
-								style={styles.plantImage}
-							/>
-
-							{/* 식물 정보 */}
-							<View
-								style={styles.plantTextWrap}
 							>
 
-								<Text
-									style={styles.plantName}
-								>
-									{p.name}
-									{p.species
-										? ` (${p.species})`
-										: ''}
-								</Text>
-
-								<Text
-									style={styles.plantMeta}
-								>
-									{p.adoptDate
-										? p.adoptDate
-										: ''}
-									{p.age
-										? ` / ${p.age}세`
-										: ''}
-								</Text>
-
-							</View>
-
-							{/* 북마크 */}
-							<TouchableOpacity
-								style={styles.settingsButton}
-								onPress={async () => {
-
-									console.log('북마크 클릭:', p.id);
-
-
-									try {
-										const result = await toggleBookmarkApi(p.id);
-
-										console.log('북마크 성공:', result);
-										await loadPlants();
-									} catch (error) {
-										console.log('북마크 실패:', error.response?.data);
-										console.log('상태코드:', error.response?.status);
-										console.log(error);
-
-									}
-								}}
-								activeOpacity={0.8}
-							>
-
+								{/* 식물 이미지 */}
 								<Image
 									source={
-										p.bookmarked
-											? require('../assets/icon/bookmarked.png')
-											: require('../assets/icon/unbookmarked.png')
+										characterImages[
+										p.character_id
+										]
 									}
-									style={styles.settingsIcon}
+									style={styles.plantImage}
+								/>
+
+								{/* 식물 정보 */}
+								<View
+									style={styles.plantTextWrap}
+								>
+
+									<Text
+										style={styles.plantName}
+									>
+										{p.name}
+										{p.species
+											? ` (${p.species})`
+											: ''}
+									</Text>
+
+									<Text
+										style={styles.plantMeta}
+									>
+										{p.adoptDate
+											? p.adoptDate
+											: ''}
+										{p.age
+											? ` / ${p.age}세`
+											: ''}
+									</Text>
+
+								</View>
+
+								{/* 북마크 */}
+								<BookmarkButton
+									bookmarked={p.bookmarked}
+									style={styles.settingsButton}
+									iconStyle={styles.settingsIcon}
+									onPress={async () => {
+
+										console.log('북마크 클릭:', p.id);
+
+
+										try {
+											const result = await toggleBookmarkApi(p.id);
+
+											console.log('북마크 성공:', result);
+											await loadPlants();
+										} catch (error) {
+											console.log('북마크 실패:', error.response?.data);
+											console.log('상태코드:', error.response?.status);
+											console.log(error);
+
+										}
+									}}
 								/>
 
 							</TouchableOpacity>
+							</Swipeable>
 
-						</TouchableOpacity>
+						</AnimatedPlantCard>
 					)
 					)
 				)}
 
 			</View>
-
-			{/* 수정 / 삭제 액션 시트 */}
-			<Modal
-				visible={actionVisible}
-				animationType="slide"
-				transparent
-				onRequestClose={
-					closeActionSheet
-				}
-			>
-
-				<Pressable
-					style={styles.actionOverlay}
-					onPress={closeActionSheet}
-				/>
-
-				<View style={styles.actionContainer}>
-
-					<View
-						style={styles.actionHandleWrap}
-					>
-
-						<View
-							style={styles.actionHandle}
-						/>
-
-					</View>
-
-					{/* 수정 */}
-					<Pressable
-						style={styles.actionItem}
-						onPress={onEdit}
-					>
-
-						<Text style={styles.actionIcon}>
-							✏️
-						</Text>
-
-						<Text style={styles.actionText}>
-							수정
-						</Text>
-
-					</Pressable>
-
-					<View
-						style={styles.actionDivider}
-					/>
-
-					{/* 삭제 */}
-					<Pressable
-						style={styles.actionItem}
-						onPress={onDelete}
-					>
-
-						<Text
-							style={[
-								styles.actionIcon,
-								{
-									color: '#B85C5C',
-								},
-							]}
-						>
-							🗑️
-						</Text>
-
-						<Text
-							style={[
-								styles.actionText,
-								{
-									color: '#B85C5C',
-								},
-							]}
-						>
-							삭제
-						</Text>
-
-					</Pressable>
-
-					<View
-						style={styles.actionSpacing}
-					/>
-
-					{/* 취소 */}
-					<Pressable
-						style={styles.actionCancel}
-						onPress={closeActionSheet}
-					>
-
-						<Text
-							style={styles.actionCancelText}
-						>
-							취소
-						</Text>
-
-					</Pressable>
-
-				</View>
-
-			</Modal>
 
 			{/* 커스텀 알림 */}
 			<CustomAlert
