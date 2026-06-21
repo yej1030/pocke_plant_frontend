@@ -8,7 +8,6 @@ const BASE_URL =
 // 일반 로그인 API
 export const loginUser =
   async (data) => {
-
     const response =
       await axios.post(
         `${BASE_URL}/api/email/login`,
@@ -21,7 +20,6 @@ export const loginUser =
 // 회원가입 API
 export const signUpUser =
   async (data) => {
-
     const response =
       await axios.post(
         `${BASE_URL}/api/email/register`,
@@ -34,7 +32,6 @@ export const signUpUser =
 // 이메일 인증번호 요청
 export const sendEmailCode =
   async (email) => {
-
     const response =
       await axios.post(
         `${BASE_URL}/api/email/verify-request`,
@@ -60,7 +57,6 @@ export const sendEmailCode =
 // 이메일 인증번호 확인
 export const verifyEmailCode =
   async (email, code) => {
-
     const response =
       await axios.post(
         `${BASE_URL}/api/email/verify-code`,
@@ -79,7 +75,6 @@ export const verifyEmailCode =
 // 카카오 로그인 API
 export const kakaoLoginApi =
   async (accessToken) => {
-
     const response =
       await axios.post(
         `${BASE_URL}/kakao/login/token`,
@@ -91,10 +86,9 @@ export const kakaoLoginApi =
     return response.data;
   };
 
-  // 내 정보 조회 (자동 로그인 검증)
+// 내 정보 조회
 export const getMyInfo =
   async (token) => {
-
     const response =
       await axios.get(
         `${BASE_URL}/api/user/me`,
@@ -109,10 +103,9 @@ export const getMyInfo =
     return response.data;
   };
 
-  // 식물 등록
-  export const registerPlant =
+// 식물 등록
+export const registerPlant =
   async (plantData) => {
-
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -133,10 +126,9 @@ export const getMyInfo =
     return response.data;
   };
 
-  //식물 정보 가져오기
-  export const getMyPlants =
+// 식물 정보 가져오기
+export const getMyPlants =
   async () => {
-
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -156,10 +148,9 @@ export const getMyInfo =
     return response.data;
   };
 
-  //북마크
-  export const toggleBookmarkApi =
+// 북마크
+export const toggleBookmarkApi =
   async (plantId) => {
-
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -180,10 +171,9 @@ export const getMyInfo =
     return response.data;
   };
 
-  // 수정
-  export const updatePlantApi =
+// 수정
+export const updatePlantApi =
   async (plantId, plantData) => {
-
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -204,10 +194,9 @@ export const getMyInfo =
     return response.data;
   };
 
-  //삭제
-  export const deletePlantApi =
+// 삭제
+export const deletePlantApi =
   async (plantId) => {
-
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -227,10 +216,9 @@ export const getMyInfo =
     return response.data;
   };
 
-  // 식물 종 분석
+// 식물 종 분석
 export const identifyPlantApi =
   async (imageUri) => {
-
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -265,10 +253,9 @@ export const identifyPlantApi =
     return response.data;
   };
 
-  // AI 채팅방 생성
-  export const createAiChatRoom =
+// AI 채팅방 생성
+export const createAiChatRoom =
   async () => {
-
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -289,10 +276,9 @@ export const identifyPlantApi =
     return response.data;
   };
 
-  // AI 채팅방 메시지 전송
-  export const sendAiMessage =
+// AI 채팅방 메시지 전송
+export const sendAiMessage =
   async (roomId, message) => {
-
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -316,23 +302,74 @@ export const identifyPlantApi =
     return response.data;
   };
 
-  // 최신 센서 데이터 조회
+// 최신 센서 데이터 조회
 export const getLatestSensorData =
-  async () => {
+  async (macAddress) => {
+    if (!macAddress) {
+      throw new Error(
+        'macAddress가 없어 센서 데이터를 조회할 수 없습니다.'
+      );
+    }
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
     const response =
       await axios.get(
-        `${BASE_URL}/api/sensor/latest`
+        `${BASE_URL}/api/sensor/latest/${macAddress}`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
       );
+
     return response.data;
   };
 
-  // 식물 환경 데이터 조회
+// 전체 센서 히스토리 조회
+export const getSensorHistory =
+  async (macAddress) => {
+    if (!macAddress) {
+      throw new Error(
+        'macAddress가 없어 센서 히스토리를 조회할 수 없습니다.'
+      );
+    }
+
+    const token =
+      await AsyncStorage.getItem(
+        'serviceToken'
+      );
+
+    const response =
+      await axios.get(
+        `${BASE_URL}/api/sensor/history/${macAddress}`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+    return response.data;
+  };
+
+// 식물 환경 데이터 조회
 export const getPlantEnv =
   async (plantName) => {
     const response =
       await axios.get(
         `${BASE_URL}/api/plant/env`,
-        { params: { name: plantName } }
+        {
+          params: {
+            name: plantName,
+          },
+        }
       );
+
     return response.data;
   };

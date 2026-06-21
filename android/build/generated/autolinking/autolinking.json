@@ -105,48 +105,24 @@
         }
       }
     },
-    "react-native-ble-manager": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-manager",
-      "name": "react-native-ble-manager",
+    "react-native-ble-plx": {
+      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-plx",
+      "name": "react-native-ble-plx",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-manager\\RNBleManager.podspec",
-          "version": "12.5.0",
+          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-plx\\react-native-ble-plx.podspec",
+          "version": "3.5.1",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-manager\\android",
-          "packageImportPath": "import it.innove.BleManagerPackage;",
-          "packageInstance": "new BleManagerPackage()",
+          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-plx\\android",
+          "packageImportPath": "import com.bleplx.BlePlxPackage;",
+          "packageInstance": "new BlePlxPackage()",
           "buildTypes": [],
-          "libraryName": "BleManagerSpec",
+          "libraryName": "BlePlx",
           "componentDescriptors": [],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-ble-manager/android/build/generated/source/codegen/jni/CMakeLists.txt",
-          "cxxModuleCMakeListsModuleName": null,
-          "cxxModuleCMakeListsPath": null,
-          "cxxModuleHeaderName": null,
-          "isPureCxxDependency": false
-        }
-      }
-    },
-    "react-native-camera": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-camera",
-      "name": "react-native-camera",
-      "platforms": {
-        "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-camera\\react-native-camera.podspec",
-          "version": "4.2.1",
-          "configurations": [],
-          "scriptPhases": []
-        },
-        "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-camera\\android",
-          "packageImportPath": "import org.reactnative.camera.RNCameraPackage;",
-          "packageInstance": "new RNCameraPackage()",
-          "buildTypes": [],
-          "componentDescriptors": [],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-camera/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-ble-plx/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -187,7 +163,7 @@
       "platforms": {
         "ios": {
           "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-gesture-handler\\RNGestureHandler.podspec",
-          "version": "2.31.1",
+          "version": "2.32.0",
           "configurations": [],
           "scriptPhases": []
         },
@@ -234,13 +210,37 @@
         }
       }
     },
+    "react-native-linear-gradient": {
+      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-linear-gradient",
+      "name": "react-native-linear-gradient",
+      "platforms": {
+        "ios": {
+          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-linear-gradient\\BVLinearGradient.podspec",
+          "version": "2.8.3",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-linear-gradient\\android",
+          "packageImportPath": "import com.BV.LinearGradient.LinearGradientPackage;",
+          "packageInstance": "new LinearGradientPackage()",
+          "buildTypes": [],
+          "componentDescriptors": [],
+          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-linear-gradient/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
     "react-native-safe-area-context": {
       "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-safe-area-context",
       "name": "react-native-safe-area-context",
       "platforms": {
         "ios": {
           "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-safe-area-context\\react-native-safe-area-context.podspec",
-          "version": "5.7.0",
+          "version": "5.8.0",
           "configurations": [],
           "scriptPhases": []
         },
@@ -268,7 +268,7 @@
       "platforms": {
         "ios": {
           "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-screens\\RNScreens.podspec",
-          "version": "4.24.0",
+          "version": "4.25.2",
           "configurations": [],
           "scriptPhases": []
         },
@@ -291,9 +291,67 @@
             "RNSScreenContentWrapperComponentDescriptor",
             "RNSModalScreenComponentDescriptor",
             "RNSTabsHostComponentDescriptor",
-            "RNSSafeAreaViewComponentDescriptor"
+            "RNSSafeAreaViewComponentDescriptor",
+            "RNSStackScreenComponentDescriptor",
+            "RNSStackHeaderConfigComponentDescriptor",
+            "RNSStackHeaderSubviewComponentDescriptor"
           ],
           "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
+    "react-native-svg": {
+      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-svg",
+      "name": "react-native-svg",
+      "platforms": {
+        "ios": {
+          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-svg\\RNSVG.podspec",
+          "version": "15.15.5",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-svg\\android",
+          "packageImportPath": "import com.horcrux.svg.SvgPackage;",
+          "packageInstance": "new SvgPackage()",
+          "buildTypes": [],
+          "libraryName": "rnsvg",
+          "componentDescriptors": [
+            "RNSVGCircleComponentDescriptor",
+            "RNSVGClipPathComponentDescriptor",
+            "RNSVGDefsComponentDescriptor",
+            "RNSVGFeBlendComponentDescriptor",
+            "RNSVGFeColorMatrixComponentDescriptor",
+            "RNSVGFeCompositeComponentDescriptor",
+            "RNSVGFeFloodComponentDescriptor",
+            "RNSVGFeGaussianBlurComponentDescriptor",
+            "RNSVGFeMergeComponentDescriptor",
+            "RNSVGFeOffsetComponentDescriptor",
+            "RNSVGFilterComponentDescriptor",
+            "RNSVGEllipseComponentDescriptor",
+            "RNSVGForeignObjectComponentDescriptor",
+            "RNSVGGroupComponentDescriptor",
+            "RNSVGImageComponentDescriptor",
+            "RNSVGLinearGradientComponentDescriptor",
+            "RNSVGLineComponentDescriptor",
+            "RNSVGMarkerComponentDescriptor",
+            "RNSVGMaskComponentDescriptor",
+            "RNSVGPathComponentDescriptor",
+            "RNSVGPatternComponentDescriptor",
+            "RNSVGRadialGradientComponentDescriptor",
+            "RNSVGRectComponentDescriptor",
+            "RNSVGSvgViewAndroidComponentDescriptor",
+            "RNSVGSymbolComponentDescriptor",
+            "RNSVGTextComponentDescriptor",
+            "RNSVGTextPathComponentDescriptor",
+            "RNSVGTSpanComponentDescriptor",
+            "RNSVGUseComponentDescriptor"
+          ],
+          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
