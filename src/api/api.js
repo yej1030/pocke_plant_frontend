@@ -254,8 +254,9 @@ export const identifyPlantApi =
   };
 
 // AI 채팅방 생성
+// AI 채팅방 생성
 export const createAiChatRoom =
-  async () => {
+  async (plantId) => {
     const token =
       await AsyncStorage.getItem(
         'serviceToken'
@@ -264,7 +265,9 @@ export const createAiChatRoom =
     const response =
       await axios.post(
         `${BASE_URL}/api/ai-chat/room`,
-        {},
+        {
+          plantId,
+        },
         {
           headers: {
             Authorization:
