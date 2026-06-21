@@ -59,6 +59,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
+
   dateButton: {
     flex: 1,
     flexDirection: 'row',
@@ -74,10 +75,10 @@ export default StyleSheet.create({
     color: '#222',
   },
 
-  dateArrowIcon: {
-    width: 24,
-    height: 24,
-  },
+dateArrowIcon: {
+  width: 24,
+  height: 24,
+},
 
   ageWrap: {
     width: 95,
@@ -163,196 +164,149 @@ export default StyleSheet.create({
   inputUnderPersonality: {
     marginTop: 12,
   },
-
   aiGuide: {
-    marginTop: 10,
-    fontSize: 13,
-    color: '#5CD79E',
-  },
+  marginTop: 10,
+  fontSize: 13,
+  color: '#5CD79E',
+},
 
-  analyzeButton: {
-    marginTop: 14,
-    borderWidth: 1,
-    borderColor: '#5CD79E',
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
+analyzeButton: {
+  marginTop: 14,
+  borderWidth: 1,
+  borderColor: '#5CD79E',
+  borderRadius: 12,
+  paddingVertical: 14,
+  alignItems: 'center',
+},
 
-  analyzeButtonText: {
-    color: '#5CD79E',
-    fontSize: 15,
-    fontWeight: '600',
-  },
+analyzeButtonText: {
+  color: '#5CD79E',
+  fontSize: 15,
+  fontWeight: '600',
+},
 
-  aiResultCard: {
-    marginTop: 14,
-    backgroundColor: '#F7FCF8',
-    borderRadius: 14,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    borderWidth: 1,
-    borderColor: '#DDF3E4',
-  },
+aiResultCard: {
+  marginTop: 14,
+  backgroundColor: '#F7FCF8',
+  borderRadius: 14,
+  paddingVertical: 10,
+  paddingHorizontal: 14,
+  borderWidth: 1,
+  borderColor: '#DDF3E4',
+},
 
-  aiResultTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
+aiResultTop: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+},
 
-  aiResultTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#2E7D57',
-  },
+aiResultTitle: {
+  fontSize: 15,
+  fontWeight: '600',
+  color: '#2E7D57',
+},
 
-  aiRetry: {
-    fontSize: 13,
-    color: '#777777',
-    fontWeight: '600',
-    transform: [{ translateY: 12 }],
-  },
+aiRetry: {
+  fontSize: 13,
+  color: '#777777',
+  fontWeight: '600',
+  transform: [{ translateY: 12 }],
+},
 
-  aiResultDesc: {
-    marginTop: 6,
-    fontSize: 13,
-    color: '#7BA892',
-  },
+aiResultDesc: {
+  marginTop: 6,
+  fontSize: 13,
+  color: '#7BA892',
+}
 
-  suggestionList: {
-    marginTop: 6,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#e6e6e6',
-    borderRadius: 8,
-    overflow: 'hidden',
-    maxHeight: 200,
-  },
+ ,
+ suggestionList: {
+   marginTop: 6,
+   backgroundColor: '#fff',
+   borderWidth: 1,
+   borderColor: '#e6e6e6',
+   borderRadius: 8,
+   overflow: 'hidden',
+   maxHeight: 200,
+ },
 
-  suggestionItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f1f1f1',
-  },
+ suggestionItem: {
+   paddingVertical: 10,
+   paddingHorizontal: 12,
+   borderBottomWidth: 1,
+   borderBottomColor: '#f1f1f1',
+ },
 
-  suggestionText: {
-    fontSize: 15,
-    color: '#333',
-  },
+ suggestionText: {
+   fontSize: 15,
+   color: '#333',
+ },
 
-  characterTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#222',
-  },
+characterTitle: {
+  fontSize: 16,
+  fontWeight: '700',
+  color: '#222',
+},
 
-  characterSub: {
-    fontSize: 13,
-    color: '#888',
-    marginTop: 4,
-    marginBottom: 12,
-  },
+characterSub: {
+  fontSize: 13,
+  color: '#888',
+  marginTop: 4,
+  marginBottom: 12,
+},
 
-  characterSelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
+characterSelector: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+},
 
-  arrowButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: '#F3F7F3',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+arrowButton: {
+  width: 42,
+  height: 42,
+  borderRadius: 21,
+  backgroundColor: '#F3F7F3',
+  alignItems: 'center',
+  justifyContent: 'center',
+},
 
-  arrowText: {
-    fontSize: 18,
-    color: '#444',
-    fontWeight: '500',
-  },
+arrowText: {
+  fontSize: 18,
+  color: '#444',
+  fontWeight: '500',
+},
 
-  characterImage: {
-    width: 140,
-    height: 140,
-    resizeMode: 'contain',
-  },
+characterImage: {
+  width: 140,
+  height: 140,
+  resizeMode: 'contain',
+},
 
-  characterCount: {
-    textAlign: 'center',
-    marginTop: 8,
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#333',
-  },
+characterCount: {
+  textAlign: 'center',
+  marginTop: 8,
+  fontSize: 15,
+  fontWeight: '600',
+  color: '#333',
+},
 
-  dotContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10,
-  },
+dotContainer: {
+  flexDirection: 'row',
+  justifyContent: 'center',
+  marginTop: 10,
+},
 
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#D9D9D9',
-    marginHorizontal: 4,
-  },
+dot: {
+  width: 8,
+  height: 8,
+  borderRadius: 4,
+  backgroundColor: '#D9D9D9',
+  marginHorizontal: 4,
+},
 
-  activeDot: {
-    backgroundColor: '#99DDAA',
-  },
+activeDot: {
+  backgroundColor: '#99DDAA',
+},
 
-  /* =========================================
-     ✅ 추가된 기기 연결(QR/MAC) 관련 스타일 
-  ========================================= */
-  qrButton: {
-    borderWidth: 1,
-    borderColor: '#5CD79E',
-    borderRadius: 8,
-    paddingVertical: 10,
-    alignItems: 'center',
-    backgroundColor: '#F7FCF8',
-    width: '98%',
-  },
-  
-  qrButtonText: {
-    color: '#5CD79E',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  
-  macAddressWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F1F3F5',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    width: '98%',
-  },
-  
-  macAddressText: {
-    fontSize: 14,
-    color: '#555',
-    flex: 1,
-  },
-  
-  connectedBadge: {
-    backgroundColor: '#DDF3E4',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-  },
-  
-  connectedText: {
-    color: '#2E7D57',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
 });
