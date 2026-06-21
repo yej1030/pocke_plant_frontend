@@ -1,9 +1,13 @@
 import { StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
+
+const CARD_WIDTH =
+  (Dimensions.get('window').width - 50) / 2;
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F6FAF7',
+    backgroundColor: '#ffffff',
   },
 
   content: {
@@ -23,19 +27,43 @@ export default StyleSheet.create({
     overflow: 'hidden',
   },
 
+  heroBlobTopRight: {
+    position: 'absolute',
+    top: -60,
+    right: -50,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    backgroundColor: '#5CD79E',
+    opacity: 0.15,
+  },
+
+  heroBlobBottomLeft: {
+    position: 'absolute',
+    bottom: -50,
+    left: -40,
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: '#ffbd16',
+    opacity: 0.12,
+  },
+
   speechBubble: {
-    minWidth: 150,
+    minWidth: 130,
     paddingHorizontal: 16,
+    marginHorizontal: 20,
     paddingVertical: 10,
     borderWidth: 1,
     borderColor: '#D8E6DE',
     borderRadius: 14,
     backgroundColor: '#FFFFFF',
+    marginBottom: 12,
   },
 
   speechText: {
     fontSize: 14,
-    color: '#2E3A34',
+    color: '#000000',
     textAlign: 'center',
     lineHeight: 20,
     fontWeight: '500',
@@ -45,7 +73,6 @@ export default StyleSheet.create({
     width: 230,
     height: 230,
     resizeMode: 'contain',
-    marginTop: 4,
   },
 
   quickReplyWrap: {
@@ -59,7 +86,7 @@ export default StyleSheet.create({
 
   quickReplyButton: {
     borderWidth: 1,
-    borderColor: '#79D791',
+    borderColor: '#E0EEE6',
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 7,
@@ -68,7 +95,7 @@ export default StyleSheet.create({
 
   quickReplyText: {
     fontSize: 12,
-    color: '#1F3B2B',
+    color: '#000000',
     fontWeight: '600',
   },
 
@@ -83,7 +110,7 @@ export default StyleSheet.create({
     height: 46,
     borderRadius: 15,
     borderWidth: 1,
-    borderColor: '#CBE8D2',
+    borderColor: '#5CD79E',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
@@ -91,7 +118,7 @@ export default StyleSheet.create({
 
   actionText: {
     fontSize: 15,
-    color: '#3D6B4F',
+    color: '#1d8a55',
     fontWeight: '700',
   },
 
@@ -131,11 +158,13 @@ export default StyleSheet.create({
   },
 
   summaryCard: {
-    marginTop: 16,
+    marginTop: 12,
     paddingHorizontal: 16,
     paddingVertical: 15,
     borderRadius: 20,
-    backgroundColor: '#1F2D26',
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#E0EEE6',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -143,14 +172,14 @@ export default StyleSheet.create({
 
   summaryTitle: {
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#30443A',
     fontWeight: '800',
   },
 
   summarySubText: {
     marginTop: 4,
     fontSize: 12,
-    color: '#BFD3C7',
+    color: '#8ea798',
     fontWeight: '500',
   },
 
@@ -185,14 +214,14 @@ export default StyleSheet.create({
   },
 
   miniSensorCard: {
-    width: '48.5%',
+    width: CARD_WIDTH,
     minHeight: 124,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: '#E4EFE8',
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 13,
-    paddingVertical: 13,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -228,10 +257,11 @@ export default StyleSheet.create({
   },
 
   miniSensorValue: {
-    marginTop: 12,
-    fontSize: 24,
+    marginTop: 4,
+    fontSize: 22,
     color: '#15251D',
     fontWeight: '900',
+    textAlign: 'left',
   },
 
   miniSensorUnit: {
@@ -241,7 +271,7 @@ export default StyleSheet.create({
   },
 
   miniSensorTarget: {
-    marginTop: 2,
+    marginTop: 4,
     fontSize: 11,
     color: '#98A8A0',
     fontWeight: '600',
@@ -262,9 +292,9 @@ export default StyleSheet.create({
   },
 
   chartCard: {
-    marginTop: 14,
-    paddingHorizontal: 14,
-    paddingTop: 16,
+    marginTop: 12,
+    paddingHorizontal: 16,
+    paddingTop: 12,
     paddingBottom: 18,
     borderRadius: 24,
     borderWidth: 1,
@@ -290,16 +320,16 @@ export default StyleSheet.create({
   },
 
   chartTitle: {
-    fontSize: 17,
-    color: '#15251D',
-    fontWeight: '900',
+    fontSize: 16,
+    color: '#30443A',
+    fontWeight: '700',
   },
 
   chartSubText: {
     marginTop: 4,
     fontSize: 12,
-    color: '#8A9B92',
-    fontWeight: '600',
+    color: '#8ea798',
+    fontWeight: '500',
   },
 
   chartCurrentValue: {
@@ -311,7 +341,7 @@ export default StyleSheet.create({
   chartCurrentUnit: {
     fontSize: 12,
     color: '#6D7D74',
-    fontWeight: '700',
+    fontWeight: '600',
   },
 
   chartAxisText: {
@@ -331,8 +361,9 @@ export default StyleSheet.create({
   chartEmptyText: {
     fontSize: 13,
     color: '#8A9B92',
-    fontWeight: '600',
+    fontWeight: '500',
     textAlign: 'center',
+    paddingHorizontal: 10,
   },
 
   pointerLabel: {
@@ -349,30 +380,33 @@ export default StyleSheet.create({
   },
 
   waterButton: {
-    marginTop: 14,
-    height: 48,
-    borderRadius: 24,
+    marginTop: 20,
+    height: 50,
+    borderRadius: 25,
     borderWidth: 1,
-    borderColor: '#C7C7C7',
-    borderStyle: 'dashed',
+    borderColor: '#5CD79E',
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     gap: 8,
-    backgroundColor: '#FFFFFF',
+    shadowColor: '#5CD79E',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 2,
   },
-
   waterIcon: {
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
     resizeMode: 'contain',
   },
-
   waterText: {
     fontSize: 15,
-    color: '#1A1A1A',
+    color: '#1d8a55',
     fontWeight: '700',
   },
+
 
   emptyWrap: {
     flex: 1,
@@ -392,95 +426,23 @@ export default StyleSheet.create({
     gap: 10,
   },
 
-  sensorCard: {
-    borderWidth: 1,
-    borderColor: '#E8E8E8',
-    borderRadius: 16,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
-
-  sensorTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 5,
-  },
-
-  sensorLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-
-  sensorIcon: {
-    width: 32,
-    height: 32,
-    resizeMode: 'contain',
-  },
-
-  sensorLabel: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#1A1A1A',
-  },
-
-  sensorRight: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    gap: 2,
-  },
-
-  sensorTarget: {
-    fontSize: 12,
-    color: '#AAA',
-    fontWeight: '500',
-    paddingRight: 20,
-    paddingBottom: 3,
-  },
-
-  sensorValue: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#1A1A1A',
-    lineHeight: 28,
-  },
-
-  sensorUnit: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1A1A1A',
-  },
-
-  sensorBarTrack: {
-    height: 10,
-    borderRadius: 30,
-    backgroundColor: '#E8F5EC',
-    overflow: 'hidden',
-  },
-
-  sensorBarFill: {
-    height: '100%',
-    borderRadius: 30,
-  },
-
   chartsSection: {
-  marginTop: 14,
-},
+    marginTop: 14,
+  },
 
-sectionTitle: {
-  fontSize: 18,
-  color: '#15251D',
-  fontWeight: '900',
-},
+  sectionTitle: {
+    paddingLeft: 6,
+    fontSize: 16,
+    color: '#30443A',
+    fontWeight: '800',
+  },
 
-sectionSubText: {
-  marginTop: 4,
-  marginBottom: 10,
-  fontSize: 12,
-  color: '#8A9B92',
-  fontWeight: '600',
-},
+  sectionSubText: {
+    marginTop: 2,
+    paddingLeft: 6,
+    fontSize: 12,
+    color: '#8ea798',
+    fontWeight: '500',
+  },
 
 });

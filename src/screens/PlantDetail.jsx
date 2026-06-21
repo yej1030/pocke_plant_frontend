@@ -3,6 +3,7 @@ import React, {
   useMemo,
   useState,
   useEffect,
+  useRef,
 } from 'react';
 
 import {
@@ -12,6 +13,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
+  Animated,
+  Easing,
 } from 'react-native';
 
 import { LineChart } from 'react-native-gifted-charts';
@@ -113,8 +116,12 @@ export default function PlantDetail({
   const [isHardwareConnected, setIsHardwareConnected] =
     useState(
       route?.params?.hardwareConnected ||
-        !!route?.params?.plant?.macAddress
+      !!route?.params?.plant?.macAddress
     );
+
+  // const [isHardwareConnected, setIsHardwareConnected] =
+  //   useState(true);
+  // 하드웨어 없어서 테스트
 
   const [speechMessage, setSpeechMessage] =
     useState('오늘은\n기분이 좋아요!');
@@ -131,11 +138,36 @@ export default function PlantDetail({
   const [sensorData, setSensorData] =
     useState(null);
 
+  // const [sensorData, setSensorData] =
+  //   useState({
+  //     soil: 3933,
+  //     temperature: 30.8,
+  //     humidity: 55,
+  //     light: 3673,
+  //   });
+  //  이것도 테스트
+
+
   const [sensorHistory, setSensorHistory] =
     useState([]);
 
   const [plantEnv, setPlantEnv] =
     useState(null);
+
+  const floatAnim = useRef(
+    new Animated.Value(0)
+  ).current;
+
+  const scaleAnim = useRef(
+    new Animated.Value(1)
+  ).current;
+
+  const heartAnim = useRef(
+  new Animated.Value(0)
+).current;
+
+  const [showHeart, setShowHeart] =
+    useState(false);
 
   const getAiText =
     answer => {
@@ -162,6 +194,30 @@ export default function PlantDetail({
     route?.params?.hardwareConnected,
     plant?.macAddress,
   ]);
+
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatAnim, {
+          toValue: 1,
+          duration: 1500,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(floatAnim, {
+          toValue: 0,
+          duration: 1500,
+          easing: Easing.inOut(Easing.sin),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
+    loop.start();
+
+    return () => loop.stop();
+  }, []);
 
   useEffect(() => {
     const createRoom =
@@ -192,7 +248,7 @@ export default function PlantDetail({
           console.log(
             '채팅방 생성 실패',
             error.response?.data ||
-              error.message
+            error.message
           );
         } finally {
           setIsRoomCreating(false);
@@ -251,8 +307,8 @@ export default function PlantDetail({
             Array.isArray(history) &&
               history.length > 0
               ? history[
-                  history.length - 1
-                ]
+              history.length - 1
+              ]
               : null
           );
 
@@ -267,7 +323,7 @@ export default function PlantDetail({
 
             if (
               typeof latest?.soil ===
-                'number' &&
+              'number' &&
               latest.soil < 30
             ) {
               setMood('sad');
@@ -283,7 +339,7 @@ export default function PlantDetail({
           console.log(
             '센서 조회 실패',
             error.response?.data ||
-              error.message
+            error.message
           );
         }
       };
@@ -338,7 +394,7 @@ export default function PlantDetail({
           console.log(
             '식물 환경 데이터 조회 실패',
             error.response?.data ||
-              error.message
+            error.message
           );
 
           setPlantEnv(null);
@@ -369,6 +425,34 @@ export default function PlantDetail({
       </>
     );
   }
+
+  const petPlant = () => {
+    Animated.sequence([
+      Animated.timing(scaleAnim, {
+        toValue: 1.15,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    setShowHeart(true);
+
+    heartAnim.setValue(0);
+
+    Animated.timing(heartAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start(() => {
+      setShowHeart(false);
+    });
+  };
 
   const askPlant =
     async question => {
@@ -432,6 +516,7 @@ export default function PlantDetail({
           content.includes('부족') ||
           content.includes('힘들') ||
           content.includes('아파') ||
+          content.includes('싫') ||
           content.includes('시들')
         ) {
           setMood('sad');
@@ -442,7 +527,7 @@ export default function PlantDetail({
         console.log(
           'AI 응답 실패:',
           error.response?.data ||
-            error.message
+          error.message
         );
 
         setSpeechMessage(
@@ -514,16 +599,16 @@ export default function PlantDetail({
   const sampledHistory =
     sensorHistory.length > 120
       ? sensorHistory.filter(
-          (_, index) => {
-            const step =
-              Math.ceil(
-                sensorHistory.length /
-                  120
-              );
+        (_, index) => {
+          const step =
+            Math.ceil(
+              sensorHistory.length /
+              120
+            );
 
-            return index % step === 0;
-          }
-        )
+          return index % step === 0;
+        }
+      )
       : sensorHistory;
 
   const chartConfigs = [
@@ -588,13 +673,13 @@ export default function PlantDetail({
       const padding =
         range <= 0
           ? Math.max(
-              max * 0.05,
-              1
-            )
+            max * 0.05,
+            1
+          )
           : Math.max(
-              range * 0.25,
-              1
-            );
+            range * 0.25,
+            1
+          );
 
       const graphMin =
         Math.max(
@@ -638,8 +723,8 @@ export default function PlantDetail({
               label:
                 isFirst || isLast
                   ? formatTimeShort(
-                      item?.regDate
-                    )
+                    item?.regDate
+                  )
                   : '',
             };
           }
@@ -653,11 +738,17 @@ export default function PlantDetail({
       };
     };
 
+  const floatTranslate =
+    floatAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, -10],
+    });
+
   const latestUpdatedText =
     sensorData?.regDate
       ? formatDateTime(
-          sensorData.regDate
-        )
+        sensorData.regDate
+      )
       : '아직 데이터 없음';
 
   return (
@@ -675,20 +766,68 @@ export default function PlantDetail({
         }
       >
         <View style={styles.heroCard}>
+          <View style={styles.heroBlobTopRight} />
+          <View style={styles.heroBlobBottomLeft} />
+          {showHeart && (
+            <Animated.Text
+              style={{
+                position: 'absolute',
+                top: 100,
+                zIndex: 999,
+                fontSize: 20,
+
+                opacity: heartAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, 0],
+                }),
+
+                transform: [
+                  {
+                    translateY:
+                      heartAnim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, -80],
+                      }),
+                  },
+                ],
+              }}
+            >
+              ❤️
+            </Animated.Text>
+          )}
           <View style={styles.speechBubble}>
             <Text style={styles.speechText}>
               {speechMessage}
             </Text>
           </View>
 
-          <Image
-            source={
-              characterImages[
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={petPlant}
+          >
+            <Animated.Image
+              source={
+                characterImages[
                 plant.character_id || 1
-              ]?.[mood]
-            }
-            style={styles.heroImage}
-          />
+                ]?.[mood]
+              }
+              style={[
+                styles.heroImage,
+                {
+                  transform: [
+                    {
+                      translateY:
+                        floatTranslate,
+                    },
+                    {
+                      scale:
+                        scaleAnim,
+                    },
+                  ],
+                },
+              ]}
+            />
+          </TouchableOpacity>
 
           <View style={styles.quickReplyWrap}>
             {[
@@ -807,7 +946,7 @@ export default function PlantDetail({
               {stats.map(item => {
                 const numericValue =
                   typeof item.value ===
-                  'number'
+                    'number'
                     ? item.value
                     : Number(item.value);
 
@@ -816,14 +955,14 @@ export default function PlantDetail({
                     numericValue
                   )
                     ? Math.min(
-                        Math.max(
-                          numericValue /
-                            item.max *
-                            100,
-                          0
-                        ),
-                        100
-                      )
+                      Math.max(
+                        numericValue /
+                        item.max *
+                        100,
+                        0
+                      ),
+                      100
+                    )
                     : 0;
 
                 return (
@@ -919,7 +1058,7 @@ export default function PlantDetail({
 
                 const latestValue =
                   sensorData?.[
-                    config.type
+                  config.type
                   ];
 
                 return (
@@ -1002,7 +1141,7 @@ export default function PlantDetail({
                         }
                         spacing={
                           chart.data.length >
-                          40
+                            40
                             ? 8
                             : 34
                         }
@@ -1080,8 +1219,7 @@ export default function PlantDetail({
                             styles.chartEmptyText
                           }
                         >
-                          그래프를 그리려면 센서 데이터가
-                          2개 이상 필요합니다.
+                          그래프를 그리려면 센서 데이터가 2개 이상 필요합니다.
                         </Text>
                       </View>
                     )}

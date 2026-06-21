@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useRef, useEffect, } from 'react';
+import { View, Text, Image, TouchableOpacity, Animated, } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from '@react-native-seoul/kakao-login';
 import CustomAlert from '../components/CustomAlert';
@@ -9,6 +9,36 @@ import { kakaoLoginApi } from '../api/api';
 
 export default function Login_1({ navigation }) {
   const { alertConfig, showAlert, closeAlert } = useCustomAlert();
+
+  const floatAnim =
+    useRef(
+      new Animated.Value(0)
+    ).current;
+
+  useEffect(() => {
+
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(
+          floatAnim,
+          {
+            toValue: -6,
+            duration: 2000,
+            useNativeDriver: true,
+          }
+        ),
+        Animated.timing(
+          floatAnim,
+          {
+            toValue: 0,
+            duration: 2000,
+            useNativeDriver: true,
+          }
+        ),
+      ])
+    ).start();
+
+  }, []);
 
   const handleKakaoLogin = async () => {
     try {
@@ -49,9 +79,18 @@ export default function Login_1({ navigation }) {
       <Text style={styles.title}>Pocket Plants</Text>
 
       {/* 로고 이미지 */}
-      <Image
+      <Animated.Image
         source={require('../assets/logo/logo_2.png')}
-        style={styles.image}
+        style={[
+          styles.image,
+          {
+            transform: [
+              {
+                translateY: floatAnim,
+              },
+            ],
+          },
+        ]}
       />
 
       {/* 버튼 그룹 */}
