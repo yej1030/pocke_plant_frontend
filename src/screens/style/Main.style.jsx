@@ -5,26 +5,31 @@ export default StyleSheet.create({
   // 전체 컨테이너
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     paddingHorizontal: 20,
     paddingTop: 20,
+    gap: 12,
   },
+
 	// 식물 카드
 	plantCard: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingVertical: 8,
-		paddingRight: 4,
+		paddingVertical: 12,
+		paddingHorizontal: 14,
+		borderRadius: 18,
+		backgroundColor: '#fff',
 	},
+	
 	plantImage: {
-		width: 72,
-		height: 72,
+		width: 64,
+		height: 64,
 		resizeMode: 'contain',
 		marginRight: 14,
-		borderRadius: 36,
-		backgroundColor: '#ffffff',
-		borderWidth: 0.7,
-		borderColor: '#bcbcbc',
+		borderRadius: 32,
+		backgroundColor: '#F2FBF6',
+		borderWidth: 1,
+		borderColor: '#dff0e6',
 	},
 	plantTextWrap: {
 		flex: 1,
@@ -53,65 +58,33 @@ export default StyleSheet.create({
 		resizeMode: 'contain',
 	},
 
-	// Action sheet (custom modal)
-	actionOverlay: {
-		flex: 1,
-		backgroundColor: 'rgba(0,0,0,0.18)'
-	},
-	actionContainer: {
-		backgroundColor: '#fff',
-		borderTopLeftRadius: 18,
-		borderTopRightRadius: 18,
-		paddingBottom: 24,
-		position: 'absolute',
-		left: 0,
-		right: 0,
-		bottom: 0,
-		shadowColor: '#000',
-		shadowOffset: { width: 0, height: -2 },
-		shadowOpacity: 0.08,
-		shadowRadius: 8,
-		elevation: 8,
-	},
-	actionHandleWrap: {
-		alignItems: 'center',
-		marginTop: 8,
-		marginBottom: 8,
-	},
-	actionHandle: {
-		width: 48,
-		height: 5,
-		borderRadius: 3,
-		backgroundColor: '#e0e0e0',
-	},
-	actionItem: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 20,
-		paddingHorizontal: 24,
-	},
-	actionIcon: {
-		fontSize: 20,
-		marginRight: 12,
-	},
-	actionText: {
-		fontSize: 17,
-		color: '#222',
-	},
-	actionDivider: {
-		height: 1,
-		backgroundColor: '#eee',
-	},
-	actionSpacing: {
-		height: 8,
-	},
-	actionCancel: {
-		alignItems: 'center',
-		paddingVertical: 16,
-		backgroundColor: '#fff',
-	},
-	actionCancelText: {
-		fontSize: 16,
-		color: '#bbb',
-	},
+
+	swipeActionContainer: {
+	flexDirection: 'row',
+	marginVertical: 6,
+	marginRight: 12,
+},
+
+editAction: {
+  width: 60,
+  backgroundColor: 'rgb(149, 222, 188, 0.6)',   // 진한 초록 배경
+  borderRadius: 8,
+  marginRight: 4,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+deleteAction: {
+  width: 60,
+  backgroundColor: 'rgb(255, 179, 179, 0.6)',   // 진한 빨강 배경
+  borderRadius: 8,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+swipeActionText: {
+  color: '#000000',   // 흰 텍스트
+  fontSize: 13,
+  fontWeight: '700',
+},
 });
