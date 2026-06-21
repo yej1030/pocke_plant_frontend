@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 백엔드 서버 주소
 const BASE_URL =
-  'https://pocket-plant-backend.onrender.com';
+  'http://192.168.0.211:8080';
 
 // 일반 로그인 API
 export const loginUser =
