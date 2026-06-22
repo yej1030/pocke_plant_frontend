@@ -280,23 +280,27 @@ export default function HardwareConnect({ navigation, route }) {
       return;
     }
 
-    if (step === 3) {
-      if (route?.params?.plant) {
-        navigation.reset({
-          index: 1,
-          routes: [
-            { name: 'Main' },
-            {
-              name: 'PlantDetail',
-              params: { plant: route.params.plant, hardwareConnected: true },
-            },
-          ],
-        });
-      } else {
-        navigation.goBack();
-      }
-      return;
-    }
+if (step === 3) {
+  if (route?.params?.plant) {
+    navigation.reset({
+      index: 1,
+      routes: [
+        { name: 'Main' },
+        {
+          name: 'PlantDetail',
+          params: { plant: route.params.plant, hardwareConnected: true },
+        },
+      ],
+    });
+  } else if (route?.params?.fromPlantRegister) {
+    // ✅ PlantRegister에서 왔을 때 macAddress 돌려주기
+    console.log('[HardwareConnect] macAddress 전달:', macAddress);
+    navigation.navigate('PlantRegister', { macAddress });
+  } else {
+    navigation.goBack();
+  }
+  return;
+}
 
     setStep(step + 1);
   };
