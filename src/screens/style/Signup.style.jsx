@@ -44,14 +44,14 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   certText: {
-    color: '#5CD79E',
+    color: '#7fc77c',
     fontWeight: 'bold',
   },
 
   // 인증 메시지
   certMessage: {
     fontSize: 12,
-    color: '#5CD79E',
+    color: '#7fc77c',
     marginBottom: 10,
     marginTop: -2,
     paddingLeft: 2,
@@ -113,7 +113,7 @@ eyeIcon: {
 
   // 회원가입 버튼
   submitButton: {
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
     padding: 18,
     borderRadius: 5,
     alignItems: 'center',

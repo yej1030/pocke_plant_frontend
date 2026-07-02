@@ -6,9 +6,8 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingTop: 20,
-    gap: 12,
   },
 
 	// 식물 카드
@@ -20,7 +19,7 @@ export default StyleSheet.create({
 		borderRadius: 18,
 		backgroundColor: '#fff',
 	},
-	
+
 	plantImage: {
 		width: 64,
 		height: 64,
@@ -37,7 +36,7 @@ export default StyleSheet.create({
 	},
 	plantName: {
 		fontSize: 16,
-		fontWeight: '800',
+		fontWeight: '700',
 		color: '#1f1f1f',
 		marginBottom: 6,
 	},
@@ -58,33 +57,70 @@ export default StyleSheet.create({
 		resizeMode: 'contain',
 	},
 
-
 	swipeActionContainer: {
-	flexDirection: 'row',
-	marginVertical: 6,
-	marginRight: 12,
-},
+		flexDirection: 'row',
+		marginVertical: 6,
+		marginRight: 12,
+	},
 
-editAction: {
-  width: 60,
-  backgroundColor: 'rgb(149, 222, 188, 0.6)',   // 진한 초록 배경
-  borderRadius: 8,
-  marginRight: 4,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
+	editAction: {
+		width: 60,
+		backgroundColor: 'rgb(149, 222, 188, 0.6)',
+		borderRadius: 8,
+		marginRight: 4,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 
-deleteAction: {
-  width: 60,
-  backgroundColor: 'rgb(255, 179, 179, 0.6)',   // 진한 빨강 배경
-  borderRadius: 8,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
+	deleteAction: {
+		width: 60,
+		backgroundColor: 'rgb(255, 179, 179, 0.6)',
+		borderRadius: 8,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 
-swipeActionText: {
-  color: '#000000',   // 흰 텍스트
-  fontSize: 13,
-  fontWeight: '700',
-},
+	swipeActionText: {
+		color: '#000000',
+		fontSize: 13,
+		fontWeight: '700',
+	},
+
+	// 새 식물 등록 카드 - 다른 카드와 통일감
+	addPlantCard: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingVertical: 14,
+		paddingHorizontal: 16,
+		borderRadius: 18,
+		borderWidth: 1,
+		borderColor: '#EFEFEF',
+		borderStyle: 'broken',
+		backgroundColor: '#ffffff',
+		marginHorizontal: 10,
+		marginTop: 8,
+	},
+
+	addPlantIconWrap: {
+		width: 34,
+		height: 34,
+		borderRadius: 10,
+		backgroundColor: '#F2FBF6',
+		alignItems: 'center',
+		justifyContent: 'center',
+		marginRight: 12,
+	},
+
+	addPlantIcon: {
+		fontSize: 16,
+		fontWeight: '700',
+		color: '#b1deb5',
+	},
+
+	addPlantText: {
+		fontSize: 15,
+		fontWeight: '600',
+		color: '#878787',
+	},
+
 });

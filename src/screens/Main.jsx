@@ -1,34 +1,13 @@
-import React, {
-	useContext,
-	useCallback,
-	useRef,
-	useEffect,
-} from 'react';
-
-import {
-	useFocusEffect,
-} from '@react-navigation/native';
-
-import {
-	View,
-	Text,
-	Image,
-	TouchableOpacity,
-	Animated,
-	Easing,
-} from 'react-native';
+import React, { useContext, useCallback, useRef, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { View, Text, Image, TouchableOpacity, Animated, Easing } from 'react-native';
 import Header from '../components/Header';
-import BottomButton from '../components/Bottombutton';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/Main.style';
-import {
-	PlantsContext,
-} from '../context/PlantsContext';
-import {
-	toggleBookmarkApi,
-	deletePlantApi,
-} from '../api/api';
+import Bottom from '../components/Bottom';
+import { PlantsContext } from '../context/PlantsContext';
+import { toggleBookmarkApi, deletePlantApi } from '../api/api';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const characterImages = {
@@ -79,11 +58,7 @@ function AnimatedPlantCard({ index, children }) {
 
 function BookmarkButton({ bookmarked, onPress, style, iconStyle }) {
 	return (
-		<TouchableOpacity
-			style={style}
-			onPress={onPress}
-			activeOpacity={0.8}
-		>
+		<TouchableOpacity style={style} onPress={onPress} activeOpacity={0.8}>
 			<Image
 				source={
 					bookmarked
@@ -96,15 +71,9 @@ function BookmarkButton({ bookmarked, onPress, style, iconStyle }) {
 	);
 }
 
-
-export default function Main({
-	navigation,
-}) {
+export default function Main({ navigation }) {
 	// 식물 데이터 (use context as single source of truth)
-	const {
-		plants,
-		loadPlants,
-	} = useContext(PlantsContext);
+	const { plants, loadPlants } = useContext(PlantsContext);
 
 	useFocusEffect(
 		useCallback(() => {
@@ -112,261 +81,140 @@ export default function Main({
 		}, [loadPlants])
 	);
 
-		// 커스텀 알림
-	const {
-		alertConfig,
-		showAlert,
-		closeAlert,
-	} = useCustomAlert();
+	// 커스텀 알림
+	const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
-	const renderRightActions = (plant) => {
-	return (
-		<View style={styles.swipeActionContainer}>
-			<TouchableOpacity style={styles.editAction}
-				onPress={() => {
-					navigation.navigate(
-						'PlantRegister',
-						{
-							plant,
-							plantId: plant.id,
+	const handleDeletePlant = (plant) => {
+		showAlert({
+			title: '삭제',
+			message: '삭제하시겠습니까?',
+			variant: 'error',
+			actions: [
+				{ text: '취소', kind: 'cancel' },
+				{
+					text: '삭제',
+					kind: 'destructive',
+					onPress: async () => {
+						try {
+							await deletePlantApi(plant.id);
+							await loadPlants();
+						} catch (error) {
+							console.log(error);
 						}
-					);
-				}}
+					},
+				},
+			],
+		});
+	};
+
+	const handleToggleBookmark = async (plantId) => {
+		try {
+			await toggleBookmarkApi(plantId);
+			await loadPlants();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const renderRightActions = (plant) => (
+		<View style={styles.swipeActionContainer}>
+			<TouchableOpacity
+				style={styles.editAction}
+				onPress={() => navigation.navigate('PlantRegister', { plant, plantId: plant.id })}
 			>
-				<Text style={styles.swipeActionText}
-				>
-					수정
-				</Text>
+				<Text style={styles.swipeActionText}>수정</Text>
 			</TouchableOpacity>
 
-			<TouchableOpacity
-				style={styles.deleteAction}
-				onPress={() => {
-
-					showAlert({
-						title: '삭제',
-						message: '삭제하시겠습니까?',
-						variant: 'error',
-						actions: [
-							{
-								text: '취소',
-								kind: 'cancel',
-							},
-							{
-								text: '삭제',
-								kind: 'destructive',
-								onPress: async () => {
-									try {
-										await deletePlantApi(
-											plant.id
-										);
-
-										await loadPlants();
-
-									} catch (error) {
-
-										console.log(
-											error
-										);
-									}
-								},
-							},
-						],
-					});
-				}}
-			>
-				<Text
-					style={styles.swipeActionText}
-				>
-					삭제
-				</Text>
+			<TouchableOpacity style={styles.deleteAction} onPress={() => handleDeletePlant(plant)}>
+				<Text style={styles.swipeActionText}>삭제</Text>
 			</TouchableOpacity>
 		</View>
 	);
-};
-
 
 	// 북마크 식물 상단 정렬
 	const sortedPlants = [...(plants || [])]
-
-		.map((plant, index) => ({
-			plant,
-			index,
-		}))
-
+		.map((plant, index) => ({ plant, index }))
 		.sort((left, right) => {
+			const leftBookmarked = left.plant.bookmarked ? 1 : 0;
+			const rightBookmarked = right.plant.bookmarked ? 1 : 0;
 
-			const leftBookmarked =
-				left.plant.bookmarked
-					? 1
-					: 0;
-
-			const rightBookmarked =
-				right.plant.bookmarked
-					? 1
-					: 0;
-
-			if (
-				leftBookmarked !==
-				rightBookmarked
-			) {
-				return (
-					rightBookmarked -
-					leftBookmarked
-				);
+			if (leftBookmarked !== rightBookmarked) {
+				return rightBookmarked - leftBookmarked;
 			}
-			return (
-				left.index -
-				right.index
-			);
+			return left.index - right.index;
 		});
-
-
 
 	return (
 		<>
-			<Header
-				title="Pocket Plants"
-				navigation={navigation}
-				type="main"
-			/>
+			<Header title="Pocket Plants" navigation={navigation} type="main" />
 
 			<View style={styles.container}>
-
-				{/* 등록된 식물 없음 */}
 				{plants.length === 0 ? (
-					<Text
-						style={{
-							color: '#888',
-							textAlign: 'center',
-							marginTop: 20,
-						}}
-					>
-						등록된 식물이 없습니다.
+					<Text style={{ color: '#888', textAlign: 'center', marginTop: 20, marginBottom: 20 }}>
+						아직 등록된 식물이 없습니다.
 					</Text>
 				) : (
 					sortedPlants.map(({ plant: p }, idx) => (
-<AnimatedPlantCard key={p.id} index={idx}>
-
-	<Swipeable
-		renderRightActions={() =>
-			renderRightActions(p)
-		}
-		overshootRight={false}
-	>
-
-		<TouchableOpacity
-			style={styles.plantCard}
-								activeOpacity={0.85}
-								onPress={() =>
-									navigation.navigate(
-										'PlantDetail',
-										{
-											plant: p,
-											plantId: p.id,
-										}
-									)
-								}
-							>
-
-								{/* 식물 이미지 */}
-								<Image
-									source={
-										characterImages[
-										p.character_id
-										]
+						<AnimatedPlantCard key={p.id} index={idx}>
+							<Swipeable renderRightActions={() => renderRightActions(p)} overshootRight={false}>
+								<TouchableOpacity
+									style={styles.plantCard}
+									activeOpacity={0.85}
+									onPress={() =>
+										navigation.navigate('PlantDetail', { plant: p, plantId: p.id })
 									}
-									style={styles.plantImage}
-								/>
-
-								{/* 식물 정보 */}
-								<View
-									style={styles.plantTextWrap}
 								>
+									<Image source={characterImages[p.character_id]} style={styles.plantImage} />
 
-									<Text
-										style={styles.plantName}
-									>
-										{p.name}
-										{p.species
-											? ` (${p.species})`
-											: ''}
-									</Text>
+									<View style={styles.plantTextWrap}>
+										<Text style={styles.plantName}>
+											{p.name}
+											{p.species ? ` (${p.species})` : ''}
+										</Text>
 
-									<Text
-										style={styles.plantMeta}
-									>
-										{p.adoptDate
-											? p.adoptDate
-											: ''}
-										{p.age
-											? ` / ${p.age}세`
-											: ''}
-									</Text>
+										<Text style={styles.plantMeta}>
+											{p.adoptDate ?? ''}
+											{p.age ? ` / ${p.age}세` : ''}
+										</Text>
+									</View>
 
-								</View>
-
-								{/* 북마크 */}
-								<BookmarkButton
-									bookmarked={p.bookmarked}
-									style={styles.settingsButton}
-									iconStyle={styles.settingsIcon}
-									onPress={async () => {
-
-										console.log('북마크 클릭:', p.id);
-
-
-										try {
-											const result = await toggleBookmarkApi(p.id);
-
-											console.log('북마크 성공:', result);
-											await loadPlants();
-										} catch (error) {
-											console.log('북마크 실패:', error.response?.data);
-											console.log('상태코드:', error.response?.status);
-											console.log(error);
-
-										}
-									}}
-								/>
-
-							</TouchableOpacity>
+									<BookmarkButton
+										bookmarked={p.bookmarked}
+										style={styles.settingsButton}
+										iconStyle={styles.settingsIcon}
+										onPress={() => handleToggleBookmark(p.id)}
+									/>
+								</TouchableOpacity>
 							</Swipeable>
-
 						</AnimatedPlantCard>
-					)
-					)
+					))
 				)}
 
+				<TouchableOpacity
+					style={styles.addPlantCard}
+					activeOpacity={0.85}
+					onPress={() => navigation.navigate('PlantRegister')}
+				>
+					<View style={styles.addPlantIconWrap}>
+						<Text style={styles.addPlantIcon}>+</Text>
+					</View>
+					<Text style={styles.addPlantText}>새 식물 등록하기</Text>
+				</TouchableOpacity>
 			</View>
 
-			{/* 커스텀 알림 */}
 			<CustomAlert
 				visible={alertConfig.visible}
 				title={alertConfig.title}
 				message={alertConfig.message}
 				buttonText={alertConfig.buttonText}
 				onPress={alertConfig.onPress}
-				secondaryButtonText={
-					alertConfig.secondaryButtonText
-				}
-				onSecondaryPress={
-					alertConfig.onSecondaryPress
-				}
+				secondaryButtonText={alertConfig.secondaryButtonText}
+				onSecondaryPress={alertConfig.onSecondaryPress}
 				actions={alertConfig.actions}
 				variant={alertConfig.variant}
 				onRequestClose={closeAlert}
 			/>
-
-			{/* 등록 버튼 */}
-			<BottomButton
-				title="식물 등록하기"
-				onPress={() =>
-					navigation.navigate(
-						'PlantRegister'
-					)
-				}
-			/>
+			<Bottom type="main" active="home" navigation={navigation} />
 		</>
 	);
-} 
+}

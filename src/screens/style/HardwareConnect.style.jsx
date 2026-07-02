@@ -29,7 +29,7 @@ export default StyleSheet.create({
   },
 
   progressBarActive: {
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
   },
 
   /* STEP 1 — 펄스 스캔 */
@@ -64,7 +64,7 @@ export default StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 1.5,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
   },
 
   iconCircle: {
@@ -135,7 +135,7 @@ export default StyleSheet.create({
   },
 
   progressBarOverlayActive: {
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
   },
 
   /* 스캔 가이드 프레임 (모서리) */
@@ -153,7 +153,7 @@ export default StyleSheet.create({
     position: 'absolute',
     width: 28,
     height: 28,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     borderWidth: 3,
   },
 
@@ -226,7 +226,7 @@ export default StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 1.5,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
@@ -254,7 +254,7 @@ export default StyleSheet.create({
   },
 
   deviceCardSelected: {
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     backgroundColor: '#F6FFF9',
   },
 
@@ -285,7 +285,7 @@ export default StyleSheet.create({
     height: 18,
     borderRadius: 9,
     borderWidth: 2,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -294,7 +294,7 @@ export default StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
   },
 
   /* STEP 3 — Wi-Fi 입력 */
@@ -381,7 +381,7 @@ export default StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 1.5,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F6FFF9',
@@ -406,7 +406,7 @@ export default StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 1.5,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
@@ -415,7 +415,7 @@ export default StyleSheet.create({
 
   doneIcon: {
     fontSize: 34,
-    color: '#5CD79E',
+    color: '#7fc77c',
     fontWeight: '700',
   },
 

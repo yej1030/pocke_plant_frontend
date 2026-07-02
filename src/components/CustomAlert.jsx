@@ -16,15 +16,15 @@ const ICONS = {
 };
 
 const COLORS = {
-  success: '#5CD79E',
+  success: '#7fc77c',
   info: '#7BCB95',
   warning: '#F6C15A',
   error: '#FF6B6B',
 };
 
 const ACTION_COLORS = {
-  primary: '#5CD79E',
-  success: '#5CD79E',
+  primary: '#7fc77c',
+  success: '#7fc77c',
   info: '#7BCB95',
   warning: '#F6C15A',
   error: '#FF6B6B',
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   actionButtonPrimary: {
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
   },
   actionButtonSecondary: {
     backgroundColor: '#fff',

@@ -72,7 +72,7 @@ export default StyleSheet.create({
   // 신규 회원가입 버튼
   signupButton: {
     width: '100%',
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
     paddingVertical: 14,
     borderRadius: 4,
     alignItems: 'center',

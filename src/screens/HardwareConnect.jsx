@@ -482,7 +482,7 @@ if (step === 3) {
             isConnecting ? (
               <View style={styles.loadingWrap}>
                 <View style={styles.loadingCircle}>
-                  <ActivityIndicator size="large" color="#5CD79E" />
+                  <ActivityIndicator size="large" color="#7fc77c" />
                 </View>
                 <Text style={styles.title}>연결 중...</Text>
                 <Text style={styles.loadingText}>

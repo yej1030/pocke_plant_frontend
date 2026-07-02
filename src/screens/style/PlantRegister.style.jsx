@@ -137,7 +137,7 @@ export default StyleSheet.create({
 
   personalityBtn: {
     borderWidth: 1,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     borderRadius: 14,
     paddingHorizontal: 12,
     paddingVertical: 4,
@@ -145,12 +145,12 @@ export default StyleSheet.create({
   },
 
   personalityBtnSelected: {
-    backgroundColor: '#99DDAA',
-    borderColor: '#99DDAA',
+    backgroundColor: '#7fc77c',
+    borderColor: '#7fc77c',
   },
 
   personalityText: {
-    color: '#5CD79E',
+    color: '#7fc77c',
     fontWeight: '500',
     fontSize: 14,
   },
@@ -167,20 +167,20 @@ export default StyleSheet.create({
   aiGuide: {
     marginTop: 10,
     fontSize: 13,
-    color: '#5CD79E',
+    color: '#7fc77c',
   },
 
   analyzeButton: {
     marginTop: 14,
     borderWidth: 1,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
   },
 
   analyzeButtonText: {
-    color: '#5CD79E',
+    color: '#7fc77c',
     fontSize: 15,
     fontWeight: '600',
   },
@@ -313,7 +313,7 @@ export default StyleSheet.create({
   ========================================= */
   qrButton: {
     borderWidth: 1,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     borderRadius: 8,
     paddingVertical: 10,
     alignItems: 'center',
@@ -322,7 +322,7 @@ export default StyleSheet.create({
   },
   
   qrButtonText: {
-    color: '#5CD79E',
+    color: '#7fc77c',
     fontSize: 14,
     fontWeight: '600',
   },

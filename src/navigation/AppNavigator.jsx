@@ -6,8 +6,13 @@ import Login from '../screens/Login_1';
 import Login_2 from '../screens/Login_2';
 import Signup from '../screens/Signup';
 import Main from '../screens/Main';
+import Board from '../screens/Board';
+import BoardDetail from '../screens/BoardDetail';
+import BoardWrite from '../screens/BoardWrite';
 import PlantRegister from '../screens/PlantRegister';
 import PlantDetail from '../screens/PlantDetail';
+import PlantDiary from '../screens/PlantDiary';
+import Friendship from '../screens/Friendship';
 import Chat from '../screens/Chat';
 import DiseasePredict from '../screens/DiseasePredict';
 import DiseaseResult from '../screens/DiseaseResult';
@@ -27,8 +32,13 @@ export default function AppNavigator() {
         <Stack.Screen name="Login_2" component={Login_2} />
         <Stack.Screen name="Signup" component={Signup} />
         <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="Board" component={Board} />
+        <Stack.Screen name="BoardDetail" component={BoardDetail} />
+        <Stack.Screen name="BoardWrite" component={BoardWrite} />
         <Stack.Screen name="PlantRegister" component={PlantRegister} />
         <Stack.Screen name="PlantDetail" component={PlantDetail} />
+        <Stack.Screen name="PlantDiary" component={PlantDiary} />
+        <Stack.Screen name="Friendship" component={Friendship} />
         <Stack.Screen name="DiseasePredict" component={DiseasePredict} />
         <Stack.Screen name="DiseaseResult" component={DiseaseResult} />
         <Stack.Screen name="Chat" component={Chat} />
