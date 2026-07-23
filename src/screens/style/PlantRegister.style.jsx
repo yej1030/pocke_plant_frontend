@@ -30,7 +30,7 @@ export default StyleSheet.create({
 
   label: {
     width: 70,
-    color: '#b0b0b0',
+    color: '#B8B8B8',
     textAlign: 'center',
     fontSize: 15,
     paddingRight: 16,

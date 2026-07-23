@@ -64,56 +64,106 @@ export default StyleSheet.create({
 	writeContent: {
 		paddingBottom: 28,
 	},
-	writeLabel: {
-		fontSize: 13,
-		fontWeight: '700',
-		color: '#333333',
-		marginBottom: 8,
-		marginTop: 10,
+
+	// PlantRegister 스타일의 row/label 레이아웃
+	writeRow: {
+		flexDirection: 'row',
+		alignItems: 'flex-start',
+		marginBottom: 22,
 	},
+	writeLabel: {
+		width: 70,
+		color: '#b0b0b0',
+		textAlign: 'center',
+		fontSize: 15,
+		paddingRight: 16,
+		paddingTop: 8,
+	},
+	writeContentWrap: {
+		flex: 1,
+	},
+
 	categoryWrap: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		gap: 8,
 	},
 	writeCategoryPill: {
-		paddingVertical: 8,
-		paddingHorizontal: 14,
-		borderRadius: 20,
-		backgroundColor: '#F5F5F5',
+		borderWidth: 1,
+		borderColor: '#7fc77c',
+		borderRadius: 14,
+		paddingHorizontal: 12,
+		paddingVertical: 4,
+		backgroundColor: '#fff',
 	},
 	writeCategoryPillActive: {
 		backgroundColor: '#7fc77c',
+		borderColor: '#7fc77c',
 	},
 	writeCategoryText: {
-		fontSize: 13,
-		fontWeight: '600',
-		color: '#8f8f8f',
+		color: '#7fc77c',
+		fontWeight: '500',
+		fontSize: 14,
 	},
 	writeCategoryTextActive: {
-		color: '#FFFFFF',
+		color: '#fff',
+		fontWeight: '700',
 	},
+
 	writeInput: {
-		borderRadius: 16,
-		borderWidth: 1,
-		borderColor: '#E8E8E8',
-		backgroundColor: '#FAFAFA',
-		paddingHorizontal: 14,
-		paddingVertical: 12,
+		borderBottomWidth: 1,
+		borderColor: '#e0e0e0',
 		fontSize: 15,
-		color: '#1f1f1f',
+		paddingVertical: 8,
+		paddingLeft: 8,
+		color: '#222',
+		backgroundColor: 'transparent',
+		width: '98%',
 	},
 	writeTextarea: {
-		minHeight: 180,
+		minHeight: 160,
 		textAlignVertical: 'top',
+		borderWidth: 1,
+		borderColor: '#e0e0e0',
+		borderRadius: 10,
+		paddingHorizontal: 10,
+		paddingTop: 10,
 	},
+
+	writeImageBox: {
+		height: 100,
+		borderWidth: 1,
+		borderColor: '#d7e7d7',
+		borderStyle: 'dashed',
+		borderRadius: 10,
+		backgroundColor: '#f8fcf8',
+		alignItems: 'center',
+		justifyContent: 'center',
+		width: '98%',
+	},
+	writeImageBoxText: {
+		marginTop: 8,
+		fontSize: 13,
+		color: '#7fc77c',
+	},
+	writeSelectedImage: {
+		width: '98%',
+		height: 200,
+		borderRadius: 12,
+		resizeMode: 'cover',
+	},
+
 	writeSubmitButton: {
-		marginTop: 20,
+		marginTop: 12,
+		marginHorizontal: 16,
 		borderRadius: 16,
 		backgroundColor: '#7fc77c',
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingVertical: 15,
+	},
+	writeSubmitButtonDisabled: {
+		backgroundColor: '#D8D8D8',
 	},
 	writeSubmitText: {
 		fontSize: 15,
@@ -279,4 +329,35 @@ export default StyleSheet.create({
 		shadowRadius: 6,
 		elevation: 4,
 	},
+
+	writeImageBox: {
+    height: 100,
+    borderWidth: 1,
+    borderColor: '#d7e7d7',
+    borderStyle: 'dashed',
+    borderRadius: 10,
+    backgroundColor: '#f8fcf8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  imageIcon: {
+    width: 42,
+    height: 42,
+    opacity: 0.3,
+  },
+
+
+
+	writeSelectedImage: {
+		width: '100%',
+		height: 180,
+		borderRadius: 16,
+		backgroundColor: '#EFEFEF',
+		marginBottom: 4,
+	},
+	writeSubmitButtonDisabled: {
+		backgroundColor: '#D8D8D8',
+	},
+
 });
