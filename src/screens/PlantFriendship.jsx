@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
 
-export default function Friendship({ navigation, route }) {
+export default function PlantFriendship({ navigation, route }) {
 	const plantName = route?.params?.plant?.name ?? '식물';
 
 	return (
