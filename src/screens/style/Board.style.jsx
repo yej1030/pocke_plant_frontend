@@ -40,6 +40,8 @@ export default StyleSheet.create({
 		height: 220,
 		borderRadius: 16,
 		backgroundColor: '#EFEFEF',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	detailText: {
 		fontSize: 15,
@@ -131,26 +133,29 @@ export default StyleSheet.create({
 	},
 
 	writeImageBox: {
-		height: 100,
+		width: '100%',
+		height: 180,
+		borderRadius: 16,
+		backgroundColor: '#FAFAFA',
 		borderWidth: 1,
-		borderColor: '#d7e7d7',
+		borderColor: '#E8E8E8',
 		borderStyle: 'dashed',
-		borderRadius: 10,
-		backgroundColor: '#f8fcf8',
 		alignItems: 'center',
 		justifyContent: 'center',
-		width: '98%',
+		marginBottom: 4,
 	},
 	writeImageBoxText: {
-		marginTop: 8,
 		fontSize: 13,
-		color: '#7fc77c',
+		fontWeight: '600',
+		color: '#B8B8B8',
+		marginTop: 8,
 	},
 	writeSelectedImage: {
-		width: '98%',
-		height: 200,
-		borderRadius: 12,
-		resizeMode: 'cover',
+		width: '100%',
+		height: 180,
+		borderRadius: 16,
+		backgroundColor: '#EFEFEF',
+		marginBottom: 4,
 	},
 
 	writeSubmitButton: {
@@ -198,6 +203,24 @@ export default StyleSheet.create({
 		color: '#ffffff',
 	},
 
+	// 검색창
+	searchBar: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: 8,
+		paddingHorizontal: 14,
+		paddingVertical: 10,
+		borderRadius: 14,
+		backgroundColor: '#F5F5F5',
+		marginBottom: 12,
+	},
+	searchInput: {
+		flex: 1,
+		fontSize: 14,
+		color: '#1f1f1f',
+		padding: 0,
+	},
+
 	// 정렬
 	sortRow: {
 		flexDirection: 'row',
@@ -235,7 +258,7 @@ export default StyleSheet.create({
 		width: 64,
 		height: 64,
 		borderRadius: 12,
-		marginRight: 14,
+		marginLeft: 14,
 		resizeMode: 'cover',
 		backgroundColor: '#EFEFEF',
 	},
@@ -285,8 +308,8 @@ export default StyleSheet.create({
 	// 메타 정보 (날짜, 조회수, 댓글수)
 	metaRow: {
 		flexDirection: 'row',
-		justifyContent: 'space-between',
 		alignItems: 'center',
+		gap: 8,
 	},
 	metaDate: {
 		fontSize: 11,
@@ -329,35 +352,4 @@ export default StyleSheet.create({
 		shadowRadius: 6,
 		elevation: 4,
 	},
-
-	writeImageBox: {
-    height: 100,
-    borderWidth: 1,
-    borderColor: '#d7e7d7',
-    borderStyle: 'dashed',
-    borderRadius: 10,
-    backgroundColor: '#f8fcf8',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  imageIcon: {
-    width: 42,
-    height: 42,
-    opacity: 0.3,
-  },
-
-
-
-	writeSelectedImage: {
-		width: '100%',
-		height: 180,
-		borderRadius: 16,
-		backgroundColor: '#EFEFEF',
-		marginBottom: 4,
-	},
-	writeSubmitButtonDisabled: {
-		backgroundColor: '#D8D8D8',
-	},
-
 });

@@ -4,6 +4,7 @@ const BoardContext = createContext();
 
 export const BoardProvider = ({ children }) => {
 	const [posts, setPosts] = useState([]);
+	const [comments, setComments] = useState([]);
 
 	// 게시글 추가
 	const addPost = (post) => {
@@ -23,6 +24,11 @@ export const BoardProvider = ({ children }) => {
 	const deletePost = (postId) => {
 		setPosts((prev) =>
 			prev.filter((post) => post.id !== postId)
+		);
+
+		// 게시글 삭제 시 해당 게시글의 댓글도 함께 삭제
+		setComments((prev) =>
+			prev.filter((comment) => comment.postId !== postId)
 		);
 	};
 
@@ -45,6 +51,75 @@ export const BoardProvider = ({ children }) => {
 		);
 	};
 
+	// 특정 게시글의 댓글 목록 조회
+	const getCommentsByPost = (postId) => {
+		return comments.filter((comment) => comment.postId === postId);
+	};
+
+	// 댓글/답글 추가
+	// parentId가 없으면 최상위 댓글, 있으면 그 댓글의 답글
+	const addComment = ({ postId, parentId = null, userId, content }) => {
+		const newComment = {
+			id: String(Date.now()),
+			postId,
+			parentId,
+			userId,
+			content,
+			date: new Date().toISOString(),
+		};
+
+		setComments((prev) => [...prev, newComment]);
+
+		// 게시글의 commentsCount 증가
+		setPosts((prev) =>
+			prev.map((post) =>
+				post.id === postId
+					? {
+							...post,
+							commentsCount: (post.commentsCount ?? 0) + 1,
+					  }
+					: post
+			)
+		);
+	};
+
+	// 댓글/답글 삭제
+	// 최상위 댓글을 삭제하면 그에 딸린 답글도 함께 삭제
+	const deleteComment = (postId, commentId) => {
+		setComments((prev) => {
+			const target = prev.find((comment) => comment.id === commentId);
+			if (!target) return prev;
+
+			const idsToRemove = [commentId];
+
+			if (!target.parentId) {
+				prev.forEach((comment) => {
+					if (comment.parentId === commentId) {
+						idsToRemove.push(comment.id);
+					}
+				});
+			}
+
+			const removedCount = idsToRemove.length;
+
+			setPosts((prevPosts) =>
+				prevPosts.map((post) =>
+					post.id === postId
+						? {
+								...post,
+								commentsCount: Math.max(
+									(post.commentsCount ?? 0) - removedCount,
+									0
+								),
+						  }
+						: post
+				)
+			);
+
+			return prev.filter((comment) => !idsToRemove.includes(comment.id));
+		});
+	};
+
 	return (
 		<BoardContext.Provider
 			value={{
@@ -54,6 +129,10 @@ export const BoardProvider = ({ children }) => {
 				deletePost,
 				getPost,
 				increaseView,
+				comments,
+				getCommentsByPost,
+				addComment,
+				deleteComment,
 			}}
 		>
 			{children}

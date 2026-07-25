@@ -6,12 +6,15 @@ import {
 	TouchableOpacity,
 	FlatList,
 	ScrollView,
+	TextInput,
 } from 'react-native';
 import {
 	IconEye,
 	IconMessageCircle,
 	IconPlus,
 	IconPhoto,
+	IconSearch,
+	IconX,
 } from '@tabler/icons-react-native';
 
 import Header from '../components/Header';
@@ -58,6 +61,7 @@ export default function Board({ navigation }) {
 
 	const [activeCategory, setActiveCategory] = useState('all');
 	const [sortType, setSortType] = useState('latest');
+	const [searchText, setSearchText] = useState('');
 
 	const visiblePosts = useMemo(() => {
 		const filtered =
@@ -67,7 +71,19 @@ export default function Board({ navigation }) {
 						(post) => post.category === activeCategory
 				  );
 
-		const sorted = [...filtered].sort((a, b) => {
+		const query = searchText.trim().toLowerCase();
+
+		const searched = query
+			? filtered.filter((post) => {
+					const title = (post.title ?? '').toLowerCase();
+					const content = (post.content ?? '').toLowerCase();
+					return (
+						title.includes(query) || content.includes(query)
+					);
+			  })
+			: filtered;
+
+		const sorted = [...searched].sort((a, b) => {
 			if (sortType === 'popular') {
 				return (b.views ?? 0) - (a.views ?? 0);
 			}
@@ -76,7 +92,7 @@ export default function Board({ navigation }) {
 		});
 
 		return sorted;
-	}, [posts, activeCategory, sortType]);
+	}, [posts, activeCategory, sortType, searchText]);
 
 	const renderPost = ({ item }) => (
 		<TouchableOpacity
@@ -88,21 +104,6 @@ export default function Board({ navigation }) {
 				})
 			}
 		>
-			{item.imageUri ? (
-				<Image
-					source={{ uri: item.imageUri }}
-					style={styles.postImage}
-				/>
-			) : (
-				<View style={styles.postImagePlaceholder}>
-					<IconPhoto
-						size={22}
-						color="#C4C4C4"
-						strokeWidth={1.5}
-					/>
-				</View>
-			)}
-
 			<View style={styles.postTextWrap}>
 				<CategoryBadge categoryKey={item.category} />
 
@@ -128,7 +129,7 @@ export default function Board({ navigation }) {
 					<View style={styles.metaIconGroup}>
 						<IconEye
 							size={13}
-							color="#A7A7A7"
+							color="#C4C4C4"
 							strokeWidth={1.75}
 						/>
 						<Text style={styles.metaCount}>
@@ -137,7 +138,7 @@ export default function Board({ navigation }) {
 
 						<IconMessageCircle
 							size={13}
-							color="#A7A7A7"
+							color="#C4C4C4"
 							strokeWidth={1.75}
 						/>
 						<Text style={styles.metaCount}>
@@ -146,6 +147,13 @@ export default function Board({ navigation }) {
 					</View>
 				</View>
 			</View>
+
+			{item.imageUri && (
+				<Image
+					source={{ uri: item.imageUri }}
+					style={styles.postImage}
+				/>
+			)}
 		</TouchableOpacity>
 	);
 
@@ -197,6 +205,27 @@ export default function Board({ navigation }) {
 					})}
 				</ScrollView>
 
+				<View style={styles.searchBar}>
+					<IconSearch size={17} color="#C4C4C4" strokeWidth={1.75} />
+
+					<TextInput
+						value={searchText}
+						onChangeText={setSearchText}
+						placeholder="제목 또는 내용 검색"
+						placeholderTextColor="#C4C4C4"
+						style={styles.searchInput}
+					/>
+
+					{searchText.length > 0 && (
+						<TouchableOpacity
+							onPress={() => setSearchText('')}
+							activeOpacity={0.7}
+						>
+							<IconX size={16} color="#C4C4C4" strokeWidth={1.75} />
+						</TouchableOpacity>
+					)}
+				</View>
+
 				<View style={styles.sortRow}>
 					{SORT_OPTIONS.map((opt) => {
 						const isActive =
@@ -232,7 +261,9 @@ export default function Board({ navigation }) {
 					contentContainerStyle={styles.listContent}
 					ListEmptyComponent={
 						<Text style={styles.emptyText}>
-							등록된 게시글이 없습니다.
+							{searchText.trim()
+								? '검색 결과가 없습니다.'
+								: '등록된 게시글이 없습니다.'}
 						</Text>
 					}
 				/>
