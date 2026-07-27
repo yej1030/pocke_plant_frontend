@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
 	View,
 	Text,
@@ -11,7 +11,7 @@ import {
 	launchCamera,
 	launchImageLibrary,
 } from 'react-native-image-picker';
-import { IconPhoto } from '@tabler/icons-react-native';
+import { IconPhoto, IconX, IconPlus } from '@tabler/icons-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
@@ -26,6 +26,8 @@ const CATEGORIES = [
 	{ key: 'adopt', label: '분양 게시판' },
 	{ key: 'disease', label: '질병 게시판' },
 ];
+
+const MAX_IMAGES = 5;
 
 export default function BoardWrite({ navigation, route }) {
 	const { addPost, updatePost } = useBoard();
@@ -45,9 +47,14 @@ export default function BoardWrite({ navigation, route }) {
 	const [category, setCategory] = useState(initialCategory);
 	const [title, setTitle] = useState(editingPost?.title ?? '');
 	const [content, setContent] = useState(editingPost?.content ?? '');
-	const [imageUri, setImageUri] = useState(
-		editingPost?.imageUri ?? null
-	);
+
+	// 기존 imageUri(단일, 예전 데이터 호환) 또는 imageUris(배열)를 모두 지원
+	const [imageUris, setImageUris] = useState(() => {
+		if (editingPost?.imageUris?.length > 0) return editingPost.imageUris;
+		if (editingPost?.imageUri) return [editingPost.imageUri];
+		return [];
+	});
+
 	const [userId, setUserId] = useState('');
 	const [nickname, setNickname] = useState('');
 
@@ -63,7 +70,18 @@ export default function BoardWrite({ navigation, route }) {
 		loadUser();
 	}, []);
 
-	const handleImagePress = () => {
+	const handleAddImage = () => {
+		if (imageUris.length >= MAX_IMAGES) {
+			showAlert({
+				title: '최대 개수 초과',
+				message: `사진은 최대 ${MAX_IMAGES}장까지 첨부할 수 있어요.`,
+				variant: 'warning',
+			});
+			return;
+		}
+
+		const remaining = MAX_IMAGES - imageUris.length;
+
 		showAlert({
 			title: '이미지 선택',
 			message: '이미지 선택 방법을 골라주세요.',
@@ -80,7 +98,10 @@ export default function BoardWrite({ navigation, route }) {
 							(res) => {
 								if (res.didCancel || res.errorCode) return;
 								if (res.assets?.length > 0) {
-									setImageUri(res.assets[0].uri);
+									setImageUris((prev) => [
+										...prev,
+										res.assets[0].uri,
+									]);
 								}
 							}
 						);
@@ -93,11 +114,17 @@ export default function BoardWrite({ navigation, route }) {
 						launchImageLibrary(
 							{
 								mediaType: 'photo',
+								selectionLimit: remaining,
 							},
 							(res) => {
 								if (res.didCancel || res.errorCode) return;
 								if (res.assets?.length > 0) {
-									setImageUri(res.assets[0].uri);
+									const newUris = res.assets.map(
+										(asset) => asset.uri
+									);
+									setImageUris((prev) =>
+										[...prev, ...newUris].slice(0, MAX_IMAGES)
+									);
 								}
 							}
 						);
@@ -109,6 +136,10 @@ export default function BoardWrite({ navigation, route }) {
 				},
 			],
 		});
+	};
+
+	const handleRemoveImage = (index) => {
+		setImageUris((prev) => prev.filter((_, i) => i !== index));
 	};
 
 	const handleSubmit = () => {
@@ -129,13 +160,15 @@ export default function BoardWrite({ navigation, route }) {
 		const postData = {
 			id: editingPost?.id ?? String(Date.now()),
 
-			userId,
-			writer: nickname,
+			userId: editingPost?.userId ?? userId,
+			writer: editingPost?.writer ?? nickname,
 
 			category,
 			title: title.trim(),
 			content: content.trim(),
-			imageUri: imageUri || null,
+			imageUris,
+			// 목록/썸네일 등 기존에 imageUri(단일)를 참조하는 화면과의 호환을 위해 첫 번째 사진을 대표 이미지로 유지
+			imageUri: imageUris[0] ?? null,
 			date: editingPost?.date ?? new Date().toISOString(),
 			views: editingPost?.views ?? 0,
 			commentsCount: editingPost?.commentsCount ?? 0,
@@ -165,8 +198,6 @@ export default function BoardWrite({ navigation, route }) {
 				contentContainerStyle={styles.writeContent}
 				keyboardShouldPersistTaps="handled"
 			>
-
-
 				{/* 제목 */}
 				<View style={styles.writeRow}>
 					<Text style={styles.writeLabel}>제목</Text>
@@ -219,7 +250,7 @@ export default function BoardWrite({ navigation, route }) {
 											style={[
 												styles.writeCategoryText,
 												isActive &&
-												styles.writeCategoryTextActive,
+													styles.writeCategoryTextActive,
 											]}
 										>
 											{item.label}
@@ -231,33 +262,45 @@ export default function BoardWrite({ navigation, route }) {
 					</View>
 				</View>
 
-				{/* 사진 */}
+				{/* 사진 (여러 장) */}
 				<View style={styles.writeRow}>
 					<Text style={styles.writeLabel}>사진</Text>
 					<View style={styles.writeContentWrap}>
-						{imageUri ? (
-							<TouchableOpacity
-								onPress={handleImagePress}
-								activeOpacity={0.85}
-							>
-								<Image
-									source={{ uri: imageUri }}
-									style={styles.writeSelectedImage}
-								/>
-							</TouchableOpacity>
-						) : (
-							<TouchableOpacity
-								style={styles.writeImageBox}
-								onPress={handleImagePress}
-								activeOpacity={0.85}
-							>
-								<IconPhoto
-									size={26}
-									color="#C4C4C4"
-									strokeWidth={1.5}
-								/>
-							</TouchableOpacity>
-						)}
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							contentContainerStyle={styles.imageListContent}
+						>
+							{imageUris.map((uri, index) => (
+								<View key={uri + index} style={styles.imageThumbWrap}>
+									<Image
+										source={{ uri }}
+										style={styles.imageThumb}
+									/>
+
+									<TouchableOpacity
+										style={styles.imageRemoveBtn}
+										onPress={() => handleRemoveImage(index)}
+										activeOpacity={0.8}
+									>
+										<IconX size={12} color="#FFFFFF" strokeWidth={2.5} />
+									</TouchableOpacity>
+								</View>
+							))}
+
+							{imageUris.length < MAX_IMAGES && (
+								<TouchableOpacity
+									style={styles.imageAddBox}
+									onPress={handleAddImage}
+									activeOpacity={0.85}
+								>
+									<IconPlus size={22} color="#C4C4C4" strokeWidth={1.5} />
+									<Text style={styles.imageAddBoxText}>
+										{imageUris.length}/{MAX_IMAGES}
+									</Text>
+								</TouchableOpacity>
+							)}
+						</ScrollView>
 					</View>
 				</View>
 

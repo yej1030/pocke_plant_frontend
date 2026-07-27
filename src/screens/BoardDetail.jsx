@@ -172,8 +172,24 @@ export default function BoardDetail({ navigation, route }) {
 						</View>
 					</View>
 
-					{post.imageUri && (
-						<Image source={{ uri: post.imageUri }} style={styles.detailImage} />
+					{post.imageUris?.length > 0 ? (
+						<ScrollView
+							horizontal
+							showsHorizontalScrollIndicator={false}
+							style={styles.detailImageScroll}
+						>
+							{post.imageUris.map((uri, index) => (
+								<Image
+									key={uri + index}
+									source={{ uri }}
+									style={styles.detailImageMulti}
+								/>
+							))}
+						</ScrollView>
+					) : (
+						post.imageUri && (
+							<Image source={{ uri: post.imageUri }} style={styles.detailImage} />
+						)
 					)}
 
 					<Text style={styles.detailText}>{post.content}</Text>

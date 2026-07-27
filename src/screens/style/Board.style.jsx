@@ -352,4 +352,160 @@ export default StyleSheet.create({
 		shadowRadius: 6,
 		elevation: 4,
 	},
+	
+// 댓글 섹션
+	commentSectionTitle: {
+		fontSize: 16,
+		fontWeight: '700',
+		color: '#1f1f1f',
+		marginTop: 24,
+		marginBottom: 12,
+	},
+	commentEmptyText: {
+		fontSize: 13,
+		color: '#A7A7A7',
+		marginBottom: 12,
+	},
+	commentItem: {
+		paddingVertical: 12,
+		borderBottomWidth: 1,
+		borderBottomColor: '#F0F0F0',
+	},
+	commentHeaderRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+	commentAuthor: {
+		fontSize: 13,
+		fontWeight: '700',
+		color: '#1f1f1f',
+	},
+	commentDate: {
+		fontSize: 11,
+		color: '#C4C4C4',
+	},
+	commentContent: {
+		fontSize: 14,
+		color: '#505050',
+		marginTop: 4,
+		lineHeight: 20,
+	},
+	commentActionRow: {
+		flexDirection: 'row',
+		gap: 14,
+		marginTop: 6,
+	},
+	commentReplyBtn: {
+		fontSize: 12,
+		fontWeight: '600',
+		color: '#7fc77c',
+	},
+	commentDeleteBtn: {
+		fontSize: 12,
+		fontWeight: '600',
+		color: '#E74C3C',
+	},
+	replyItem: {
+		marginLeft: 20,
+		marginTop: 10,
+		paddingLeft: 12,
+		borderLeftWidth: 2,
+		borderLeftColor: '#F0F0F0',
+	},
+	replyInputRow: {
+		flexDirection: 'row',
+		marginTop: 8,
+		gap: 8,
+	},
+	replyInput: {
+		flex: 1,
+		borderWidth: 1,
+		borderColor: '#E8E8E8',
+		borderRadius: 10,
+		paddingHorizontal: 12,
+		paddingVertical: 8,
+		fontSize: 13,
+		color: '#1f1f1f',
+	},
+	commentInputRow: {
+		flexDirection: 'row',
+		marginTop: 16,
+		gap: 8,
+	},
+	commentInput: {
+		flex: 1,
+		borderWidth: 1,
+		borderColor: '#E8E8E8',
+		borderRadius: 10,
+		paddingHorizontal: 14,
+		paddingVertical: 10,
+		fontSize: 14,
+		color: '#1f1f1f',
+	},
+	commentSubmitBtn: {
+		backgroundColor: '#7fc77c',
+		borderRadius: 10,
+		paddingHorizontal: 16,
+		justifyContent: 'center',
+	},
+	commentSubmitBtnText: {
+		color: '#ffffff',
+		fontWeight: '700',
+		fontSize: 13,
+	},
+
+	// 여러 장 사진 리스트
+	imageListContent: {
+		gap: 10,
+		paddingRight: 8,
+	},
+	imageThumbWrap: {
+		position: 'relative',
+	},
+	imageThumb: {
+		width: 84,
+		height: 84,
+		borderRadius: 12,
+		backgroundColor: '#EFEFEF',
+	},
+	imageRemoveBtn: {
+		position: 'absolute',
+		top: -6,
+		right: -6,
+		width: 20,
+		height: 20,
+		borderRadius: 10,
+		backgroundColor: '#00000099',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	imageAddBox: {
+		width: 84,
+		height: 84,
+		borderRadius: 12,
+		borderWidth: 1,
+		borderColor: '#E8E8E8',
+		borderStyle: 'dashed',
+		backgroundColor: '#FAFAFA',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	imageAddBoxText: {
+		fontSize: 11,
+		fontWeight: '600',
+		color: '#C4C4C4',
+		marginTop: 4,
+	},
+
+	detailImageScroll: {
+		marginBottom: 4,
+	},
+	detailImageMulti: {
+		width: 260,
+		height: 220,
+		borderRadius: 16,
+		backgroundColor: '#EFEFEF',
+		marginRight: 10,
+	},
 });
