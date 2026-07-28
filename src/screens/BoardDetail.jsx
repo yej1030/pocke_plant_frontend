@@ -1,8 +1,4 @@
-import React, {
-	useMemo,
-	useState,
-	useEffect,
-} from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
 	View,
 	Text,
@@ -12,35 +8,15 @@ import {
 	TextInput,
 } from 'react-native';
 import { IconEye, IconMessageCircle, IconEdit } from '@tabler/icons-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
+import CustomAlert from '../components/CustomAlert';
+import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/Board.style';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBoard } from '../context/BoardContext';
-
-const CATEGORIES = [
-	{ key: 'all', label: '전체' },
-	{ key: 'free', label: '자유 게시판' },
-	{ key: 'adopt', label: '분양 게시판' },
-	{ key: 'disease', label: '질병 게시판' },
-];
-
-function formatDate(isoString) {
-	const date = new Date(isoString);
-	const month = date.getMonth() + 1;
-	const day = date.getDate();
-	return `${month}월 ${day}일`;
-}
-
-function CategoryBadge({ categoryKey }) {
-	const label = CATEGORIES.find((category) => category.key === categoryKey)?.label ?? '';
-
-	return (
-		<View style={styles.categoryBadge}>
-			<Text style={styles.categoryBadgeText}>{label}</Text>
-		</View>
-	);
-}
+import { formatDate, CategoryBadge } from './boardUtils';
 
 export default function BoardDetail({ navigation, route }) {
 	const {
@@ -56,6 +32,7 @@ export default function BoardDetail({ navigation, route }) {
 	const [commentText, setCommentText] = useState('');
 	const [replyTarget, setReplyTarget] = useState(null); // 답글 작성 중인 댓글 id
 	const [replyText, setReplyText] = useState('');
+	const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
 	useEffect(() => {
 		const loadUser = async () => {
@@ -119,9 +96,47 @@ export default function BoardDetail({ navigation, route }) {
 	const repliesByParent = (parentId) =>
 		allComments.filter((c) => c.parentId === parentId);
 
-	const handleDelete = () => {
-		deletePost(post.id);
-		navigation.goBack();
+	const confirmDelete = ({ title, message, onConfirm }) => {
+		showAlert({
+			title,
+			message,
+			variant: 'error',
+			actions: [
+				{ text: '취소', kind: 'cancel' },
+				{
+					text: '삭제',
+					kind: 'destructive',
+					onPress: onConfirm,
+				},
+			],
+		});
+	};
+
+	const handleDeletePost = () => {
+		confirmDelete({
+			title: '게시글 삭제',
+			message: '작성한 게시글을 삭제하시겠습니까?',
+			onConfirm: () => {
+				deletePost(post.id);
+				navigation.goBack();
+			},
+		});
+	};
+
+	const handleDeleteComment = (commentId) => {
+		confirmDelete({
+			title: '댓글 삭제',
+			message: '이 댓글을 삭제하시겠습니까?',
+			onConfirm: () => deleteComment(post.id, commentId),
+		});
+	};
+
+	const handleDeleteReply = (replyId) => {
+		confirmDelete({
+			title: '답글 삭제',
+			message: '이 답글을 삭제하시겠습니까?',
+			onConfirm: () => deleteComment(post.id, replyId),
+		});
 	};
 
 	const handleSubmitComment = () => {
@@ -134,6 +149,12 @@ export default function BoardDetail({ navigation, route }) {
 		});
 
 		setCommentText('');
+	};
+
+	const handleToggleReply = (commentId) => {
+		const next = replyTarget === commentId ? null : commentId;
+		setReplyTarget(next);
+		setReplyText(''); // 대상이 바뀌면 이전에 쓰던 답글 내용은 초기화
 	};
 
 	const handleSubmitReply = (parentId) => {
@@ -165,7 +186,7 @@ export default function BoardDetail({ navigation, route }) {
 
 						<View style={styles.metaIconGroup}>
 							<IconEye size={13} color="#A7A7A7" strokeWidth={1.75} />
-							<Text style={styles.metaCount}>{post.views}</Text>
+							<Text style={styles.metaCount}>{post.views ?? 0}</Text>
 
 							<IconMessageCircle size={13} color="#A7A7A7" strokeWidth={1.75} />
 							<Text style={styles.metaCount}>{allComments.length}</Text>
@@ -217,7 +238,7 @@ export default function BoardDetail({ navigation, route }) {
 									{ backgroundColor: '#E74C3C', marginTop: 10 },
 								]}
 								activeOpacity={0.85}
-								onPress={handleDelete}
+								onPress={handleDeletePost}
 							>
 								<Text style={styles.detailActionText}>삭제하기</Text>
 							</TouchableOpacity>
@@ -248,19 +269,13 @@ export default function BoardDetail({ navigation, route }) {
 								<Text style={styles.commentContent}>{comment.content}</Text>
 
 								<View style={styles.commentActionRow}>
-									<TouchableOpacity
-										onPress={() =>
-											setReplyTarget(
-												replyTarget === comment.id ? null : comment.id
-											)
-										}
-									>
+									<TouchableOpacity onPress={() => handleToggleReply(comment.id)}>
 										<Text style={styles.commentReplyBtn}>답글</Text>
 									</TouchableOpacity>
 
 									{comment.userId === myUserId && (
 										<TouchableOpacity
-											onPress={() => deleteComment(post.id, comment.id)}
+											onPress={() => handleDeleteComment(comment.id)}
 										>
 											<Text style={styles.commentDeleteBtn}>삭제</Text>
 										</TouchableOpacity>
@@ -302,7 +317,7 @@ export default function BoardDetail({ navigation, route }) {
 
 										{reply.userId === myUserId && (
 											<TouchableOpacity
-												onPress={() => deleteComment(post.id, reply.id)}
+												onPress={() => handleDeleteReply(reply.id)}
 											>
 												<Text style={styles.commentDeleteBtn}>삭제</Text>
 											</TouchableOpacity>
@@ -332,6 +347,11 @@ export default function BoardDetail({ navigation, route }) {
 					</View>
 				</View>
 			</ScrollView>
+
+			<CustomAlert
+				{...alertConfig}
+				onRequestClose={closeAlert}
+			/>
 
 			<Bottom type="main" active="board" navigation={navigation} />
 		</>

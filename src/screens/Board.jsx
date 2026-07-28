@@ -8,53 +8,18 @@ import {
 	ScrollView,
 	TextInput,
 } from 'react-native';
-import {
-	IconEye,
-	IconMessageCircle,
-	IconPlus,
-	IconPhoto,
-	IconSearch,
-	IconX,
-} from '@tabler/icons-react-native';
+import { IconEye, IconMessageCircle, IconPlus, IconSearch, IconX } from '@tabler/icons-react-native';
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
 import styles from './style/Board.style';
-
 import { useBoard } from '../context/BoardContext';
-
-const CATEGORIES = [
-	{ key: 'all', label: '전체' },
-	{ key: 'free', label: '자유 게시판' },
-	{ key: 'adopt', label: '분양 게시판' },
-	{ key: 'disease', label: '질병 게시판' },
-];
+import { CATEGORIES, formatDate, CategoryBadge } from './boardUtils';
 
 const SORT_OPTIONS = [
 	{ key: 'latest', label: '최신순' },
 	{ key: 'popular', label: '인기순' },
 ];
-
-function formatDate(isoString) {
-	if (!isoString) return '';
-
-	const date = new Date(isoString);
-	const month = date.getMonth() + 1;
-	const day = date.getDate();
-
-	return `${month}월 ${day}일`;
-}
-
-function CategoryBadge({ categoryKey }) {
-	const label =
-		CATEGORIES.find((c) => c.key === categoryKey)?.label ?? '';
-
-	return (
-		<View style={styles.categoryBadge}>
-			<Text style={styles.categoryBadgeText}>{label}</Text>
-		</View>
-	);
-}
 
 export default function Board({ navigation }) {
 	const { posts } = useBoard();
@@ -67,9 +32,7 @@ export default function Board({ navigation }) {
 		const filtered =
 			activeCategory === 'all'
 				? posts
-				: posts.filter(
-						(post) => post.category === activeCategory
-				  );
+				: posts.filter((post) => post.category === activeCategory);
 
 		const query = searchText.trim().toLowerCase();
 
@@ -77,9 +40,7 @@ export default function Board({ navigation }) {
 			? filtered.filter((post) => {
 					const title = (post.title ?? '').toLowerCase();
 					const content = (post.content ?? '').toLowerCase();
-					return (
-						title.includes(query) || content.includes(query)
-					);
+					return title.includes(query) || content.includes(query);
 			  })
 			: filtered;
 
@@ -99,103 +60,67 @@ export default function Board({ navigation }) {
 			style={styles.postCard}
 			activeOpacity={0.85}
 			onPress={() =>
-				navigation.navigate('BoardDetail', {
-					postId: item.id,
-				})
+				navigation.navigate('BoardDetail', { postId: item.id })
 			}
 		>
 			<View style={styles.postTextWrap}>
 				<CategoryBadge categoryKey={item.category} />
 
-				<Text
-					style={styles.postTitle}
-					numberOfLines={1}
-				>
+				<Text style={styles.postTitle} numberOfLines={1}>
 					{item.title}
 				</Text>
 
-				<Text
-					style={styles.postPreview}
-					numberOfLines={2}
-				>
+				<Text style={styles.postPreview} numberOfLines={2}>
 					{item.content}
 				</Text>
 
 				<View style={styles.metaRow}>
-					<Text style={styles.metaDate}>
-						{formatDate(item.date)}
-					</Text>
+					<Text style={styles.metaDate}>{formatDate(item.date)}</Text>
 
 					<View style={styles.metaIconGroup}>
-						<IconEye
-							size={13}
-							color="#C4C4C4"
-							strokeWidth={1.75}
-						/>
-						<Text style={styles.metaCount}>
-							{item.views ?? 0}
-						</Text>
+						<IconEye size={13} color="#C4C4C4" strokeWidth={1.75} />
+						<Text style={styles.metaCount}>{item.views ?? 0}</Text>
 
-						<IconMessageCircle
-							size={13}
-							color="#C4C4C4"
-							strokeWidth={1.75}
-						/>
-						<Text style={styles.metaCount}>
-							{item.commentsCount ?? 0}
-						</Text>
+						<IconMessageCircle size={13} color="#C4C4C4" strokeWidth={1.75} />
+						<Text style={styles.metaCount}>{item.commentsCount ?? 0}</Text>
 					</View>
 				</View>
 			</View>
 
 			{item.imageUri && (
-				<Image
-					source={{ uri: item.imageUri }}
-					style={styles.postImage}
-				/>
+				<Image source={{ uri: item.imageUri }} style={styles.postImage} />
 			)}
 		</TouchableOpacity>
 	);
 
 	return (
 		<>
-			<Header
-				title="게시판"
-				navigation={navigation}
-				type="full"
-			/>
+			<Header title="게시판" navigation={navigation} type="full" />
 
 			<View style={styles.container}>
 				<ScrollView
 					horizontal
 					showsHorizontalScrollIndicator={false}
 					style={styles.categoryScroll}
-					contentContainerStyle={
-						styles.categoryScrollContent
-					}
+					contentContainerStyle={styles.categoryScrollContent}
 				>
 					{CATEGORIES.map((cat) => {
-						const isActive =
-							activeCategory === cat.key;
+						const isActive = activeCategory === cat.key;
 
 						return (
 							<TouchableOpacity
 								key={cat.key}
 								style={[
 									styles.categoryPill,
-									isActive &&
-										styles.categoryPillActive,
+									isActive && styles.categoryPillActive,
 								]}
 								activeOpacity={0.8}
-								onPress={() =>
-									setActiveCategory(cat.key)
-								}
+								onPress={() => setActiveCategory(cat.key)}
 							>
 								<Text
 									style={[
 										styles.categoryPillText,
-										isActive &&
-											styles.categoryPillTextActive,
+										isActive && styles.categoryPillTextActive,
 									]}
 								>
 									{cat.label}
@@ -228,22 +153,18 @@ export default function Board({ navigation }) {
 
 				<View style={styles.sortRow}>
 					{SORT_OPTIONS.map((opt) => {
-						const isActive =
-							sortType === opt.key;
+						const isActive = sortType === opt.key;
 
 						return (
 							<TouchableOpacity
 								key={opt.key}
 								style={styles.sortOption}
-								onPress={() =>
-									setSortType(opt.key)
-								}
+								onPress={() => setSortType(opt.key)}
 							>
 								<Text
 									style={[
 										styles.sortText,
-										isActive &&
-											styles.sortTextActive,
+										isActive && styles.sortTextActive,
 									]}
 								>
 									{opt.label}
@@ -271,23 +192,13 @@ export default function Board({ navigation }) {
 				<TouchableOpacity
 					style={styles.writeButton}
 					activeOpacity={0.85}
-					onPress={() =>
-						navigation.navigate('BoardWrite')
-					}
+					onPress={() => navigation.navigate('BoardWrite')}
 				>
-					<IconPlus
-						size={24}
-						color="#FFFFFF"
-						strokeWidth={2}
-					/>
+					<IconPlus size={24} color="#FFFFFF" strokeWidth={2} />
 				</TouchableOpacity>
 			</View>
 
-			<Bottom
-				type="main"
-				active="board"
-				navigation={navigation}
-			/>
+			<Bottom type="main" active="board" navigation={navigation} />
 		</>
 	);
 }

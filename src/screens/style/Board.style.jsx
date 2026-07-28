@@ -35,14 +35,6 @@ export default StyleSheet.create({
 		borderRadius: 16,
 		backgroundColor: '#EFEFEF',
 	},
-	detailImagePlaceholder: {
-		width: '100%',
-		height: 220,
-		borderRadius: 16,
-		backgroundColor: '#EFEFEF',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
 	detailText: {
 		fontSize: 15,
 		lineHeight: 23,
@@ -63,6 +55,17 @@ export default StyleSheet.create({
 		fontWeight: '700',
 		color: '#FFFFFF',
 	},
+	detailImageScroll: {
+		marginBottom: 4,
+	},
+	detailImageMulti: {
+		width: 260,
+		height: 220,
+		borderRadius: 16,
+		backgroundColor: '#EFEFEF',
+		marginRight: 10,
+	},
+
 	writeContent: {
 		paddingBottom: 28,
 	},
@@ -142,19 +145,6 @@ export default StyleSheet.create({
 		borderStyle: 'dashed',
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginBottom: 4,
-	},
-	writeImageBoxText: {
-		fontSize: 13,
-		fontWeight: '600',
-		color: '#B8B8B8',
-		marginTop: 8,
-	},
-	writeSelectedImage: {
-		width: '100%',
-		height: 180,
-		borderRadius: 16,
-		backgroundColor: '#EFEFEF',
 		marginBottom: 4,
 	},
 
@@ -262,15 +252,6 @@ export default StyleSheet.create({
 		resizeMode: 'cover',
 		backgroundColor: '#EFEFEF',
 	},
-	postImagePlaceholder: {
-		width: 64,
-		height: 64,
-		borderRadius: 12,
-		marginRight: 14,
-		backgroundColor: '#F0F0F0',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
 	postTextWrap: {
 		flex: 1,
 		justifyContent: 'center',
@@ -319,13 +300,12 @@ export default StyleSheet.create({
 	metaIconGroup: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		gap: 3,
+		gap: 6,
 	},
 	metaCount: {
 		fontSize: 11,
 		fontWeight: '600',
 		color: '#A7A7A7',
-		marginRight: 8,
 	},
 
 	emptyText: {
@@ -352,8 +332,8 @@ export default StyleSheet.create({
 		shadowRadius: 6,
 		elevation: 4,
 	},
-	
-// 댓글 섹션
+
+	// 댓글 섹션
 	commentSectionTitle: {
 		fontSize: 16,
 		fontWeight: '700',
@@ -496,16 +476,5 @@ export default StyleSheet.create({
 		fontWeight: '600',
 		color: '#C4C4C4',
 		marginTop: 4,
-	},
-
-	detailImageScroll: {
-		marginBottom: 4,
-	},
-	detailImageMulti: {
-		width: 260,
-		height: 220,
-		borderRadius: 16,
-		backgroundColor: '#EFEFEF',
-		marginRight: 10,
 	},
 });

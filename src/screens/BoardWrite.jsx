@@ -13,19 +13,14 @@ import {
 } from 'react-native-image-picker';
 import { IconPhoto, IconX, IconPlus } from '@tabler/icons-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/Board.style';
-
 import { useBoard } from '../context/BoardContext';
-
-const CATEGORIES = [
-	{ key: 'free', label: '자유 게시판' },
-	{ key: 'adopt', label: '분양 게시판' },
-	{ key: 'disease', label: '질병 게시판' },
-];
+import { WRITE_CATEGORIES } from './boardUtils';
 
 const MAX_IMAGES = 5;
 
@@ -36,7 +31,7 @@ export default function BoardWrite({ navigation, route }) {
 	const editingPost = route?.params?.post ?? null;
 
 	const initialCategory = useMemo(() => {
-		const matched = CATEGORIES.find(
+		const matched = WRITE_CATEGORIES.find(
 			(category) =>
 				category.key ===
 				(editingPost?.category ?? route?.params?.category)
@@ -91,17 +86,11 @@ export default function BoardWrite({ navigation, route }) {
 					kind: 'primary',
 					onPress: () => {
 						launchCamera(
-							{
-								mediaType: 'photo',
-								cameraType: 'back',
-							},
+							{ mediaType: 'photo', cameraType: 'back' },
 							(res) => {
 								if (res.didCancel || res.errorCode) return;
 								if (res.assets?.length > 0) {
-									setImageUris((prev) => [
-										...prev,
-										res.assets[0].uri,
-									]);
+									setImageUris((prev) => [...prev, res.assets[0].uri]);
 								}
 							}
 						);
@@ -112,16 +101,11 @@ export default function BoardWrite({ navigation, route }) {
 					kind: 'primary',
 					onPress: () => {
 						launchImageLibrary(
-							{
-								mediaType: 'photo',
-								selectionLimit: remaining,
-							},
+							{ mediaType: 'photo', selectionLimit: remaining },
 							(res) => {
 								if (res.didCancel || res.errorCode) return;
 								if (res.assets?.length > 0) {
-									const newUris = res.assets.map(
-										(asset) => asset.uri
-									);
+									const newUris = res.assets.map((asset) => asset.uri);
 									setImageUris((prev) =>
 										[...prev, ...newUris].slice(0, MAX_IMAGES)
 									);
@@ -130,10 +114,7 @@ export default function BoardWrite({ navigation, route }) {
 						);
 					},
 				},
-				{
-					text: '취소',
-					kind: 'cancel',
-				},
+				{ text: '취소', kind: 'cancel' },
 			],
 		});
 	};
@@ -167,7 +148,8 @@ export default function BoardWrite({ navigation, route }) {
 			title: title.trim(),
 			content: content.trim(),
 			imageUris,
-			// 목록/썸네일 등 기존에 imageUri(단일)를 참조하는 화면과의 호환을 위해 첫 번째 사진을 대표 이미지로 유지
+			// 목록/썸네일 등 기존에 imageUri(단일)를 참조하는 화면과의 호환을 위해
+			// 첫 번째 사진을 대표 이미지로 유지
 			imageUri: imageUris[0] ?? null,
 			date: editingPost?.date ?? new Date().toISOString(),
 			views: editingPost?.views ?? 0,
@@ -233,7 +215,7 @@ export default function BoardWrite({ navigation, route }) {
 					<Text style={styles.writeLabel}>카테고리</Text>
 					<View style={styles.writeContentWrap}>
 						<View style={styles.categoryWrap}>
-							{CATEGORIES.map((item) => {
+							{WRITE_CATEGORIES.map((item) => {
 								const isActive = category === item.key;
 
 								return (
@@ -249,8 +231,7 @@ export default function BoardWrite({ navigation, route }) {
 										<Text
 											style={[
 												styles.writeCategoryText,
-												isActive &&
-													styles.writeCategoryTextActive,
+												isActive && styles.writeCategoryTextActive,
 											]}
 										>
 											{item.label}
@@ -273,10 +254,7 @@ export default function BoardWrite({ navigation, route }) {
 						>
 							{imageUris.map((uri, index) => (
 								<View key={uri + index} style={styles.imageThumbWrap}>
-									<Image
-										source={{ uri }}
-										style={styles.imageThumb}
-									/>
+									<Image source={{ uri }} style={styles.imageThumb} />
 
 									<TouchableOpacity
 										style={styles.imageRemoveBtn}

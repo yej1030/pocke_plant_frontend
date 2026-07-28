@@ -22,9 +22,7 @@ export const BoardProvider = ({ children }) => {
 
 	// 게시글 삭제
 	const deletePost = (postId) => {
-		setPosts((prev) =>
-			prev.filter((post) => post.id !== postId)
-		);
+		setPosts((prev) => prev.filter((post) => post.id !== postId));
 
 		// 게시글 삭제 시 해당 게시글의 댓글도 함께 삭제
 		setComments((prev) =>
@@ -42,10 +40,7 @@ export const BoardProvider = ({ children }) => {
 		setPosts((prev) =>
 			prev.map((post) =>
 				post.id === postId
-					? {
-							...post,
-							views: post.views + 1,
-					  }
+					? { ...post, views: (post.views ?? 0) + 1 }
 					: post
 			)
 		);
@@ -70,7 +65,6 @@ export const BoardProvider = ({ children }) => {
 
 		setComments((prev) => [...prev, newComment]);
 
-		// 게시글의 commentsCount 증가
 		setPosts((prev) =>
 			prev.map((post) =>
 				post.id === postId
@@ -85,39 +79,39 @@ export const BoardProvider = ({ children }) => {
 
 	// 댓글/답글 삭제
 	// 최상위 댓글을 삭제하면 그에 딸린 답글도 함께 삭제
+	// (state setter 안에서 다른 state의 setter를 호출하지 않도록,
+	//  삭제 대상 계산은 밖에서 먼저 끝내고 각 setter는 한 번씩만 호출)
 	const deleteComment = (postId, commentId) => {
-		setComments((prev) => {
-			const target = prev.find((comment) => comment.id === commentId);
-			if (!target) return prev;
+		const target = comments.find((comment) => comment.id === commentId);
+		if (!target) return;
 
-			const idsToRemove = [commentId];
+		const idsToRemove = [commentId];
 
-			if (!target.parentId) {
-				prev.forEach((comment) => {
-					if (comment.parentId === commentId) {
-						idsToRemove.push(comment.id);
-					}
-				});
-			}
+		if (!target.parentId) {
+			comments.forEach((comment) => {
+				if (comment.parentId === commentId) {
+					idsToRemove.push(comment.id);
+				}
+			});
+		}
 
-			const removedCount = idsToRemove.length;
+		setComments((prev) =>
+			prev.filter((comment) => !idsToRemove.includes(comment.id))
+		);
 
-			setPosts((prevPosts) =>
-				prevPosts.map((post) =>
-					post.id === postId
-						? {
-								...post,
-								commentsCount: Math.max(
-									(post.commentsCount ?? 0) - removedCount,
-									0
-								),
-						  }
-						: post
-				)
-			);
-
-			return prev.filter((comment) => !idsToRemove.includes(comment.id));
-		});
+		setPosts((prev) =>
+			prev.map((post) =>
+				post.id === postId
+					? {
+							...post,
+							commentsCount: Math.max(
+								(post.commentsCount ?? 0) - idsToRemove.length,
+								0
+							),
+					  }
+					: post
+			)
+		);
 	};
 
 	return (
