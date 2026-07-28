@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import {
 	View,
 	Text,
@@ -7,7 +7,9 @@ import {
 	FlatList,
 	ScrollView,
 	TextInput,
+	BackHandler,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { IconEye, IconMessageCircle, IconPlus, IconSearch, IconX } from '@tabler/icons-react-native';
 
 import Header from '../components/Header';
@@ -27,6 +29,27 @@ export default function Board({ navigation }) {
 	const [activeCategory, setActiveCategory] = useState('all');
 	const [sortType, setSortType] = useState('latest');
 	const [searchText, setSearchText] = useState('');
+
+	const handleBackToHome = useCallback(() => {
+		navigation.navigate('Main'); // 실제 홈 화면 라우트 이름 확인!
+	}, [navigation]);
+
+	// 안드로이드 하드웨어 뒤로가기 버튼 대응
+	useFocusEffect(
+		useCallback(() => {
+			const onHardwareBackPress = () => {
+				handleBackToHome();
+				return true;
+			};
+
+			const subscription = BackHandler.addEventListener(
+				'hardwareBackPress',
+				onHardwareBackPress
+			);
+
+			return () => subscription.remove();
+		}, [handleBackToHome])
+	);
 
 	const visiblePosts = useMemo(() => {
 		const filtered =
@@ -95,7 +118,12 @@ export default function Board({ navigation }) {
 
 	return (
 		<>
-			<Header title="게시판" navigation={navigation} type="full" />
+			<Header
+				title="게시판"
+				navigation={navigation}
+				type="full"
+				onBackPress={handleBackToHome}
+			/>
 
 			<View style={styles.container}>
 				<ScrollView

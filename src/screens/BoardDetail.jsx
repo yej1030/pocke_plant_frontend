@@ -6,6 +6,8 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	TextInput,
+	KeyboardAvoidingView,
+	Platform,
 } from 'react-native';
 import { IconEye, IconMessageCircle, IconEdit } from '@tabler/icons-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,7 +32,7 @@ export default function BoardDetail({ navigation, route }) {
 
 	const [myUserId, setMyUserId] = useState('');
 	const [commentText, setCommentText] = useState('');
-	const [replyTarget, setReplyTarget] = useState(null); // 답글 작성 중인 댓글 id
+	const [replyTarget, setReplyTarget] = useState(null);
 	const [replyText, setReplyText] = useState('');
 	const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
@@ -154,7 +156,7 @@ export default function BoardDetail({ navigation, route }) {
 	const handleToggleReply = (commentId) => {
 		const next = replyTarget === commentId ? null : commentId;
 		setReplyTarget(next);
-		setReplyText(''); // 대상이 바뀌면 이전에 쓰던 답글 내용은 초기화
+		setReplyText('');
 	};
 
 	const handleSubmitReply = (parentId) => {
@@ -175,178 +177,179 @@ export default function BoardDetail({ navigation, route }) {
 		<>
 			<Header title="게시판" navigation={navigation} type="full" />
 
-			<ScrollView style={styles.container} contentContainerStyle={styles.detailContent}>
-				<View style={styles.detailCard}>
-					<CategoryBadge categoryKey={post.category} />
+			<KeyboardAvoidingView
+				style={{ flex: 1 }}
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+				keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+			>
+				<ScrollView style={styles.container} contentContainerStyle={styles.detailContent}>
+					<View style={styles.detailCard}>
+						<CategoryBadge categoryKey={post.category} />
 
-					<Text style={styles.detailTitle}>{post.title}</Text>
+						<Text style={styles.detailTitle}>{post.title}</Text>
 
-					<View style={styles.detailMetaRow}>
-						<Text style={styles.metaDate}>{formatDate(post.date)}</Text>
+						<View style={styles.detailMetaRow}>
+							<Text style={styles.metaDate}>{formatDate(post.date)}</Text>
 
-						<View style={styles.metaIconGroup}>
-							<IconEye size={13} color="#A7A7A7" strokeWidth={1.75} />
-							<Text style={styles.metaCount}>{post.views ?? 0}</Text>
+							<View style={styles.metaIconGroup}>
+								<IconEye size={13} color="#A7A7A7" strokeWidth={1.75} />
+								<Text style={styles.metaCount}>{post.views ?? 0}</Text>
 
-							<IconMessageCircle size={13} color="#A7A7A7" strokeWidth={1.75} />
-							<Text style={styles.metaCount}>{allComments.length}</Text>
+								<IconMessageCircle size={13} color="#A7A7A7" strokeWidth={1.75} />
+								<Text style={styles.metaCount}>{allComments.length}</Text>
+							</View>
 						</View>
-					</View>
 
-					{post.imageUris?.length > 0 ? (
-						<ScrollView
-							horizontal
-							showsHorizontalScrollIndicator={false}
-							style={styles.detailImageScroll}
-						>
-							{post.imageUris.map((uri, index) => (
-								<Image
-									key={uri + index}
-									source={{ uri }}
-									style={styles.detailImageMulti}
-								/>
-							))}
-						</ScrollView>
-					) : (
-						post.imageUri && (
-							<Image source={{ uri: post.imageUri }} style={styles.detailImage} />
-						)
-					)}
-
-					<Text style={styles.detailText}>{post.content}</Text>
-
-					{/* 내 글일 때만: 수정/삭제 */}
-					{isMine && (
-						<>
-							<TouchableOpacity
-								style={styles.detailActionButton}
-								activeOpacity={0.85}
-								onPress={() =>
-									navigation.navigate('BoardWrite', {
-										category: post.category,
-										post,
-									})
-								}
+						{post.imageUris?.length > 0 ? (
+							<ScrollView
+								horizontal
+								showsHorizontalScrollIndicator={false}
+								style={styles.detailImageScroll}
 							>
-								<IconEdit size={18} color="#FFFFFF" strokeWidth={2} />
-								<Text style={styles.detailActionText}>이 글 수정하기</Text>
-							</TouchableOpacity>
+								{post.imageUris.map((uri, index) => (
+									<Image
+										key={uri + index}
+										source={{ uri }}
+										style={styles.detailImageMulti}
+									/>
+								))}
+							</ScrollView>
+						) : (
+							post.imageUri && (
+								<Image source={{ uri: post.imageUri }} style={styles.detailImage} />
+							)
+						)}
 
-							<TouchableOpacity
-								style={[
-									styles.detailActionButton,
-									{ backgroundColor: '#E74C3C', marginTop: 10 },
-								]}
-								activeOpacity={0.85}
-								onPress={handleDeletePost}
-							>
-								<Text style={styles.detailActionText}>삭제하기</Text>
-							</TouchableOpacity>
-						</>
-					)}
+						<Text style={styles.detailText}>{post.content}</Text>
 
-					{/* 댓글 섹션: 내 글/남의 글 상관없이 항상 표시 */}
-					<Text style={styles.commentSectionTitle}>
-						댓글 {allComments.length}
-					</Text>
+						{isMine && (
+							<>
+								<TouchableOpacity
+									style={styles.detailActionButton}
+									activeOpacity={0.85}
+									onPress={() =>
+										navigation.navigate('BoardWrite', {
+											category: post.category,
+											post,
+										})
+									}
+								>
+									<IconEdit size={18} color="#FFFFFF" strokeWidth={2} />
+									<Text style={styles.detailActionText}>이 글 수정하기</Text>
+								</TouchableOpacity>
 
-					{topLevelComments.length === 0 ? (
-						<Text style={styles.commentEmptyText}>
-							아직 댓글이 없습니다.
+								<TouchableOpacity
+									style={[
+										styles.detailActionButton,
+										{ backgroundColor: '#E74C3C', marginTop: 10 },
+									]}
+									activeOpacity={0.85}
+									onPress={handleDeletePost}
+								>
+									<Text style={styles.detailActionText}>삭제하기</Text>
+								</TouchableOpacity>
+							</>
+						)}
+
+						<Text style={styles.commentSectionTitle}>
+							댓글 {allComments.length}
 						</Text>
-					) : (
-						topLevelComments.map((comment) => (
-							<View key={comment.id} style={styles.commentItem}>
-								<View style={styles.commentHeaderRow}>
-									<Text style={styles.commentAuthor}>
-										{comment.userId || '익명'}
-									</Text>
-									<Text style={styles.commentDate}>
-										{formatDate(comment.date)}
-									</Text>
-								</View>
 
-								<Text style={styles.commentContent}>{comment.content}</Text>
-
-								<View style={styles.commentActionRow}>
-									<TouchableOpacity onPress={() => handleToggleReply(comment.id)}>
-										<Text style={styles.commentReplyBtn}>답글</Text>
-									</TouchableOpacity>
-
-									{comment.userId === myUserId && (
-										<TouchableOpacity
-											onPress={() => handleDeleteComment(comment.id)}
-										>
-											<Text style={styles.commentDeleteBtn}>삭제</Text>
-										</TouchableOpacity>
-									)}
-								</View>
-
-								{/* 답글 입력창 */}
-								{replyTarget === comment.id && (
-									<View style={styles.replyInputRow}>
-										<TextInput
-											value={replyText}
-											onChangeText={setReplyText}
-											placeholder="답글을 입력하세요"
-											placeholderTextColor="#B8B8B8"
-											style={styles.replyInput}
-										/>
-										<TouchableOpacity
-											style={styles.commentSubmitBtn}
-											onPress={() => handleSubmitReply(comment.id)}
-										>
-											<Text style={styles.commentSubmitBtnText}>등록</Text>
-										</TouchableOpacity>
+						{topLevelComments.length === 0 ? (
+							<Text style={styles.commentEmptyText}>
+								아직 댓글이 없습니다.
+							</Text>
+						) : (
+							topLevelComments.map((comment) => (
+								<View key={comment.id} style={styles.commentItem}>
+									<View style={styles.commentHeaderRow}>
+										<Text style={styles.commentAuthor}>
+											{comment.userId || '익명'}
+										</Text>
+										<Text style={styles.commentDate}>
+											{formatDate(comment.date)}
+										</Text>
 									</View>
-								)}
 
-								{/* 답글 목록 (들여쓰기) */}
-								{repliesByParent(comment.id).map((reply) => (
-									<View key={reply.id} style={styles.replyItem}>
-										<View style={styles.commentHeaderRow}>
-											<Text style={styles.commentAuthor}>
-												{reply.userId || '익명'}
-											</Text>
-											<Text style={styles.commentDate}>
-												{formatDate(reply.date)}
-											</Text>
-										</View>
+									<Text style={styles.commentContent}>{comment.content}</Text>
 
-										<Text style={styles.commentContent}>{reply.content}</Text>
+									<View style={styles.commentActionRow}>
+										<TouchableOpacity onPress={() => handleToggleReply(comment.id)}>
+											<Text style={styles.commentReplyBtn}>답글</Text>
+										</TouchableOpacity>
 
-										{reply.userId === myUserId && (
+										{comment.userId === myUserId && (
 											<TouchableOpacity
-												onPress={() => handleDeleteReply(reply.id)}
+												onPress={() => handleDeleteComment(comment.id)}
 											>
 												<Text style={styles.commentDeleteBtn}>삭제</Text>
 											</TouchableOpacity>
 										)}
 									</View>
-								))}
-							</View>
-						))
-					)}
 
-					{/* 새 댓글 입력 */}
-					<View style={styles.commentInputRow}>
-						<TextInput
-							value={commentText}
-							onChangeText={setCommentText}
-							placeholder="댓글을 입력하세요."
-							placeholderTextColor="#B8B8B8"
-							style={styles.commentInput}
-						/>
+									{replyTarget === comment.id && (
+										<View style={styles.replyInputRow}>
+											<TextInput
+												value={replyText}
+												onChangeText={setReplyText}
+												placeholder="답글을 입력하세요"
+												placeholderTextColor="#B8B8B8"
+												style={styles.replyInput}
+											/>
+											<TouchableOpacity
+												style={styles.commentSubmitBtn}
+												onPress={() => handleSubmitReply(comment.id)}
+											>
+												<Text style={styles.commentSubmitBtnText}>등록</Text>
+											</TouchableOpacity>
+										</View>
+									)}
 
-						<TouchableOpacity
-							style={styles.commentSubmitBtn}
-							onPress={handleSubmitComment}
-						>
-							<Text style={styles.commentSubmitBtnText}>등록</Text>
-						</TouchableOpacity>
+									{repliesByParent(comment.id).map((reply) => (
+										<View key={reply.id} style={styles.replyItem}>
+											<View style={styles.commentHeaderRow}>
+												<Text style={styles.commentAuthor}>
+													{reply.userId || '익명'}
+												</Text>
+												<Text style={styles.commentDate}>
+													{formatDate(reply.date)}
+												</Text>
+											</View>
+
+											<Text style={styles.commentContent}>{reply.content}</Text>
+
+											{reply.userId === myUserId && (
+												<TouchableOpacity
+													onPress={() => handleDeleteReply(reply.id)}
+												>
+													<Text style={styles.commentDeleteBtn}>삭제</Text>
+												</TouchableOpacity>
+											)}
+										</View>
+									))}
+								</View>
+							))
+						)}
+
+						<View style={styles.commentInputRow}>
+							<TextInput
+								value={commentText}
+								onChangeText={setCommentText}
+								placeholder="댓글을 입력하세요."
+								placeholderTextColor="#B8B8B8"
+								style={styles.commentInput}
+							/>
+
+							<TouchableOpacity
+								style={styles.commentSubmitBtn}
+								onPress={handleSubmitComment}
+							>
+								<Text style={styles.commentSubmitBtnText}>등록</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
-				</View>
-			</ScrollView>
+				</ScrollView>
+			</KeyboardAvoidingView>
 
 			<CustomAlert
 				{...alertConfig}
