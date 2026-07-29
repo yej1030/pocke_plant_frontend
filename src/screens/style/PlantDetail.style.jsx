@@ -34,7 +34,7 @@ export default StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: 80,
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
     opacity: 0.15,
   },
 
@@ -110,7 +110,7 @@ export default StyleSheet.create({
     height: 46,
     borderRadius: 15,
     borderWidth: 1,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
@@ -118,13 +118,13 @@ export default StyleSheet.create({
 
   actionText: {
     fontSize: 15,
-    color: '#1d8a55',
+    color: '#7fc77c',
     fontWeight: '700',
   },
 
   actionPrimary: {
-    backgroundColor: '#5CD79E',
-    borderColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
+    borderColor: '#7fc77c',
   },
 
   actionPrimaryText: {
@@ -197,7 +197,7 @@ export default StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 999,
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
   },
 
   liveText: {
@@ -233,7 +233,7 @@ export default StyleSheet.create({
   },
 
   miniSensorCardActive: {
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     backgroundColor: '#F1FFF7',
   },
 
@@ -288,7 +288,7 @@ export default StyleSheet.create({
   miniBarFill: {
     height: '100%',
     borderRadius: 999,
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
   },
 
   chartCard: {
@@ -384,13 +384,13 @@ export default StyleSheet.create({
     height: 50,
     borderRadius: 25,
     borderWidth: 1,
-    borderColor: '#5CD79E',
+    borderColor: '#7fc77c',
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     gap: 8,
-    shadowColor: '#5CD79E',
+    shadowColor: '#7fc77c',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
@@ -403,7 +403,7 @@ export default StyleSheet.create({
   },
   waterText: {
     fontSize: 15,
-    color: '#1d8a55',
+    color: '#7fc77c',
     fontWeight: '700',
   },
 
@@ -444,5 +444,4 @@ export default StyleSheet.create({
     color: '#8ea798',
     fontWeight: '500',
   },
-
 });

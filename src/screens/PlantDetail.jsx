@@ -20,6 +20,7 @@ import {
 import { LineChart } from 'react-native-gifted-charts';
 
 import Header from '../components/Header';
+import Bottom from '../components/Bottom';
 import { PlantsContext } from '../context/PlantsContext';
 import styles from './style/PlantDetail.style';
 
@@ -616,7 +617,7 @@ export default function PlantDetail({
       type: 'soil',
       title: '토양 수분 전체 변화',
       unit: '',
-      color: '#5CD79E',
+      color: '#7fc77c',
     },
 
     {
@@ -1256,6 +1257,16 @@ export default function PlantDetail({
           </Text>
         )}
       </ScrollView>
+
+      <Bottom
+        type="detail"
+        active="plant"
+        navigation={navigation}
+        params={{
+          plant,
+          plantId: plant?.id,
+        }}
+      />
     </>
   );
 }

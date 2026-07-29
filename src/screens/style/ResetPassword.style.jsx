@@ -63,7 +63,7 @@ eyeIcon: {
   },
 
   submitButton: {
-    backgroundColor: '#5CD79E',
+    backgroundColor: '#7fc77c',
     padding: 18,
     borderRadius: 5,
     alignItems: 'center',

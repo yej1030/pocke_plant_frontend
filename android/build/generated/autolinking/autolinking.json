@@ -1,26 +1,26 @@
 {
-  "root": "C:\\Users\\kim23\\pocke_plant_frontend",
-  "reactNativePath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native",
+  "root": "C:\\pocke_plant_frontend\\React",
+  "reactNativePath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native",
   "reactNativeVersion": "0.85",
   "dependencies": {
     "@react-native-async-storage/async-storage": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-async-storage\\async-storage",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-async-storage\\async-storage",
       "name": "@react-native-async-storage/async-storage",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-async-storage\\async-storage\\AsyncStorage.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-async-storage\\async-storage\\AsyncStorage.podspec",
           "version": "3.1.1",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-async-storage\\async-storage\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-async-storage\\async-storage\\android",
           "packageImportPath": "import org.asyncstorage.AsyncStoragePackage;",
           "packageInstance": "new AsyncStoragePackage()",
           "buildTypes": [],
           "libraryName": "AsyncStorageSpec",
           "componentDescriptors": [],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/@react-native-async-storage/async-storage/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -29,23 +29,23 @@
       }
     },
     "@react-native-community/datetimepicker": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-community\\datetimepicker",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-community\\datetimepicker",
       "name": "@react-native-community/datetimepicker",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-community\\datetimepicker\\RNDateTimePicker.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-community\\datetimepicker\\RNDateTimePicker.podspec",
           "version": "9.1.0",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-community\\datetimepicker\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-community\\datetimepicker\\android",
           "packageImportPath": "import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;",
           "packageInstance": "new RNDateTimePickerPackage()",
           "buildTypes": [],
           "libraryName": "RNDateTimePickerCGen",
           "componentDescriptors": [],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/@react-native-community/datetimepicker/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -54,17 +54,17 @@
       }
     },
     "@react-native-picker/picker": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-picker\\picker",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-picker\\picker",
       "name": "@react-native-picker/picker",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-picker\\picker\\RNCPicker.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-picker\\picker\\RNCPicker.podspec",
           "version": "2.11.4",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-picker\\picker\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-picker\\picker\\android",
           "packageImportPath": "import com.reactnativecommunity.picker.RNCPickerPackage;",
           "packageInstance": "new RNCPickerPackage()",
           "buildTypes": [],
@@ -73,7 +73,7 @@
             "RNCAndroidDialogPickerComponentDescriptor",
             "RNCAndroidDropdownPickerComponentDescriptor"
           ],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/@react-native-picker/picker/android/src/main/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/@react-native-picker/picker/android/src/main/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -82,22 +82,22 @@
       }
     },
     "@react-native-seoul/kakao-login": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-seoul\\kakao-login",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-seoul\\kakao-login",
       "name": "@react-native-seoul/kakao-login",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-seoul\\kakao-login\\kakao-login.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-seoul\\kakao-login\\kakao-login.podspec",
           "version": "5.4.2",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\@react-native-seoul\\kakao-login\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\@react-native-seoul\\kakao-login\\android",
           "packageImportPath": "import com.dooboolab.kakaologins.RNKakaoLoginsPackage;",
           "packageInstance": "new RNKakaoLoginsPackage()",
           "buildTypes": [],
           "componentDescriptors": [],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/@react-native-seoul/kakao-login/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/@react-native-seoul/kakao-login/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -106,23 +106,23 @@
       }
     },
     "react-native-ble-plx": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-plx",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-ble-plx",
       "name": "react-native-ble-plx",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-plx\\react-native-ble-plx.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-ble-plx\\react-native-ble-plx.podspec",
           "version": "3.5.1",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-ble-plx\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-ble-plx\\android",
           "packageImportPath": "import com.bleplx.BlePlxPackage;",
           "packageInstance": "new BlePlxPackage()",
           "buildTypes": [],
           "libraryName": "BlePlx",
           "componentDescriptors": [],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-ble-plx/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/react-native-ble-plx/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -131,17 +131,17 @@
       }
     },
     "react-native-camera-kit": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-camera-kit",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-camera-kit",
       "name": "react-native-camera-kit",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-camera-kit\\ReactNativeCameraKit.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-camera-kit\\ReactNativeCameraKit.podspec",
           "version": "18.0.0",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-camera-kit\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-camera-kit\\android",
           "packageImportPath": "import com.rncamerakit.RNCameraKitPackage;",
           "packageInstance": "new RNCameraKitPackage()",
           "buildTypes": [],
@@ -149,7 +149,7 @@
           "componentDescriptors": [
             "CKCameraComponentDescriptor"
           ],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-camera-kit/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/react-native-camera-kit/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -158,17 +158,17 @@
       }
     },
     "react-native-gesture-handler": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-gesture-handler",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-gesture-handler",
       "name": "react-native-gesture-handler",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-gesture-handler\\RNGestureHandler.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-gesture-handler\\RNGestureHandler.podspec",
           "version": "2.32.0",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-gesture-handler\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-gesture-handler\\android",
           "packageImportPath": "import com.swmansion.gesturehandler.RNGestureHandlerPackage;",
           "packageInstance": "new RNGestureHandlerPackage()",
           "buildTypes": [],
@@ -177,7 +177,7 @@
             "RNGestureHandlerButtonComponentDescriptor",
             "RNGestureHandlerRootViewComponentDescriptor"
           ],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/react-native-gesture-handler/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -186,23 +186,23 @@
       }
     },
     "react-native-image-picker": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-image-picker",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-image-picker",
       "name": "react-native-image-picker",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-image-picker\\react-native-image-picker.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-image-picker\\react-native-image-picker.podspec",
           "version": "8.2.1",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-image-picker\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-image-picker\\android",
           "packageImportPath": "import com.imagepicker.ImagePickerPackage;",
           "packageInstance": "new ImagePickerPackage()",
           "buildTypes": [],
           "libraryName": "RNImagePickerSpec",
           "componentDescriptors": [],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -211,22 +211,22 @@
       }
     },
     "react-native-linear-gradient": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-linear-gradient",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-linear-gradient",
       "name": "react-native-linear-gradient",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-linear-gradient\\BVLinearGradient.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-linear-gradient\\BVLinearGradient.podspec",
           "version": "2.8.3",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-linear-gradient\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-linear-gradient\\android",
           "packageImportPath": "import com.BV.LinearGradient.LinearGradientPackage;",
           "packageInstance": "new LinearGradientPackage()",
           "buildTypes": [],
           "componentDescriptors": [],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-linear-gradient/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/react-native-linear-gradient/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -235,17 +235,17 @@
       }
     },
     "react-native-safe-area-context": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-safe-area-context",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-safe-area-context",
       "name": "react-native-safe-area-context",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-safe-area-context\\react-native-safe-area-context.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-safe-area-context\\react-native-safe-area-context.podspec",
           "version": "5.8.0",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-safe-area-context\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-safe-area-context\\android",
           "packageImportPath": "import com.th3rdwave.safeareacontext.SafeAreaContextPackage;",
           "packageInstance": "new SafeAreaContextPackage()",
           "buildTypes": [],
@@ -254,7 +254,7 @@
             "RNCSafeAreaProviderComponentDescriptor",
             "RNCSafeAreaViewComponentDescriptor"
           ],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/react-native-safe-area-context/android/src/main/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -263,17 +263,17 @@
       }
     },
     "react-native-screens": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-screens",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-screens",
       "name": "react-native-screens",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-screens\\RNScreens.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-screens\\RNScreens.podspec",
           "version": "4.25.2",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-screens\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-screens\\android",
           "packageImportPath": "import com.swmansion.rnscreens.RNScreensPackage;",
           "packageInstance": "new RNScreensPackage()",
           "buildTypes": [],
@@ -296,7 +296,7 @@
             "RNSStackHeaderConfigComponentDescriptor",
             "RNSStackHeaderSubviewComponentDescriptor"
           ],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/react-native-screens/android/src/main/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -305,17 +305,17 @@
       }
     },
     "react-native-svg": {
-      "root": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-svg",
+      "root": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-svg",
       "name": "react-native-svg",
       "platforms": {
         "ios": {
-          "podspecPath": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-svg\\RNSVG.podspec",
+          "podspecPath": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-svg\\RNSVG.podspec",
           "version": "15.15.5",
           "configurations": [],
           "scriptPhases": []
         },
         "android": {
-          "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\node_modules\\react-native-svg\\android",
+          "sourceDir": "C:\\pocke_plant_frontend\\React\\node_modules\\react-native-svg\\android",
           "packageImportPath": "import com.horcrux.svg.SvgPackage;",
           "packageInstance": "new SvgPackage()",
           "buildTypes": [],
@@ -351,7 +351,7 @@
             "RNSVGTSpanComponentDescriptor",
             "RNSVGUseComponentDescriptor"
           ],
-          "cmakeListsPath": "C:/Users/kim23/pocke_plant_frontend/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt",
+          "cmakeListsPath": "C:/pocke_plant_frontend/React/node_modules/react-native-svg/android/src/main/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -522,7 +522,7 @@
         {
           "name": "--path <path>",
           "description": "Path to the React Native project root.",
-          "default": "C:\\Users\\kim23\\pocke_plant_frontend"
+          "default": "C:\\pocke_plant_frontend\\React"
         },
         {
           "name": "--platform <string>",
@@ -822,7 +822,7 @@
   "assets": [],
   "project": {
     "ios": {
-      "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\ios",
+      "sourceDir": "C:\\pocke_plant_frontend\\React\\ios",
       "xcodeProject": {
         "name": "PocketPlants.xcodeproj",
         "path": ".",
@@ -831,7 +831,7 @@
       "assets": []
     },
     "android": {
-      "sourceDir": "C:\\Users\\kim23\\pocke_plant_frontend\\android",
+      "sourceDir": "C:\\pocke_plant_frontend\\React\\android",
       "appName": "app",
       "packageName": "com.pocketplants",
       "applicationId": "com.pocketplants",

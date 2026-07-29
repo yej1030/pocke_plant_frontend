@@ -330,6 +330,7 @@ export default function PlantRegister({
                         <TextInput
                             style={styles.input}
                             placeholder="식물 이름"
+                            placeholderTextColor="#B8B8B8"
                             value={name}
                             onChangeText={setName}
                         />
@@ -386,6 +387,7 @@ export default function PlantRegister({
                                 <TextInput
                                     style={styles.ageInput}
                                     placeholder="나이"
+                                    placeholderTextColor="#B8B8B8"
                                     value={age}
                                     onChangeText={(text) => {
                                         const onlyNumber = text.replace(/[^0-9]/g, '');
@@ -407,6 +409,7 @@ export default function PlantRegister({
                         <TextInput
                             style={styles.input}
                             placeholder="AI 분석 또는 직접 입력"
+                            placeholderTextColor="#B8B8B8"
                             value={species}
                             onChangeText={(text) => setSpecies(text)}
                         />
@@ -512,6 +515,7 @@ export default function PlantRegister({
                         <TextInput
                             style={[styles.input, styles.inputUnderPersonality]}
                             placeholder="직접 입력 (선택)"
+                            placeholderTextColor="#B8B8B8"
                             value={customPersonality}
                             onChangeText={(text) => {
                                 setCustomPersonality(text);
