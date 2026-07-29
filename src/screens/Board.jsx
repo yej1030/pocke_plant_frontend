@@ -203,6 +203,7 @@ export default function Board({ navigation }) {
 				</View>
 
 				<FlatList
+					style={styles.postList}
 					data={visiblePosts}
 					keyExtractor={(item) => item.id}
 					renderItem={renderPost}

@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useRef, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, Image, TouchableOpacity, Animated, Easing } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Animated, Easing, BackHandler } from 'react-native';
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
@@ -79,6 +79,23 @@ export default function Main({ navigation }) {
 		useCallback(() => {
 			loadPlants();
 		}, [loadPlants])
+	);
+
+	// 홈 화면에서 앱 종료
+	useFocusEffect(
+		useCallback(() => {
+			const onHardwareBackPress = () => {
+				BackHandler.exitApp();
+				return true; 
+			};
+
+			const subscription = BackHandler.addEventListener(
+				'hardwareBackPress',
+				onHardwareBackPress
+			);
+
+			return () => subscription.remove();
+		}, [])
 	);
 
 	// 커스텀 알림

@@ -223,9 +223,9 @@ export default function BoardDetail({ navigation, route }) {
 						<Text style={styles.detailText}>{post.content}</Text>
 
 						{isMine && (
-							<>
+							<View style={styles.detailActionRow}>
 								<TouchableOpacity
-									style={styles.detailActionButton}
+									style={[styles.detailActionButton, styles.detailActionButtonHalf]}
 									activeOpacity={0.85}
 									onPress={() =>
 										navigation.navigate('BoardWrite', {
@@ -235,21 +235,24 @@ export default function BoardDetail({ navigation, route }) {
 									}
 								>
 									<IconEdit size={18} color="#FFFFFF" strokeWidth={2} />
-									<Text style={styles.detailActionText}>이 글 수정하기</Text>
+									<Text style={styles.detailActionText}>수정하기</Text>
 								</TouchableOpacity>
 
 								<TouchableOpacity
 									style={[
 										styles.detailActionButton,
-										{ backgroundColor: '#E74C3C', marginTop: 10 },
+										styles.detailActionButtonHalf,
+										{ backgroundColor: '#E74C3C' },
 									]}
 									activeOpacity={0.85}
 									onPress={handleDeletePost}
 								>
 									<Text style={styles.detailActionText}>삭제하기</Text>
 								</TouchableOpacity>
-							</>
+							</View>
 						)}
+
+						<View style={styles.sectionDivider} />
 
 						<Text style={styles.commentSectionTitle}>
 							댓글 {allComments.length}
