@@ -232,38 +232,39 @@ export default StyleSheet.create({
 	categoryScroll: {
 		flexGrow: 0,        // 세로로 늘어나지 않게 고정
 		flexShrink: 0,      // 세로로 줄어들지 않게 고정
-		marginBottom: 12,
+		marginBottom: 4,
 	},
 
-	// 카테고리 필터 ScrollView 안쪽 컨텐츠 정렬
-	categoryScrollContent: {
-		gap: 8,           // 필터 버튼들 사이 가로 간격
-		paddingRight: 8,
+		categoryScrollContent: {
+		alignItems: 'flex-start', // 세로로 늘어나지 않게 고정
 	},
 
-	// 카테고리 필터 버튼 하나 (전체/자유/분양/질병) - 선택 안 된 상태
-	categoryPill: {
-		paddingVertical: 8,
-		paddingHorizontal: 14,
-		borderRadius: 20,           // 완전히 둥근 알약 모양
-		backgroundColor: '#F5F5F5', // 연한 회색 (선택 안 됨)
+// ============================================================
+	// 공통 밑줄 탭 스타일
+	// - Board.jsx 상단 카테고리 필터 (전체/자유/분양/질병)
+	// - MyPosts.jsx 포스트/댓글 탭
+	// ============================================================
+	tabRow: {
+		flexDirection: 'row',
+		flexShrink: 0,
 	},
-
-	// 카테고리 필터 버튼 - 선택된 상태
-	categoryPillActive: {
-		backgroundColor: '#7fc77c', // 선택되면 초록색
+	tabItem: {
+		paddingBottom: 8,
+		marginRight: 18,
 	},
-
-	// 카테고리 필터 버튼 텍스트 - 선택 안 된 상태
-	categoryPillText: {
-		fontSize: 13,
+	tabText: {
+		fontSize: 15,
 		fontWeight: '600',
-		color: '#8f8f8f', // 회색 글씨
+		color: '#C4C4C4',
 	},
-
-	// 카테고리 필터 버튼 텍스트 - 선택된 상태
-	categoryPillTextActive: {
-		color: '#ffffff', // 흰 글씨
+	tabTextActive: {
+		color: '#1f1f1f',
+	},
+	tabUnderline: {
+		marginTop: 6,
+		height: 2,
+		borderRadius: 1,
+		backgroundColor: '#7fc77c',
 	},
 
 
