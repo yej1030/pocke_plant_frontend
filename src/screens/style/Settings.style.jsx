@@ -13,28 +13,51 @@ export default StyleSheet.create({
     paddingBottom: 40,
   },
 
+  // 프로필 영역: 아바타 원 + 닉네임/이메일을 가로로 배치
   profileSection: {
-    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 16,
+    marginLeft: 2,
+  },
+
+  profileAvatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: '#E8F7EF', // 연한 초록 (앱 포인트 컬러 톤)
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  profileAvatarText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#7fc77c',
+  },
+
+  profileTextWrap: {
+    flex: 1,
   },
 
   name: {
-    fontSize: 20,
+    fontSize: 19,
     fontWeight: '700',
     color: '#111',
-    marginLeft: 8,
   },
 
   email: {
     marginTop: 2,
-    fontSize: 15,
+    fontSize: 14,
     color: '#8b8b8b',
-    marginLeft: 8,
   },
 
   groupTitle: {
     fontSize: 14,
-    color: '#999',
-    marginBottom: 4,
+    fontWeight: '700', // 500 → 700, 섹션 제목이 더 잘 보이도록
+    color: '#7a7a7a',  // 999 → 살짝 진하게
+    marginBottom: 6,
     marginLeft: 8,
   },
 
@@ -80,11 +103,11 @@ export default StyleSheet.create({
     color: '#999',
   },
 
-arrowIcon: {
-  width: 18,
-  height: 18,
-  opacity: 0.6,
-},
+  arrowIcon: {
+    width: 18,
+    height: 18,
+    opacity: 0.6,
+  },
 
   logoutButton: {
     height: 45,

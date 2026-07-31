@@ -17,6 +17,7 @@ import Chat from '../screens/Chat';
 import DiseasePredict from '../screens/DiseasePredict';
 import DiseaseResult from '../screens/DiseaseResult';
 import Settings from '../screens/Settings';
+import MyPosts from '../screens/MyPosts';
 import FindPassword from '../screens/FindPassword';
 import ResetPassword from '../screens/ResetPassword';
 import HardwareConnect from '../screens/HardwareConnect';
@@ -43,6 +44,7 @@ export default function AppNavigator() {
         <Stack.Screen name="DiseaseResult" component={DiseaseResult} />
         <Stack.Screen name="Chat" component={Chat} />
         <Stack.Screen name="Settings" component={Settings} />
+        <Stack.Screen name="MyPosts" component={MyPosts} />
         <Stack.Screen name="FindPassword" component={FindPassword} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="HardwareConnect" component={HardwareConnect} />

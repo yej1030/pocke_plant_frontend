@@ -61,10 +61,10 @@ export default function Board({ navigation }) {
 
 		const searched = query
 			? filtered.filter((post) => {
-					const title = (post.title ?? '').toLowerCase();
-					const content = (post.content ?? '').toLowerCase();
-					return title.includes(query) || content.includes(query);
-			  })
+				const title = (post.title ?? '').toLowerCase();
+				const content = (post.content ?? '').toLowerCase();
+				return title.includes(query) || content.includes(query);
+			})
 			: filtered;
 
 		const sorted = [...searched].sort((a, b) => {
@@ -138,21 +138,25 @@ export default function Board({ navigation }) {
 						return (
 							<TouchableOpacity
 								key={cat.key}
-								style={[
-									styles.categoryPill,
-									isActive && styles.categoryPillActive,
-								]}
+								style={styles.tabItem}
 								activeOpacity={0.8}
 								onPress={() => setActiveCategory(cat.key)}
 							>
 								<Text
 									style={[
-										styles.categoryPillText,
-										isActive && styles.categoryPillTextActive,
+										styles.tabText,
+										isActive && styles.tabTextActive,
 									]}
 								>
 									{cat.label}
 								</Text>
+
+								<View
+									style={[
+										styles.tabUnderline,
+										!isActive && { backgroundColor: 'transparent' },
+									]}
+								/>
 							</TouchableOpacity>
 						);
 					})}
