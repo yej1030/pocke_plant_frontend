@@ -12,6 +12,8 @@ import BoardWrite from '../screens/BoardWrite';
 import PlantRegister from '../screens/PlantRegister';
 import PlantDetail from '../screens/PlantDetail';
 import PlantDiary from '../screens/PlantDiary';
+import PlantDiaryDetail from '../screens/PlantDiaryDetail';
+import PlantDiaryWrite from '../screens/PlantDiaryWrite';
 import PlantFriendship from '../screens/PlantFriendship';
 import Chat from '../screens/Chat';
 import DiseasePredict from '../screens/DiseasePredict';
@@ -39,6 +41,8 @@ export default function AppNavigator() {
         <Stack.Screen name="PlantRegister" component={PlantRegister} />
         <Stack.Screen name="PlantDetail" component={PlantDetail} />
         <Stack.Screen name="PlantDiary" component={PlantDiary} />
+        <Stack.Screen name="PlantDiaryDetail" component={PlantDiaryDetail} />
+        <Stack.Screen name="PlantDiaryWrite" component={PlantDiaryWrite} />
         <Stack.Screen name="Friendship" component={PlantFriendship} />
         <Stack.Screen name="DiseasePredict" component={DiseasePredict} />
         <Stack.Screen name="DiseaseResult" component={DiseaseResult} />
