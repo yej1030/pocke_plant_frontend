@@ -507,6 +507,7 @@ if (step === 3) {
                   value={wifiSsid}
                   onChangeText={setWifiSsid}
                   placeholder="Wi-Fi 이름 (2.4GHz)"
+                  placeholderTextColor="#999"
                   style={styles.input}
                   maxLength={32}
                   autoCorrect={false}
@@ -518,6 +519,7 @@ if (step === 3) {
                   placeholder="Wi-Fi 비밀번호"
                   secureTextEntry
                   style={styles.input}
+                  placeholderTextColor="#999"
                   maxLength={64}
                 />
 

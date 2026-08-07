@@ -47,8 +47,17 @@ export default function PlantDiaryWrite({ navigation, route }) {
 	const { addDiaryEntry, updateDiaryEntry } = usePlantDiary();
 	const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
+	// 하드웨어(스마트 화분) 연동 여부 — 기기 등록 시 macAddress가 저장됨
+	const isHardwareConnected = !!plant?.macAddress;
+
 	const [photoUris, setPhotoUris] = useState(editingEntry?.photoUris ?? []);
-	const [mood, setMood] = useState(editingEntry?.mood ?? null);
+
+	// 오늘 기분: 복수 선택 가능하도록 배열로 관리
+	// (기존 단일 mood 데이터와의 호환을 위해, 기존 entry.mood가 있으면 배열로 변환)
+	const [moods, setMoods] = useState(
+		editingEntry?.moods ?? (editingEntry?.mood ? [editingEntry.mood] : [])
+	);
+
 	const [note, setNote] = useState(editingEntry?.note ?? '');
 
 	const isEditing = !!editingEntry;
@@ -111,6 +120,13 @@ export default function PlantDiaryWrite({ navigation, route }) {
 		setPhotoUris((prev) => prev.filter((_, i) => i !== index));
 	};
 
+	// 기분 칩 토글 (복수 선택)
+	const handleToggleMood = (key) => {
+		setMoods((prev) =>
+			prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+		);
+	};
+
 	const handleSubmit = () => {
 		if (!note.trim()) {
 			showAlert({
@@ -126,10 +142,14 @@ export default function PlantDiaryWrite({ navigation, route }) {
 			plantId: editingEntry?.plantId ?? plantId,
 			date: editingEntry?.date ?? new Date().toISOString(),
 			day: calcDayCount(plant, editingEntry?.day),
-			mood: mood ?? 'sprout',
+			moods,
+			mood: moods[0] ?? 'sprout', // 기존 화면(목록/상세)이 단일 mood를 참조하는 것과의 호환용
 			photoUris,
 			note: note.trim(),
-			sensorSnapshot: editingEntry?.sensorSnapshot ?? getTodaySensorSnapshot(),
+			// 하드웨어 연동된 경우에만 센서 스냅샷 저장
+			sensorSnapshot: isHardwareConnected
+				? editingEntry?.sensorSnapshot ?? getTodaySensorSnapshot()
+				: undefined,
 		};
 
 		if (isEditing) {
@@ -165,7 +185,7 @@ export default function PlantDiaryWrite({ navigation, route }) {
 					contentContainerStyle={styles.formContent}
 					keyboardShouldPersistTaps="handled"
 				>
-					<Text style={styles.formLabel}>
+					<Text style={styles.formLabell}>
 						사진 <Text style={styles.formLabelOpt}>선택, 최대 {MAX_PHOTOS}장</Text>
 					</Text>
 
@@ -198,18 +218,18 @@ export default function PlantDiaryWrite({ navigation, route }) {
 					</View>
 
 					<Text style={styles.formLabel}>
-						오늘 기분 <Text style={styles.formLabelOpt}>선택</Text>
+						오늘 기분 <Text style={styles.formLabelOpt}>복수 선택 가능</Text>
 					</Text>
 
 					<View style={styles.moodPickRow}>
 						{MOODS.map((m) => {
-							const isActive = mood === m.key;
+							const isActive = moods.includes(m.key);
 							return (
 								<TouchableOpacity
 									key={m.key}
 									style={[styles.moodChip, isActive && styles.moodChipActive]}
 									activeOpacity={0.85}
-									onPress={() => setMood(isActive ? null : m.key)}
+									onPress={() => handleToggleMood(m.key)}
 								>
 									<Text style={styles.moodChipEmoji}>{m.emoji}</Text>
 									<Text
@@ -241,14 +261,16 @@ export default function PlantDiaryWrite({ navigation, route }) {
 					/>
 					<Text style={styles.noteCount}>{note.length}/300</Text>
 
-					<View style={styles.sensorInfoCard}>
-						<Text style={styles.sensorInfoText}>
-							오늘의 센서 스냅샷이 자동으로 함께 저장돼요.{'\n'}
-							🌡️ {getTodaySensorSnapshot().temp} · 💧{' '}
-							{getTodaySensorSnapshot().humidity} · 🌱{' '}
-							{getTodaySensorSnapshot().soil}
-						</Text>
-					</View>
+					{isHardwareConnected && (
+						<View style={styles.sensorInfoCard}>
+							<Text style={styles.sensorInfoText}>
+								오늘의 센서 스냅샷이 자동으로 함께 저장돼요.{'\n'}
+								🌡️ {getTodaySensorSnapshot().temp} · 💧{' '}
+								{getTodaySensorSnapshot().humidity} · 🌱{' '}
+								{getTodaySensorSnapshot().soil}
+							</Text>
+						</View>
+					)}
 
 					<TouchableOpacity
 						style={[styles.submitButton, !isValid && styles.submitButtonDisabled]}

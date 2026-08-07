@@ -126,6 +126,7 @@ export default function ResetPassword({
             value={newPassword}
             onChangeText={setNewPassword}
             secureTextEntry={!showNewPassword}
+            placeholderTextColor="#aaa"
           />
           <TouchableOpacity
             style={styles.eyeButton}
@@ -166,6 +167,7 @@ export default function ResetPassword({
           <TextInput
             style={styles.passwordInput}
             placeholder="새 비밀번호 확인"
+            placeholderTextColor="#aaa"
             value={newPasswordCheck}
             onChangeText={
               setNewPasswordCheck

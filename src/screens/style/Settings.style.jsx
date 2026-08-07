@@ -42,21 +42,20 @@ export default StyleSheet.create({
   },
 
   name: {
-    fontSize: 19,
+    fontSize: 18,
     fontWeight: '700',
-    color: '#111',
+    color: '#333',
   },
 
   email: {
-    marginTop: 2,
     fontSize: 14,
     color: '#8b8b8b',
   },
 
   groupTitle: {
-    fontSize: 14,
-    fontWeight: '700', // 500 → 700, 섹션 제목이 더 잘 보이도록
-    color: '#7a7a7a',  // 999 → 살짝 진하게
+    fontSize: 15,
+    fontWeight: '500', 
+    color: '#868686',  
     marginBottom: 6,
     marginLeft: 8,
   },
@@ -75,7 +74,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
   },
 
   switchRow: {
@@ -92,14 +91,14 @@ export default StyleSheet.create({
   },
 
   menuText: {
-    fontSize: 16,
-    color: '#222',
-    fontWeight: '500',
+    fontSize: 15,
+    color: '#333',
+    fontWeight: '400',
   },
 
   subText: {
     marginTop: 2,
-    fontSize: 13,
+    fontSize: 12,
     color: '#999',
   },
 
@@ -122,7 +121,7 @@ export default StyleSheet.create({
 
   logoutText: {
     color: '#c25555',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
   },
 
@@ -134,12 +133,12 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 12,
+    marginTop: 10,
   },
 
   deleteText: {
     color: '#c25555',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
   },
 

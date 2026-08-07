@@ -85,18 +85,10 @@ export default StyleSheet.create({
     height: 36,
   },
 
-  title_1: {
-    marginTop: 30,
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#333',
-    textAlign: 'center',
-  },
-
   /* 공통 */
   title: {
     marginTop: 20,
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: '700',
     color: '#333',
     textAlign: 'center',
@@ -210,7 +202,7 @@ export default StyleSheet.create({
   qrHint: {
     marginTop: 8,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#ffffffbf',
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -328,7 +320,7 @@ export default StyleSheet.create({
   macText: {
     fontSize: 12,
     color: '#666',
-    fontWeight: '500',
+    fontWeight: '600',
   },
 
   input: {
@@ -341,7 +333,7 @@ export default StyleSheet.create({
     marginTop: 12,
     fontSize: 15,
     color: '#333',
-    backgroundColor: '#FAFAFA',
+    backgroundColor: '#ffffff',
   },
 
   noticeBox: {
@@ -358,7 +350,7 @@ export default StyleSheet.create({
   },
 
   noticeIcon: {
-    fontSize: 13,
+    fontSize: 12,
     marginTop: 1,
   },
 
@@ -389,7 +381,7 @@ export default StyleSheet.create({
 
   loadingText: {
     marginTop: 20,
-    fontSize: 15,
+    fontSize: 14,
     color: '#555',
     textAlign: 'center',
     lineHeight: 22,

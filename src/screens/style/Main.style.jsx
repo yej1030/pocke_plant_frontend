@@ -37,13 +37,13 @@ export default StyleSheet.create({
 	plantName: {
 		fontSize: 16,
 		fontWeight: '700',
-		color: '#1f1f1f',
+		color: '#333',
 		marginBottom: 6,
 	},
 	plantMeta: {
 		fontSize: 14,
 		color: '#8f8f8f',
-		fontWeight: '500',
+		fontWeight: '400',
 	},
 	settingsButton: {
 		width: 34,
@@ -81,9 +81,9 @@ export default StyleSheet.create({
 	},
 
 	swipeActionText: {
-		color: '#000000',
-		fontSize: 13,
-		fontWeight: '700',
+		color: '#333',
+		fontSize: 14,
+		fontWeight: '600',
 	},
 
 	// 새 식물 등록 카드 - 다른 카드와 통일감
@@ -118,9 +118,9 @@ export default StyleSheet.create({
 	},
 
 	addPlantText: {
-		fontSize: 15,
-		fontWeight: '600',
-		color: '#878787',
+		fontSize: 16,
+		fontWeight: '500',
+		color: '#999',
 	},
 
 });

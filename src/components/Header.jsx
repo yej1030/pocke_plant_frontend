@@ -142,14 +142,14 @@ const styles = StyleSheet.create({
 
   mainTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#333',
     textAlign: 'center',
   },
 
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#333',
   },
 

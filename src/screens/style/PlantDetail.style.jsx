@@ -63,10 +63,10 @@ export default StyleSheet.create({
 
   speechText: {
     fontSize: 14,
-    color: '#000000',
+    color: '#333',
     textAlign: 'center',
     lineHeight: 20,
-    fontWeight: '500',
+    fontWeight: '600',
   },
 
   heroImage: {
@@ -95,8 +95,8 @@ export default StyleSheet.create({
 
   quickReplyText: {
     fontSize: 12,
-    color: '#000000',
-    fontWeight: '600',
+    color: '#333',
+    fontWeight: '500',
   },
 
   actionRow: {
@@ -117,9 +117,9 @@ export default StyleSheet.create({
   },
 
   actionText: {
-    fontSize: 15,
+    fontSize: 16,
     color: '#7fc77c',
-    fontWeight: '700',
+    fontWeight: '600',
   },
 
   actionPrimary: {
@@ -128,9 +128,9 @@ export default StyleSheet.create({
   },
 
   actionPrimaryText: {
-    fontSize: 15,
+    fontSize: 16,
     color: '#FFFFFF',
-    fontWeight: '800',
+    fontWeight: '600',
   },
 
   hardwareButton: {
@@ -145,14 +145,14 @@ export default StyleSheet.create({
   },
 
   hardwareText: {
-    fontSize: 15,
+    fontSize: 16,
     color: '#6C7A73',
-    fontWeight: '700',
+    fontWeight: '500',
   },
 
   hardwareHint: {
     marginTop: 14,
-    fontSize: 13,
+    fontSize: 12,
     color: '#96A39D',
     textAlign: 'center',
   },
@@ -169,7 +169,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-
+// 이후부터 텍스트 나중에 수정
   summaryTitle: {
     fontSize: 16,
     color: '#30443A',

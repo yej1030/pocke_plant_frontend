@@ -1,596 +1,523 @@
 import React, {
-    useState,
-    useContext,
-    useEffect,
+	useState,
+	useContext,
+	useEffect,
 } from 'react';
 import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    Image,
-    ScrollView,
-    Platform,
+	View,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	Image,
+	ScrollView,
+	Platform,
 } from 'react-native';
 import {
-    launchCamera,
-    launchImageLibrary,
+	launchCamera,
+	launchImageLibrary,
 } from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { IconCameraPlus, IconX } from '@tabler/icons-react-native';
 import Header from '../components/Header';
 import BottomButton from '../components/Bottombutton';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/PlantRegister.style';
+import { PlantsContext } from '../context/PlantsContext';
 import {
-    PlantsContext,
-} from '../context/PlantsContext';
-import {
-    registerPlant,
-    updatePlantApi,
-    identifyPlantApi,
+	registerPlant,
+	updatePlantApi,
+	identifyPlantApi,
 } from '../api/api';
 
 const personalityList = [
-    '활발한',
-    '무뚝뚝한',
-    '다정한',
-    '느긋한',
-    '사교적인',
-    '적극적인',
-    '애교 많은',
-    '까칠한',
+	'활발한', '무뚝뚝한', '다정한', '느긋한',
+	'사교적인', '적극적인', '애교 많은', '까칠한',
 ];
 
 const characterList = [
-    require('../assets/Plant/plant_01_happy.png'),
-    require('../assets/Plant/plant_03_happy.png'),
-    require('../assets/Plant/plant_05_happy.png'),
-    require('../assets/Plant/plant_07_happy.png'),
-    require('../assets/Plant/plant_09_happy.png'),
-    require('../assets/Plant/plant_11_happy.png'),
-    require('../assets/Plant/plant_13_happy.png'),
-    require('../assets/Plant/plant_15_happy.png'),
-    require('../assets/Plant/plant_17_happy.png'),
-    require('../assets/Plant/plant_19_happy.png'),
+	require('../assets/Plant/plant_01_happy.png'),
+	require('../assets/Plant/plant_03_happy.png'),
+	require('../assets/Plant/plant_05_happy.png'),
+	require('../assets/Plant/plant_07_happy.png'),
+	require('../assets/Plant/plant_09_happy.png'),
+	require('../assets/Plant/plant_11_happy.png'),
+	require('../assets/Plant/plant_13_happy.png'),
+	require('../assets/Plant/plant_15_happy.png'),
+	require('../assets/Plant/plant_17_happy.png'),
+	require('../assets/Plant/plant_19_happy.png'),
 ];
 
 const speciesList = [
-    '몬스테라',
-    '스투키',
-    '산세베리아',
-    '스킨답서스',
-    '필로덴드론',
-    '페퍼로미아',
-    '프레데리아',
-    '칼랑코에',
-    '페페로미아',
-    '아레카야자',
-    '관음죽',
-    '싱고니움',
-    '유칼립투스',
+	'몬스테라', '스투키', '산세베리아', '스킨답서스', '필로덴드론',
+	'페퍼로미아', '프레데리아', '칼랑코에', '페페로미아',
+	'아레카야자', '관음죽', '싱고니움', '유칼립투스',
 ];
 
-export default function PlantRegister({
-    navigation,
-    route,
-}) {
-    const {
-        addPlant,
-        updatePlant,
-    } = useContext(PlantsContext);
+export default function PlantRegister({ navigation, route }) {
+	const { addPlant, updatePlant } = useContext(PlantsContext);
+	const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
-    const {
-        alertConfig,
-        showAlert,
-        closeAlert,
-    } = useCustomAlert();
+	const editingId = route?.params?.plantId ?? null;
 
-    const editingId = route?.params?.plantId ?? null;
+	const [name, setName] = useState('');
+	const [species, setSpecies] = useState('');
+	const [filteredSpecies, setFilteredSpecies] = useState([]);
+	const [age, setAge] = useState('');
+	const [imageUri, setImageUri] = useState(null);
+	const [macAddress, setMacAddress] = useState('');
+	const [adoptDate, setAdoptDate] = useState(new Date());
+	const [showDatePicker, setShowDatePicker] = useState(false);
+	const [selectedPersonality, setSelectedPersonality] = useState('활발한');
+	const [customPersonality, setCustomPersonality] = useState('');
+	const [analyzedSpecies, setAnalyzedSpecies] = useState('');
+	const [isAnalyzed, setIsAnalyzed] = useState(false);
+	const [analysisAccuracy, setAnalysisAccuracy] = useState('');
+	const [selectedCharacter, setSelectedCharacter] = useState(1);
 
-    const [name, setName] = useState('');
-    const [species, setSpecies] = useState('');
-    const [filteredSpecies, setFilteredSpecies] = useState([]);
-    const [age, setAge] = useState('');
-    const [imageUri, setImageUri] = useState(null);
-    const [macAddress, setMacAddress] = useState('');
-    const [adoptDate, setAdoptDate] = useState(new Date());
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [selectedPersonality, setSelectedPersonality] = useState('활발한');
-    const [customPersonality, setCustomPersonality] = useState('');
-    const [analyzedSpecies, setAnalyzedSpecies] = useState('');
-    const [isAnalyzed, setIsAnalyzed] = useState(false);
-    const [analysisAccuracy, setAnalysisAccuracy] = useState('');
-    const [selectedCharacter, setSelectedCharacter] = useState(1);
+	useEffect(() => {
+		if (route.params?.macAddress) {
+			setMacAddress(route.params.macAddress);
+		}
+	}, [route.params?.macAddress]);
 
-    useEffect(() => {
-        if (route.params?.macAddress) {
-            setMacAddress(route.params.macAddress);
-        }
-    }, [route.params?.macAddress]);
+	const handleImagePress = () => {
+		showAlert({
+			title: '이미지 선택',
+			message: '이미지 선택 방법을 골라주세요.',
+			actions: [
+				{
+					text: '카메라로 촬영',
+					kind: 'primary',
+					onPress: () => {
+						launchCamera(
+							{ mediaType: 'photo', cameraType: 'back' },
+							(res) => {
+								if (res.didCancel || res.errorCode) return;
+								if (res.assets?.length > 0) {
+									setImageUri(res.assets[0].uri);
+									setIsAnalyzed(false);
+									setAnalyzedSpecies('');
+									setAnalysisAccuracy('');
+								}
+							}
+						);
+					},
+				},
+				{
+					text: '갤러리에서 선택',
+					kind: 'primary',
+					onPress: () => {
+						launchImageLibrary({ mediaType: 'photo' }, (res) => {
+							if (res.didCancel || res.errorCode) return;
+							if (res.assets?.length > 0) {
+								setImageUri(res.assets[0].uri);
+								setIsAnalyzed(false);
+								setAnalyzedSpecies('');
+								setAnalysisAccuracy('');
+							}
+						});
+					},
+				},
+				{ text: '취소', kind: 'cancel' },
+			],
+		});
+	};
 
-    const handleImagePress = () => {
-        showAlert({
-            title: '이미지 선택',
-            message: '이미지 선택 방법을 골라주세요.',
-            actions: [
-                {
-                    text: '카메라로 촬영',
-                    kind: 'primary',
-                    onPress: () => {
-                        launchCamera(
-                            {
-                                mediaType: 'photo',
-                                cameraType: 'back',
-                            },
-                            (res) => {
-                                if (res.didCancel || res.errorCode) return;
-                                if (res.assets?.length > 0) {
-                                    setImageUri(res.assets[0].uri);
-                                    setIsAnalyzed(false);
-                                    setAnalyzedSpecies('');
-                                    setAnalysisAccuracy('');
-                                }
-                            }
-                        );
-                    },
-                },
-                {
-                    text: '갤러리에서 선택',
-                    kind: 'primary',
-                    onPress: () => {
-                        launchImageLibrary(
-                            {
-                                mediaType: 'photo',
-                            },
-                            (res) => {
-                                if (res.didCancel || res.errorCode) return;
-                                if (res.assets?.length > 0) {
-                                    setImageUri(res.assets[0].uri);
-                                    setIsAnalyzed(false);
-                                    setAnalyzedSpecies('');
-                                    setAnalysisAccuracy('');
-                                }
-                            }
-                        );
-                    },
-                },
-                {
-                    text: '취소',
-                    kind: 'cancel',
-                },
-            ],
-        });
-    };
+	const handleRemoveImage = () => {
+		setImageUri(null);
+		setIsAnalyzed(false);
+		setAnalyzedSpecies('');
+		setAnalysisAccuracy('');
+	};
 
-    const handleAnalyzeSpecies = async () => {
-        if (!imageUri) {
-            showAlert({
-                title: '이미지 필요',
-                message: '먼저 식물 사진을 선택해주세요.',
-                variant: 'warning',
-            });
-            return;
-        }
+	const handleAnalyzeSpecies = async () => {
+		if (!imageUri) {
+			showAlert({
+				title: '이미지 필요',
+				message: '먼저 식물 사진을 선택해주세요.',
+				variant: 'warning',
+			});
+			return;
+		}
 
-        try {
-            const result = await identifyPlantApi(imageUri);
-            console.log('종 분석 결과:', result);
+		try {
+			const result = await identifyPlantApi(imageUri);
+			const speciesName = result.koreanName || result.scientificName || '';
+			setAnalyzedSpecies(speciesName);
+			setAnalysisAccuracy(result.accuracy || '');
+			setSpecies(speciesName);
+			setIsAnalyzed(true);
+		} catch (error) {
+			console.log('종 분석 실패:', error.response?.data);
+			showAlert({
+				title: '분석 실패',
+				message: '식물 종 분석에 실패했습니다.',
+				variant: 'error',
+			});
+		}
+	};
 
-            const speciesName = result.koreanName || result.scientificName || '';
-            setAnalyzedSpecies(speciesName);
-            setAnalysisAccuracy(result.accuracy || '');
-            setSpecies(speciesName);
-            setIsAnalyzed(true);
-        } catch (error) {
-            console.log('종 분석 실패:', error.response?.data);
-            showAlert({
-                title: '분석 실패',
-                message: '식물 종 분석에 실패했습니다.',
-                variant: 'error',
-            });
-        }
-    };
+	useEffect(() => {
+		const q = (species || '').trim();
+		if (q.length === 0) {
+			setFilteredSpecies([]);
+			return;
+		}
+		const lowered = q.toLowerCase();
+		const matches = speciesList
+			.filter((s) => s.toLowerCase().includes(lowered))
+			.slice(0, 8);
+		setFilteredSpecies(matches);
+	}, [species]);
 
-    useEffect(() => {
-        const q = (species || '').trim();
-        if (q.length === 0) {
-            setFilteredSpecies([]);
-            return;
-        }
-        const lowered = q.toLowerCase();
-        const matches = speciesList
-            .filter((s) => s.toLowerCase().includes(lowered))
-            .slice(0, 8);
-        setFilteredSpecies(matches);
-    }, [species]);
+	const handleSubmit = async () => {
+		const missing = [];
+		if (!name || name.trim() === '') missing.push('이름');
+		if (!species || species.trim() === '') missing.push('종');
 
-    const handleSubmit = async () => {
-        const missing = [];
-        if (!name || name.trim() === '') missing.push('이름');
-        if (!species || species.trim() === '') missing.push('종');
+		if (missing.length > 0) {
+			showAlert({
+				title: '필수 입력',
+				message: `${missing.join(' 및 ')}을(를) 입력해주세요.`,
+				variant: 'warning',
+			});
+			return;
+		}
 
-        if (missing.length > 0) {
-            showAlert({
-                title: '필수 입력',
-                message: `${missing.join(' 및 ')}을(를) 입력해주세요.`,
-                variant: 'warning',
-            });
-            return;
-        }
+		try {
+			const plantData = {
+				name: name || '',
+				species: species || '',
+				adoptDate: adoptDate ? adoptDate.toISOString().slice(0, 10) : '',
+				age: age ? Number(age) : null,
+				personality: customPersonality || selectedPersonality,
+				imageUri: imageUri || '',
+				character_id: selectedCharacter,
+				macAddress: macAddress || '',
+			};
 
-        try {
-            const plantData = {
-                name: name || '',
-                species: species || '',
-                adoptDate: adoptDate ? adoptDate.toISOString().slice(0, 10) : '',
-                age: age ? Number(age) : null,
-                personality: customPersonality || selectedPersonality,
-                imageUri: imageUri || '',
-                character_id: selectedCharacter,
-                macAddress: macAddress || '',
-            };
+			let response;
+			if (editingId) {
+				response = await updatePlantApi(editingId, plantData);
+			} else {
+				response = await registerPlant(plantData);
+			}
 
-            console.log('식물 등록 요청:', plantData);
+			try {
+				if (editingId) {
+					updatePlant(editingId, response || plantData);
+				} else {
+					addPlant(response || plantData);
+				}
+			} catch (e) {
+				console.log('Context update failed:', e.message);
+			}
 
-            let response;
-            if (editingId) {
-                response = await updatePlantApi(editingId, plantData);
-            } else {
-                response = await registerPlant(plantData);
-            }
+			showAlert({
+				title: '성공',
+				message: editingId ? '식물 정보가 수정되었습니다.' : '식물이 등록되었습니다.',
+				buttonText: '확인',
+				onPress: () => navigation.replace('Main'),
+				variant: 'success',
+			});
+		} catch (error) {
+			console.log('식물 등록 실패:', error.response?.data);
+			showAlert({
+				title: '실패',
+				message: error.response?.data?.message || '식물 등록에 실패했습니다.',
+				variant: 'error',
+			});
+		}
+	};
 
-            console.log('식물 등록 성공:', response);
+	useEffect(() => {
+		if (route?.params?.plant) {
+			const p = route.params.plant;
 
-            try {
-                if (editingId) {
-                    updatePlant(editingId, response || plantData);
-                } else {
-                    addPlant(response || plantData);
-                }
-            } catch (e) {
-                console.log('Context update failed:', e.message);
-            }
+			if (p.name) setName(p.name);
+			if (p.species) setSpecies(p.species);
+			if (p.adoptDate) {
+				const d = new Date(p.adoptDate);
+				if (!isNaN(d.getTime())) setAdoptDate(d);
+			}
+			if (p.age) setAge(p.age);
+			if (p.imageUri) setImageUri(p.imageUri);
+			if (p.macAddress) setMacAddress(p.macAddress);
 
-            showAlert({
-                title: '성공',
-                message: editingId ? '식물 정보가 수정되었습니다.' : '식물이 등록되었습니다.',
-                buttonText: '확인',
-                onPress: () => navigation.replace('Main'),
-                variant: 'success',
-            });
-        } catch (error) {
-            console.log('식물 등록 실패:', error.response?.data);
-            showAlert({
-                title: '실패',
-                message: error.response?.data?.message || '식물 등록에 실패했습니다.',
-                variant: 'error',
-            });
-        }
-    };
+			if (p.personality) {
+				if (personalityList.includes(p.personality)) {
+					setSelectedPersonality(p.personality);
+					setCustomPersonality('');
+				} else {
+					setCustomPersonality(p.personality);
+					setSelectedPersonality(p.personality);
+				}
+			}
+			if (p.character_id) setSelectedCharacter(p.character_id);
+		}
+	}, [route]);
 
-    useEffect(() => {
-        if (route?.params?.plant) {
-            const p = route.params.plant;
+	return (
+		<View style={styles.background}>
+			{showDatePicker && (
+				<DateTimePicker
+					value={adoptDate}
+					mode="date"
+					display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+					onChange={(event, selectedDate) => {
+						setShowDatePicker(false);
+						if (selectedDate) setAdoptDate(selectedDate);
+					}}
+					maximumDate={new Date()}
+				/>
+			)}
 
-            if (p.name) setName(p.name);
-            if (p.species) setSpecies(p.species);
-            if (p.adoptDate) {
-                const d = new Date(p.adoptDate);
-                if (!isNaN(d.getTime())) setAdoptDate(d);
-            }
-            if (p.age) setAge(p.age);
-            if (p.imageUri) setImageUri(p.imageUri);
-            if (p.macAddress) setMacAddress(p.macAddress);
+			<Header title="식물 등록하기" navigation={navigation} type="full" />
 
-            if (p.personality) {
-                if (personalityList.includes(p.personality)) {
-                    setSelectedPersonality(p.personality);
-                    setCustomPersonality('');
-                } else {
-                    setCustomPersonality(p.personality);
-                    setSelectedPersonality(p.personality);
-                }
-            }
-            if (p.character_id) setSelectedCharacter(p.character_id);
-        }
-    }, [route]);
+			<ScrollView
+				contentContainerStyle={styles.container}
+				keyboardShouldPersistTaps="handled"
+			>
+				<Text style={styles.labelMain}>식물 정보를 입력해주세요</Text>
 
-    return (
-        <View style={styles.background}>
-            {showDatePicker && (
-                <DateTimePicker
-                    value={adoptDate}
-                    mode="date"
-                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                    onChange={(event, selectedDate) => {
-                        setShowDatePicker(false);
-                        if (selectedDate) setAdoptDate(selectedDate);
-                    }}
-                    maximumDate={new Date()}
-                />
-            )}
+				{/* 이름 */}
+				<Text style={styles.formLabel}>이름</Text>
+				<TextInput
+					style={styles.input}
+					placeholder="식물 이름"
+					placeholderTextColor="#B8B8B8"
+					value={name}
+					onChangeText={setName}
+				/>
 
-            <Header
-                title="식물 등록하기"
-                navigation={navigation}
-                type="full"
-            />
+				{/* 기기 연결 */}
+				<Text style={styles.formLabel}>기기</Text>
+				{macAddress ? (
+					<View style={styles.macAddressWrap}>
+						<Text style={styles.macAddressText}>{macAddress}</Text>
+						<View style={styles.connectedBadge}>
+							<Text style={styles.connectedText}>✅ 인식됨</Text>
+						</View>
+					</View>
+				) : (
+					<TouchableOpacity
+						style={styles.qrButton}
+						onPress={() => navigation.navigate('HardwareConnect', { fromPlantRegister: true })}
+						activeOpacity={0.8}
+					>
+						<Text style={styles.qrButtonText}>📷 QR 코드로 기기 등록</Text>
+					</TouchableOpacity>
+				)}
+				<Text style={styles.aiGuide}>
+					스마트 화분이 있다면 센서 연동을 위해 스캔해주세요.
+				</Text>
 
-            <ScrollView
-                contentContainerStyle={styles.container}
-                keyboardShouldPersistTaps="handled"
-            >
-                <Text style={styles.labelMain}>식물 정보를 입력해주세요</Text>
+				{/* 입양날짜 + 나이 */}
+				<View style={styles.dualRow}>
+					<View style={styles.dualCol}>
+						<Text style={styles.formLabel}>입양날짜</Text>
+						<TouchableOpacity
+							style={styles.dateButton}
+							onPress={() => setShowDatePicker(true)}
+							activeOpacity={0.8}
+						>
+							<Text style={styles.dateText}>
+								{adoptDate ? adoptDate.toISOString().slice(0, 10) : '날짜 선택'}
+							</Text>
+							<Image
+								source={require('../assets/icon/down.png')}
+								style={styles.dateArrowIcon}
+								resizeMode="contain"
+							/>
+						</TouchableOpacity>
+					</View>
 
-                {/* 이름 */}
-                <View style={styles.row}>
-                    <Text style={styles.label}>이름</Text>
-                    <View style={styles.contentWrap}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="식물 이름"
-                            placeholderTextColor="#B8B8B8"
-                            value={name}
-                            onChangeText={setName}
-                        />
-                    </View>
-                </View>
+					<View style={styles.dualColSmall}>
+						<Text style={styles.formLabel}>나이</Text>
+						<View style={styles.ageInputWrap}>
+							<TextInput
+								style={styles.ageInput}
+								placeholder="0"
+								placeholderTextColor="#B8B8B8"
+								value={age}
+								onChangeText={(text) => setAge(text.replace(/[^0-9]/g, ''))}
+								keyboardType="numeric"
+								maxLength={3}
+							/>
+							<Text style={styles.ageText}>세</Text>
+						</View>
+					</View>
+				</View>
 
-                {/* 기기 연결 */}
-                <View style={styles.row}>
-                    <Text style={styles.label}>기기</Text>
-                    <View style={styles.contentWrap}>
-                        {macAddress ? (
-                            <View style={styles.macAddressWrap}>
-                                <Text style={styles.macAddressText}>{macAddress}</Text>
-                                <View style={styles.connectedBadge}>
-                                    <Text style={styles.connectedText}>✅ 인식됨</Text>
-                                </View>
-                            </View>
-                        ) : (
-                            <TouchableOpacity
-                                style={styles.qrButton}
-                                onPress={() => navigation.navigate('HardwareConnect', { fromPlantRegister: true })}
-                                activeOpacity={0.8}
-                            >
-                                <Text style={styles.qrButtonText}>📷 QR 코드로 기기 등록</Text>
-                            </TouchableOpacity>
-                        )}
-                        <Text style={styles.aiGuide}>
-                            스마트 화분이 있다면 센서 연동을 위해 스캔해주세요.
-                        </Text>
-                    </View>
-                </View>
+				{/* 종 */}
+				<Text style={styles.formLabel}>종</Text>
+				<TextInput
+					style={styles.input}
+					placeholder="AI 분석 또는 직접 입력"
+					placeholderTextColor="#B8B8B8"
+					value={species}
+					onChangeText={setSpecies}
+				/>
 
-                {/* 입양날짜 */}
-                <View style={styles.row}>
-                    <Text style={styles.label}>입양날짜</Text>
-                    <View style={styles.contentWrap}>
-                        <View style={styles.dateRow}>
-                            <TouchableOpacity
-                                style={styles.dateButton}
-                                onPress={() => setShowDatePicker(true)}
-                                activeOpacity={0.8}
-                            >
-                                <Text style={styles.dateText}>
-                                    {adoptDate ? adoptDate.toISOString().slice(0, 10) : '날짜 선택'}
-                                </Text>
-                                <Image
-                                    source={require('../assets/icon/down.png')}
-                                    style={styles.dateArrowIcon}
-                                    resizeMode="contain"
-                                />
-                            </TouchableOpacity>
+				{filteredSpecies.length > 0 && (
+					<View style={styles.suggestionList}>
+						{filteredSpecies.map((item) => (
+							<TouchableOpacity
+								key={item}
+								onPress={() => {
+									setSpecies(item);
+									setFilteredSpecies([]);
+									setIsAnalyzed(false);
+								}}
+								style={styles.suggestionItem}
+							>
+								<Text style={styles.suggestionText}>{item}</Text>
+							</TouchableOpacity>
+						))}
+					</View>
+				)}
 
-                            <View style={styles.ageWrap}>
-                                <TextInput
-                                    style={styles.ageInput}
-                                    placeholder="나이"
-                                    placeholderTextColor="#B8B8B8"
-                                    value={age}
-                                    onChangeText={(text) => {
-                                        const onlyNumber = text.replace(/[^0-9]/g, '');
-                                        setAge(onlyNumber);
-                                    }}
-                                    keyboardType="numeric"
-                                    maxLength={3}
-                                />
-                                <Text style={styles.ageText}>세</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
+				{isAnalyzed && (
+					<View style={styles.aiResultCard}>
+						<View style={styles.aiResultTop}>
+							<Text style={styles.aiResultTitle}>🌿 {analyzedSpecies}</Text>
+							<TouchableOpacity onPress={handleAnalyzeSpecies}>
+								<Text style={styles.aiRetry}>다시 분석하기</Text>
+							</TouchableOpacity>
+						</View>
+						<Text style={styles.aiResultDesc}>신뢰도: {analysisAccuracy}</Text>
+					</View>
+				)}
 
-                {/* 종 */}
-                <View style={styles.row}>
-                    <Text style={styles.label}>종</Text>
-                    <View style={styles.contentWrap}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="AI 분석 또는 직접 입력"
-                            placeholderTextColor="#B8B8B8"
-                            value={species}
-                            onChangeText={(text) => setSpecies(text)}
-                        />
+				{/* 이미지 — 일지 방식(썸네일+추가박스) 재사용, 1장만 */}
+				<Text style={styles.formLabel}>
+					이미지 <Text style={styles.formLabelOpt}>선택, 1장</Text>
+				</Text>
+				<View style={styles.photoRow}>
+					{imageUri ? (
+						<View style={styles.photoThumbWrap}>
+							<Image source={{ uri: imageUri }} style={styles.photoThumb} />
+							<TouchableOpacity
+								style={styles.photoRemoveBtn}
+								onPress={handleRemoveImage}
+								activeOpacity={0.8}
+							>
+								<IconX size={12} color="#FFFFFF" strokeWidth={2.5} />
+							</TouchableOpacity>
+						</View>
+					) : (
+						<TouchableOpacity
+							style={styles.photoAddBox}
+							onPress={handleImagePress}
+							activeOpacity={0.85}
+						>
+							<IconCameraPlus size={20} color="#7fc77c" strokeWidth={1.5} />
+							<Text style={styles.photoAddBoxText}>0/1</Text>
+						</TouchableOpacity>
+					)}
+				</View>
 
-                        {filteredSpecies.length > 0 && (
-                            <View style={styles.suggestionList}>
-                                {filteredSpecies.map((item) => (
-                                    <TouchableOpacity
-                                        key={item}
-                                        onPress={() => {
-                                            setSpecies(item);
-                                            setFilteredSpecies([]);
-                                            setIsAnalyzed(false);
-                                        }}
-                                        style={styles.suggestionItem}
-                                    >
-                                        <Text style={styles.suggestionText}>{item}</Text>
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
-                        )}
+				{imageUri ? (
+					<TouchableOpacity
+						style={styles.analyzeButton}
+						onPress={handleAnalyzeSpecies}
+						activeOpacity={0.85}
+					>
+						<Text style={styles.analyzeButtonText}>🌿 종 분석하기</Text>
+					</TouchableOpacity>
+				) : (
+					<Text style={styles.aiGuide}>사진을 등록하면 AI가 종을 분석합니다.</Text>
+				)}
 
-                        {isAnalyzed && (
-                            <View style={styles.aiResultCard}>
-                                <View style={styles.aiResultTop}>
-                                    <Text style={styles.aiResultTitle}>🌿 {analyzedSpecies}</Text>
-                                    <TouchableOpacity
-                                        style={{ justifyContent: 'center' }}
-                                        onPress={handleAnalyzeSpecies}
-                                    >
-                                        <Text style={styles.aiRetry}>다시 분석하기</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <Text style={styles.aiResultDesc}>신뢰도: {analysisAccuracy}</Text>
-                            </View>
-                        )}
-                    </View>
-                </View>
+				{/* 성격 — 일지 mood칩 방식(완전 둥근 pill, border 1.5) 재사용 */}
+				<Text style={styles.formLabel}>
+					성격 <Text style={styles.formLabelOpt}>선택</Text>
+				</Text>
+				<View style={styles.chipWrap}>
+					{personalityList.map((item) => {
+						const isActive = selectedPersonality === item;
+						return (
+							<TouchableOpacity
+								key={item}
+								style={[styles.chip, isActive && styles.chipActive]}
+								onPress={() => {
+									setSelectedPersonality(item);
+									setCustomPersonality('');
+								}}
+							>
+								<Text style={[styles.chipText, isActive && styles.chipTextActive]}>
+									{item}
+								</Text>
+							</TouchableOpacity>
+						);
+					})}
+				</View>
 
-                {/* 이미지 */}
-                <View style={styles.row}>
-                    <Text style={styles.label}>이미지</Text>
-                    <View style={styles.contentWrap}>
-                        {imageUri ? (
-                            <>
-                                <TouchableOpacity onPress={handleImagePress} activeOpacity={0.8}>
-                                    <Image source={{ uri: imageUri }} style={styles.selectedImage} />
-                                </TouchableOpacity>
+				<TextInput
+					style={[styles.input, styles.inputUnderChips]}
+					placeholder="직접 입력 (선택)"
+					placeholderTextColor="#B8B8B8"
+					value={customPersonality}
+					onChangeText={(text) => {
+						setCustomPersonality(text);
+						if (text) setSelectedPersonality(text);
+					}}
+				/>
 
-                                <TouchableOpacity
-                                    style={styles.analyzeButton}
-                                    onPress={handleAnalyzeSpecies}
-                                    activeOpacity={0.85}
-                                >
-                                    <Text style={styles.analyzeButtonText}>🌿 종 분석하기</Text>
-                                </TouchableOpacity>
-                            </>
-                        ) : (
-                            <>
-                                <TouchableOpacity style={styles.imageBox} onPress={handleImagePress}>
-                                    <Image
-                                        source={require('../assets/icon/placeholder.png')}
-                                        style={styles.imageIcon}
-                                    />
-                                </TouchableOpacity>
-                                <Text style={styles.aiGuide}>
-                                    사진을 등록하면 AI가 종을 분석합니다.
-                                </Text>
-                            </>
-                        )}
-                    </View>
-                </View>
+				{/* 캐릭터 선택 */}
+				<Text style={styles.formLabel}>캐릭터</Text>
+				<View style={styles.characterSelector}>
+					<TouchableOpacity
+						style={styles.arrowButton}
+						onPress={() => selectedCharacter > 1 && setSelectedCharacter((p) => p - 1)}
+					>
+						<Text style={styles.arrowText}>{'<'}</Text>
+					</TouchableOpacity>
 
-                {/* 성격 */}
-                <View style={styles.row}>
-                    <Text style={styles.label}>성격</Text>
-                    <View style={styles.contentWrap}>
-                        <View style={styles.personalityWrap}>
-                            {personalityList.map((item) => (
-                                <TouchableOpacity
-                                    key={item}
-                                    style={[
-                                        styles.personalityBtn,
-                                        selectedPersonality === item && styles.personalityBtnSelected,
-                                    ]}
-                                    onPress={() => {
-                                        setSelectedPersonality(item);
-                                        setCustomPersonality('');
-                                    }}
-                                >
-                                    <Text
-                                        style={[
-                                            styles.personalityText,
-                                            selectedPersonality === item && styles.personalityTextSelected,
-                                        ]}
-                                    >
-                                        {item}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
+					<Image
+						source={characterList[selectedCharacter - 1]}
+						style={styles.characterImage}
+					/>
 
-                        <TextInput
-                            style={[styles.input, styles.inputUnderPersonality]}
-                            placeholder="직접 입력 (선택)"
-                            placeholderTextColor="#B8B8B8"
-                            value={customPersonality}
-                            onChangeText={(text) => {
-                                setCustomPersonality(text);
-                                if (text) setSelectedPersonality(text);
-                            }}
-                        />
-                    </View>
-                </View>
+					<TouchableOpacity
+						style={styles.arrowButton}
+						onPress={() =>
+							selectedCharacter < characterList.length && setSelectedCharacter((p) => p + 1)
+						}
+					>
+						<Text style={styles.arrowText}>{'>'}</Text>
+					</TouchableOpacity>
+				</View>
 
-                {/* 캐릭터 선택 */}
-                <View style={styles.row}>
-                    <Text style={styles.label}>캐릭터</Text>
-                    <View style={styles.contentWrap}>
-                        <View style={styles.characterSelector}>
-                            <TouchableOpacity
-                                style={styles.arrowButton}
-                                onPress={() => {
-                                    if (selectedCharacter > 1) {
-                                        setSelectedCharacter((prev) => prev - 1);
-                                    }
-                                }}
-                            >
-                                <Text style={styles.arrowText}>{'<'}</Text>
-                            </TouchableOpacity>
+				<Text style={styles.characterCount}>
+					{selectedCharacter} / {characterList.length}
+				</Text>
 
-                            <Image
-                                source={characterList[selectedCharacter - 1]}
-                                style={styles.characterImage}
-                            />
+				<View style={styles.dotContainer}>
+					{characterList.map((_, index) => (
+						<View
+							key={index}
+							style={[styles.dot, selectedCharacter === index + 1 && styles.activeDot]}
+						/>
+					))}
+				</View>
+			</ScrollView>
 
-                            <TouchableOpacity
-                                style={styles.arrowButton}
-                                onPress={() => {
-                                    if (selectedCharacter < characterList.length) {
-                                        setSelectedCharacter((prev) => prev + 1);
-                                    }
-                                }}
-                            >
-                                <Text style={styles.arrowText}>{'>'}</Text>
-                            </TouchableOpacity>
-                        </View>
+			<CustomAlert
+				visible={alertConfig.visible}
+				title={alertConfig.title}
+				message={alertConfig.message}
+				buttonText={alertConfig.buttonText}
+				onPress={alertConfig.onPress}
+				secondaryButtonText={alertConfig.secondaryButtonText}
+				onSecondaryPress={alertConfig.onSecondaryPress}
+				actions={alertConfig.actions}
+				variant={alertConfig.variant}
+				onRequestClose={closeAlert}
+			/>
 
-                        <Text style={styles.characterCount}>
-                            {selectedCharacter} / {characterList.length}
-                        </Text>
-
-                        <View style={styles.dotContainer}>
-                            {characterList.map((_, index) => (
-                                <View
-                                    key={index}
-                                    style={[
-                                        styles.dot,
-                                        selectedCharacter === index + 1 && styles.activeDot,
-                                    ]}
-                                />
-                            ))}
-                        </View>
-                    </View>
-                </View>
-            </ScrollView>
-
-            <CustomAlert
-                visible={alertConfig.visible}
-                title={alertConfig.title}
-                message={alertConfig.message}
-                buttonText={alertConfig.buttonText}
-                onPress={alertConfig.onPress}
-                secondaryButtonText={alertConfig.secondaryButtonText}
-                onSecondaryPress={alertConfig.onSecondaryPress}
-                actions={alertConfig.actions}
-                variant={alertConfig.variant}
-                onRequestClose={closeAlert}
-            />
-
-            <BottomButton title="등록하기" onPress={handleSubmit} />
-        </View>
-    );
+			<BottomButton title="등록하기" onPress={handleSubmit} />
+		</View>
+	);
 }

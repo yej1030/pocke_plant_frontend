@@ -62,10 +62,11 @@ eyeIcon: {
     marginBottom: 0,
   },
 
+  // 로그인 버튼 텍스트
   loginSubmitText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
 
   // 소셜 로그인 영역
@@ -73,13 +74,6 @@ eyeIcon: {
     alignItems: 'center',
     marginTop: 18,
     marginBottom: 8,
-  },
-
-  socialLoginLabel: {
-    fontSize: 13,
-    color: '#888',
-    marginBottom: 10,
-    fontWeight: '600',
   },
 
   // 카카오 원형 버튼
@@ -112,7 +106,7 @@ eyeIcon: {
   },
 
   linkText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#888',
     textDecorationLine: 'underline',
   },
@@ -137,8 +131,9 @@ eyeIcon: {
   },
   snsTitle: {
     fontSize: 14,
-    color: '#666',
+    color: '#888',
     fontWeight: '350',
+    marginHorizontal: 10,
   },
   snsIconsRow: {
     flexDirection: 'row',
@@ -155,14 +150,9 @@ eyeIcon: {
     marginHorizontal: 12,
   },
   snsIconImage: {
-    width: 32,
-    height: 32,
+    width: 64,
+    height: 64,
     resizeMode: 'contain',
-  },
-  snsIconText: {
-    fontSize: 20,
-    color: '#fff',
-    fontWeight: '800',
   },
 
 });

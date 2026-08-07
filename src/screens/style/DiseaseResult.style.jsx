@@ -36,11 +36,6 @@ justifyContent: 'center',
 alignItems: 'center',
 },
 
-emptyText: {
-color: '#999',
-fontSize: 12,
-},
-
 headerText: {
 fontWeight: '700',
 marginBottom: 12,

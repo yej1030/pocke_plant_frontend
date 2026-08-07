@@ -10,37 +10,35 @@ export default StyleSheet.create({
   },
 
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '600',
+    marginBottom: 10,
     color: '#333',
-    marginBottom: 24,
   },
 
-    // 비밀번호 입력 행
-  passwordRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingLeft: 14,
-    paddingRight: 8,
-  },
+// 비밀번호 입력 행
+passwordRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  borderWidth: 1,
+  borderColor: '#e1e1e1',
+  borderRadius: 4,
+  marginBottom: 10,
+  paddingHorizontal: 15,
+  height: 52,
+},
 
   // 비밀번호 입력창
-  passwordInput: {
-    flex: 1,
-    paddingVertical: 14,
-    paddingRight: 10,
-  },
+passwordInput: {
+  flex: 1,
+  fontSize: 15,
+  color: '#333',
+},
 
   // 비밀번호 보기 버튼
   eyeButton: {
-    paddingHorizontal: 6,
-    paddingVertical: 4,
+    paddingLeft: 10,
   },
-  // 눈 아이콘
 eyeIcon: {
   width: 20,
   height: 20,
@@ -50,8 +48,6 @@ eyeIcon: {
   hint: {
     fontSize: 12,
     color: '#999',
-    marginLeft: 7,
-    marginTop: -8,
     marginBottom: 10,
   },
 
@@ -73,16 +69,16 @@ eyeIcon: {
   submitButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
 
   footerLink: {
+    marginTop: 8,
     alignItems: 'center',
-    marginTop: 12,
   },
 
   linkText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#888',
     textDecorationLine: 'underline',
   },

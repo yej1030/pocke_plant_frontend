@@ -30,7 +30,7 @@ export default StyleSheet.create({
   submitButtonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
   footerLink: {
     alignItems: 'center',
@@ -38,7 +38,7 @@ export default StyleSheet.create({
     paddingHorizontal: 2,
   },
   linkText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#888',
     textDecorationLine: 'underline',
   },

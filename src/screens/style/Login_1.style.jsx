@@ -20,8 +20,8 @@ export default StyleSheet.create({
 
   // 앱 이름
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    fontSize: 32,
+    fontWeight: '700',
     color: '#333',
     marginTop: 60,
   },
@@ -64,8 +64,8 @@ export default StyleSheet.create({
     marginRight: 8,
   },
   kakaoText: {
-    fontSize: 17,
-    color: '#381E1F',
+    fontSize: 16,
+    color: '#333',
     fontWeight: '700',
   },
 
@@ -79,9 +79,9 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   signupText: {
-    fontSize: 17,
+    fontSize: 16,
     color: '#fff',
-    fontWeight: 'bold',
+    fontWeight: '700',
   },
 
   // 기존 유저 로그인 버튼
@@ -95,9 +95,9 @@ export default StyleSheet.create({
     borderColor: '#d7d7d7',
   },
   loginText: {
-    fontSize: 17,
+    fontSize: 16,
     color: '#333',
-    fontWeight: '600',
+    fontWeight: '700',
   },
 
 });
