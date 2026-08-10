@@ -7,7 +7,7 @@ const CARD_WIDTH =
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
   },
 
   content: {
@@ -34,7 +34,7 @@ export default StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: 80,
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
     opacity: 0.15,
   },
 
@@ -45,7 +45,7 @@ export default StyleSheet.create({
     width: 140,
     height: 140,
     borderRadius: 70,
-    backgroundColor: '#ffbd16',
+    backgroundColor: '#FFBD16',
     opacity: 0.12,
   },
 
@@ -63,7 +63,7 @@ export default StyleSheet.create({
 
   speechText: {
     fontSize: 14,
-    color: '#333',
+    color: '#1F2937',
     textAlign: 'center',
     lineHeight: 20,
     fontWeight: '600',
@@ -95,7 +95,7 @@ export default StyleSheet.create({
 
   quickReplyText: {
     fontSize: 12,
-    color: '#333',
+    color: '#1F2937',
     fontWeight: '500',
   },
 
@@ -110,7 +110,7 @@ export default StyleSheet.create({
     height: 46,
     borderRadius: 15,
     borderWidth: 1,
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
@@ -118,13 +118,13 @@ export default StyleSheet.create({
 
   actionText: {
     fontSize: 16,
-    color: '#7fc77c',
+    color: '#7FC77C',
     fontWeight: '600',
   },
 
   actionPrimary: {
-    backgroundColor: '#7fc77c',
-    borderColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
+    borderColor: '#7FC77C',
   },
 
   actionPrimaryText: {
@@ -162,7 +162,7 @@ export default StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 15,
     borderRadius: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E0EEE6',
     flexDirection: 'row',
@@ -179,7 +179,7 @@ export default StyleSheet.create({
   summarySubText: {
     marginTop: 4,
     fontSize: 12,
-    color: '#8ea798',
+    color: '#8EA798',
     fontWeight: '500',
   },
 
@@ -197,7 +197,7 @@ export default StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 999,
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
   },
 
   liveText: {
@@ -233,7 +233,7 @@ export default StyleSheet.create({
   },
 
   miniSensorCardActive: {
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     backgroundColor: '#F1FFF7',
   },
 
@@ -288,7 +288,7 @@ export default StyleSheet.create({
   miniBarFill: {
     height: '100%',
     borderRadius: 999,
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
   },
 
   chartCard: {
@@ -328,7 +328,7 @@ export default StyleSheet.create({
   chartSubText: {
     marginTop: 4,
     fontSize: 12,
-    color: '#8ea798',
+    color: '#8EA798',
     fontWeight: '500',
   },
 
@@ -384,8 +384,8 @@ export default StyleSheet.create({
     height: 50,
     borderRadius: 25,
     borderWidth: 1,
-    borderColor: '#7fc77c',
-    backgroundColor: '#ffffff',
+    borderColor: '#7FC77C',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -403,7 +403,7 @@ export default StyleSheet.create({
   },
   waterText: {
     fontSize: 15,
-    color: '#7fc77c',
+    color: '#7FC77C',
     fontWeight: '700',
   },
 
@@ -418,7 +418,7 @@ export default StyleSheet.create({
 
   emptyText: {
     fontSize: 14,
-    color: '#7B7B7B',
+    color: '#6B7280',
   },
 
   statsList: {
@@ -441,7 +441,7 @@ export default StyleSheet.create({
     marginTop: 2,
     paddingLeft: 6,
     fontSize: 12,
-    color: '#8ea798',
+    color: '#8EA798',
     fontWeight: '500',
   },
 });

@@ -4,11 +4,11 @@ export default StyleSheet.create({
 
 background: {
 flex: 1,
-backgroundColor: '#fafafa',
+backgroundColor: '#F8FAFC',
 },
 
 container: {
-backgroundColor: '#fff',
+backgroundColor: '#FFFFFF',
 padding: 20,
 paddingBottom: 120,
 flexGrow: 1,
@@ -29,7 +29,7 @@ marginBottom: 16,
 noImage: {
 width: '100%',
 height: 300,
-backgroundColor: '#f5f5f5',
+backgroundColor: '#E5E7EB',
 borderRadius: 8,
 marginBottom: 16,
 justifyContent: 'center',
@@ -40,7 +40,7 @@ headerText: {
 fontWeight: '700',
 marginBottom: 12,
 fontSize: 16,
-color: '#222',
+color: '#1F2937',
 },
 
 resultRow: {
@@ -55,7 +55,7 @@ marginBottom: 6,
 },
 
 resultLabel: {
-color: '#333',
+color: '#1F2937',
 fontSize: 14,
 },
 
@@ -79,7 +79,7 @@ backgroundColor: '#b85a5a',
 
 divider: {
 height: 1,
-backgroundColor: '#E6E6E6',
+backgroundColor: '#E5E7EB',
 marginTop: 4,
 marginBottom: 12,
 },
@@ -89,7 +89,7 @@ paddingVertical: 2,
 },
 
 tipText: {
-color: '#999',
+color: '#9CA3AF',
 fontSize: 12,
 lineHeight: 18,
 },

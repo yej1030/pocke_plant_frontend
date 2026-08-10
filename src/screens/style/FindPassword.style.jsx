@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+     backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingTop: 20,
   },
@@ -12,15 +12,15 @@ export default StyleSheet.create({
     width: '100%',
     height: 52,
     borderWidth: 1,
-    borderColor: '#e1e1e1',
+     borderColor: '#E5E7EB',
     borderRadius: 4,
     paddingHorizontal: 15,
     marginBottom: 10,
     fontSize: 15,
-    color: '#333',
+     color: '#1F2937',
   },
   submitButton: {
-    backgroundColor: '#7fc77c',
+     backgroundColor: '#7FC77C',
     padding: 18,
     borderRadius: 5,
     alignItems: 'center',
@@ -28,7 +28,7 @@ export default StyleSheet.create({
     marginBottom: 0,
   },
   submitButtonText: {
-    color: '#fff',
+     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '700',
   },
@@ -39,7 +39,7 @@ export default StyleSheet.create({
   },
   linkText: {
     fontSize: 12,
-    color: '#888',
+    color: '#6B7280',
     textDecorationLine: 'underline',
   },
 });

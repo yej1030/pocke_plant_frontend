@@ -4,7 +4,7 @@ export default StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingTop: 20,
   },
@@ -14,12 +14,12 @@ export default StyleSheet.create({
     width: '100%',
     height: 52,
     borderWidth: 1,
-    borderColor: '#e1e1e1',
+    borderColor: '#E5E7EB',
     borderRadius: 4,
     paddingHorizontal: 15,
     marginBottom: 10,
     fontSize: 15,
-    color: '#333',
+    color: '#1F2937',
   },
 
   // 비밀번호 row
@@ -27,7 +27,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#e1e1e1',
+    borderColor: '#E5E7EB',
     borderRadius: 4,
     marginBottom: 10,
     paddingHorizontal: 15,
@@ -38,7 +38,7 @@ export default StyleSheet.create({
   passwordInput: {
     flex: 1,
     fontSize: 15,
-    color: '#333',
+    color: '#1F2937',
   },
 
   // 눈 버튼
@@ -54,7 +54,7 @@ eyeIcon: {
 
   // 로그인 버튼
   loginSubmitButton: {
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
     padding: 18,
     borderRadius: 5,
     alignItems: 'center',
@@ -64,7 +64,7 @@ eyeIcon: {
 
   // 로그인 버튼 텍스트
   loginSubmitText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '700',
   },
@@ -107,7 +107,7 @@ eyeIcon: {
 
   linkText: {
     fontSize: 12,
-    color: '#888',
+    color: '#6B7280',
     textDecorationLine: 'underline',
   },
 
@@ -127,11 +127,11 @@ eyeIcon: {
   snsLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#e6e6e6',
+    backgroundColor: '#E5E7EB',
   },
   snsTitle: {
     fontSize: 14,
-    color: '#888',
+    color: '#6B7280',
     fontWeight: '350',
     marginHorizontal: 10,
   },
@@ -144,7 +144,7 @@ eyeIcon: {
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#F3F3F3',
+    backgroundColor: '#E5E7EB',
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 12,

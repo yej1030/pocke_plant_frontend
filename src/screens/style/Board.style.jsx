@@ -7,7 +7,7 @@ export default StyleSheet.create({
 	// ============================================================
 	container: {
 		flex: 1,
-		backgroundColor: '#ffffff',
+		backgroundColor: '#FFFFFF',
 		paddingHorizontal: 20,
 		paddingTop: 14,
 	},
@@ -25,7 +25,7 @@ export default StyleSheet.create({
 	detailTitle: {
 		fontSize: 20,
 		fontWeight: '700',
-		color: '#333',
+		color: '#1F2937',
 		lineHeight: 28,
 	},
 	detailMetaRow: {
@@ -37,12 +37,12 @@ export default StyleSheet.create({
 		width: '100%',
 		height: 220,
 		borderRadius: 16,
-		backgroundColor: '#EFEFEF',
+		backgroundColor: '#E5E7EB',
 	},
 	detailText: {
 		fontSize: 14,
 		lineHeight: 23,
-		color: '#505050',
+		color: '#6B7280',
 	},
 	detailActionButton: {
 		flexDirection: 'row',
@@ -52,7 +52,7 @@ export default StyleSheet.create({
 		marginTop: 4,
 		paddingVertical: 10,
 		borderRadius: 8,
-		backgroundColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
 	},
 	detailActionText: {
 		fontSize: 12,
@@ -74,7 +74,7 @@ export default StyleSheet.create({
 		width: 260,
 		height: 220,
 		borderRadius: 16,
-		backgroundColor: '#EFEFEF',
+		backgroundColor: '#E5E7EB',
 		marginRight: 10,
 	},
 
@@ -88,20 +88,20 @@ export default StyleSheet.create({
 	writeLabell: {
 		fontSize: 15,
 		fontWeight: '500',
-		color: '#b0b0b0',
+		color: '#9CA3AF',
 		marginBottom: 8,
 	},
 	writeLabel: {
 		fontSize: 15,
 		fontWeight: '500',
-		color: '#b0b0b0',
+		color: '#9CA3AF',
 		marginTop: 18,
 		marginBottom: 8,
 	},
 	writeLabelOpt: {
 		fontSize: 12,
 		fontWeight: '400',
-		color: '#C4C4C4',
+		color: '#9CA3AF',
 	},
 
 	// 통일: 카테고리 칩 (일지 mood칩 방식, border 1.5 + radius 20)
@@ -112,36 +112,36 @@ export default StyleSheet.create({
 	},
 	writeCategoryPill: {
 		borderWidth: 1,
-		borderColor: '#7fc77c',
+		borderColor: '#7FC77C',
 		borderRadius: 14,
 		paddingHorizontal: 12,
 		paddingVertical: 4,
-		backgroundColor: '#fff',
+		backgroundColor: '#FFFFFF',
 	},
 	writeCategoryPillActive: {
-		backgroundColor: '#7fc77c',
-		borderColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
+		borderColor: '#7FC77C',
 	},
 	writeCategoryText: {
-		color: '#7fc77c',
+		color: '#7FC77C',
 		fontWeight: '500',
 		fontSize: 14,
 	},
 	writeCategoryTextActive: {
-		color: '#fff',
+		color: '#FFFFFF',
 		fontWeight: '600',
 	},
 
 	// 통일: 밑줄 → 테두리 박스 입력창
 	writeInput: {
 		borderWidth: 1,
-		borderColor: '#e0e0e0',
+		borderColor: '#E5E7EB',
 		borderRadius: 10,
 		fontSize: 15,
 		paddingHorizontal: 12,
 		paddingVertical: 10,
-		color: '#222',
-		backgroundColor: '#fff',
+		color: '#1F2937',
+		backgroundColor: '#FFFFFF',
 	},
 	writeTextarea: {
 		minHeight: 160,
@@ -151,13 +151,13 @@ export default StyleSheet.create({
 	writeSubmitButton: {
 		marginTop: 22,
 		borderRadius: 16,
-		backgroundColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
 		alignItems: 'center',
 		justifyContent: 'center',
 		paddingVertical: 15,
 	},
 	writeSubmitButtonDisabled: {
-		backgroundColor: '#D8D8D8',
+		backgroundColor: '#E5E7EB',
 	},
 	writeSubmitText: {
 		fontSize: 16,
@@ -183,7 +183,7 @@ export default StyleSheet.create({
 		width: 150,
 		height: 150,
 		borderRadius: 12,
-		backgroundColor: '#EFEFEF',
+		backgroundColor: '#E5E7EB',
 		resizeMode: 'cover',
 	},
 	photoRemoveBtn: {
@@ -202,16 +202,16 @@ export default StyleSheet.create({
 		height: 120,
 		borderRadius: 12,
 		borderWidth: 1,
-		borderColor: '#E8E8E8',
+		borderColor: '#E5E7EB',
 		borderStyle: 'dashed',
-		backgroundColor: '#FAFAFA',
+		backgroundColor: '#E5E7EB',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	photoAddBoxText: {
 		fontSize: 12,
 		fontWeight: '600',
-		color: '#C4C4C4',
+		color: '#9CA3AF',
 		marginTop: 4,
 	},
 
@@ -241,16 +241,16 @@ export default StyleSheet.create({
 	tabText: {
 		fontSize: 16,
 		fontWeight: '500',
-		color: '#C4C4C4',
+		color: '#9CA3AF',
 	},
 	tabTextActive: {
-		color: '#1f1f1f',
+		color: '#1F2937',
 	},
 	tabUnderline: {
 		marginTop: 6,
 		height: 2,
 		borderRadius: 1,
-		backgroundColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
 	},
 
 	// ============================================================
@@ -263,14 +263,14 @@ export default StyleSheet.create({
 		paddingHorizontal: 14,
 		paddingVertical: 10,
 		borderRadius: 14,
-		backgroundColor: '#F5F5F5',
+		backgroundColor: '#E5E7EB',
 		marginBottom: 8,
 		flexShrink: 0,
 	},
 	searchInput: {
 		flex: 1,
 		fontSize: 14,
-		color: '#1f1f1f',
+		color: '#1F2937',
 		padding: 0,
 	},
 
@@ -290,10 +290,10 @@ export default StyleSheet.create({
 	sortText: {
 		fontSize: 12,
 		fontWeight: '500',
-		color: '#C4C4C4',
+		color: '#9CA3AF',
 	},
 	sortTextActive: {
-		color: '#1f1f1f',
+		color: '#1F2937',
 		fontWeight: '700',
 	},
 
@@ -309,7 +309,7 @@ export default StyleSheet.create({
 		padding: 14,
 		borderRadius: 18,
 		borderWidth: 1,
-		borderColor: '#F0F0F0',
+		borderColor: '#E5E7EB',
 	},
 	postImage: {
 		width: 80,
@@ -318,7 +318,7 @@ export default StyleSheet.create({
 		marginLeft: 14,
 		marginTop: 8,
 		resizeMode: 'cover',
-		backgroundColor: '#EFEFEF',
+		backgroundColor: '#E5E7EB',
 	},
 	postTextWrap: {
 		flex: 1,
@@ -339,7 +339,7 @@ export default StyleSheet.create({
 	categoryBadgeText: {
 		fontSize: 10,
 		fontWeight: '700',
-		color: '#7fc77c',
+		color: '#7FC77C',
 	},
 
 	// ============================================================
@@ -348,13 +348,13 @@ export default StyleSheet.create({
 	postTitle: {
 		fontSize: 16,
 		fontWeight: '700',
-		color: '#1f1f1f',
+		color: '#1F2937',
 		marginBottom: 4,
 	},
 	postPreview: {
 		fontSize: 12,
 		fontWeight: '400',
-		color: '#8f8f8f',
+		color: '#6B7280',
 		lineHeight: 18,
 		marginBottom: 8,
 	},
@@ -366,7 +366,7 @@ export default StyleSheet.create({
 	metaDate: {
 		fontSize: 11,
 		fontWeight: '500',
-		color: '#C4C4C4',
+		color: '#9CA3AF',
 	},
 	metaIconGroup: {
 		flexDirection: 'row',
@@ -376,7 +376,7 @@ export default StyleSheet.create({
 	metaCount: {
 		fontSize: 11,
 		fontWeight: '500',
-		color: '#c4c4c4',
+		color: '#9CA3AF',
 	},
 
 	// ============================================================
@@ -384,7 +384,7 @@ export default StyleSheet.create({
 	// ============================================================
 	emptyText: {
 		textAlign: 'center',
-		color: '#A7A7A7',
+		color: '#9CA3AF',
 		fontSize: 14,
 		marginTop: 40,
 	},
@@ -399,7 +399,7 @@ export default StyleSheet.create({
 		width: 52,
 		height: 52,
 		borderRadius: 26,
-		backgroundColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
 		alignItems: 'center',
 		justifyContent: 'center',
 		shadowColor: '#000',
@@ -414,23 +414,23 @@ export default StyleSheet.create({
 	// ============================================================
 	sectionDivider: {
 		height: 1,
-		backgroundColor: '#F0F0F0',
+		backgroundColor: '#E5E7EB',
 		marginVertical: 4,
 	},
 	commentSectionTitle: {
 		fontSize: 16,
 		fontWeight: '600',
-		color: '#1f1f1f',
+		color: '#1F2937',
 	},
 	commentEmptyText: {
 		fontSize: 13,
-		color: '#c4c4c4',
+		color: '#9CA3AF',
 	},
 	commentItem: {
 		paddingBottom: 12,
 		paddingHorizontal: 8,
 		borderBottomWidth: 1,
-		borderBottomColor: '#F0F0F0',
+		borderBottomColor: '#E5E7EB',
 	},
 	commentHeaderRow: {
 		flexDirection: 'row',
@@ -440,16 +440,16 @@ export default StyleSheet.create({
 	commentAuthor: {
 		fontSize: 14,
 		fontWeight: '600',
-		color: '#1f1f1f',
+		color: '#1F2937',
 	},
 	commentDate: {
 		fontSize: 11,
 		fontWeight: '500',
-		color: '#C4C4C4',
+		color: '#9CA3AF',
 	},
 	commentContent: {
 		fontSize: 14,
-		color: '#505050',
+		color: '#6B7280',
 		marginTop: 4,
 		lineHeight: 20,
 	},
@@ -461,7 +461,7 @@ export default StyleSheet.create({
 	commentReplyBtn: {
 		fontSize: 12,
 		fontWeight: '600',
-		color: '#7fc77c',
+		color: '#7FC77C',
 	},
 	commentDeleteBtn: {
 		fontSize: 12,
@@ -473,7 +473,7 @@ export default StyleSheet.create({
 		marginTop: 10,
 		paddingLeft: 12,
 		borderLeftWidth: 2,
-		borderLeftColor: '#F0F0F0',
+		borderLeftColor: '#E5E7EB',
 	},
 	replyInputRow: {
 		flexDirection: 'row',
@@ -483,12 +483,12 @@ export default StyleSheet.create({
 	replyInput: {
 		flex: 1,
 		borderWidth: 1,
-		borderColor: '#E8E8E8',
+		borderColor: '#E5E7EB',
 		borderRadius: 6,
 		paddingHorizontal: 14,
 		paddingVertical: 10,
 		fontSize: 14,
-		color: '#1f1f1f',
+		color: '#1F2937',
 	},
 	commentInputRow: {
 		flexDirection: 'row',
@@ -498,21 +498,21 @@ export default StyleSheet.create({
 	commentInput: {
 		flex: 1,
 		borderWidth: 1,
-		borderColor: '#E8E8E8',
+		borderColor: '#E5E7EB',
 		borderRadius: 6,
 		paddingHorizontal: 14,
 		paddingVertical: 10,
 		fontSize: 14,
-		color: '#1f1f1f',
+		color: '#1F2937',
 	},
 	commentSubmitBtn: {
-		backgroundColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
 		borderRadius: 6,
 		paddingHorizontal: 16,
 		justifyContent: 'center',
 	},
 	commentSubmitBtnText: {
-		color: '#ffffff',
+		color: '#FFFFFF',
 		fontWeight: '500',
 		fontSize: 14,
 	},

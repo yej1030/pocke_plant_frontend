@@ -4,7 +4,7 @@ export default StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingTop: 20,
   },
@@ -13,7 +13,7 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 10,
-    color: '#333',
+    color: '#1F2937',
   },
 
 // 비밀번호 입력 행
@@ -21,7 +21,7 @@ passwordRow: {
   flexDirection: 'row',
   alignItems: 'center',
   borderWidth: 1,
-  borderColor: '#e1e1e1',
+  borderColor: '#E5E7EB',
   borderRadius: 4,
   marginBottom: 10,
   paddingHorizontal: 15,
@@ -32,7 +32,7 @@ passwordRow: {
 passwordInput: {
   flex: 1,
   fontSize: 15,
-  color: '#333',
+  color: '#1F2937',
 },
 
   // 비밀번호 보기 버튼
@@ -47,19 +47,19 @@ eyeIcon: {
   // 힌트 텍스트
   hint: {
     fontSize: 12,
-    color: '#999',
+    color: '#9CA3AF',
     marginBottom: 10,
   },
 
   // 에러 텍스트
   error: {
     fontSize: 12,
-    color: 'red',
+    color: '#EF4444',
     marginBottom: 10,
   },
 
   submitButton: {
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
     padding: 18,
     borderRadius: 5,
     alignItems: 'center',
@@ -67,7 +67,7 @@ eyeIcon: {
   },
 
   submitButtonText: {
-    color: '#fff',
+    color: '#FFFFFF',
     fontSize: 18,
     fontWeight: '700',
   },
@@ -79,7 +79,7 @@ eyeIcon: {
 
   linkText: {
     fontSize: 12,
-    color: '#888',
+    color: '#6B7280',
     textDecorationLine: 'underline',
   },
 

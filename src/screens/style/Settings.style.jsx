@@ -4,7 +4,7 @@ export default StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
 
   content: {
@@ -26,7 +26,7 @@ export default StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#E8F7EF', // 연한 초록 (앱 포인트 컬러 톤)
+    backgroundColor: '#E8F7EF',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -34,7 +34,7 @@ export default StyleSheet.create({
   profileAvatarText: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#7fc77c',
+    color: '#7FC77C',
   },
 
   profileTextWrap: {
@@ -44,26 +44,26 @@ export default StyleSheet.create({
   name: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#333',
+    color: '#1F2937',
   },
 
   email: {
     fontSize: 14,
-    color: '#8b8b8b',
+    color: '#6B7280',
   },
 
   groupTitle: {
     fontSize: 15,
     fontWeight: '500', 
-    color: '#868686',  
+    color: '#6B7280',  
     marginBottom: 6,
     marginLeft: 8,
   },
 
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#dddddd',
+    borderColor: '#E5E7EB',
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 14,
@@ -87,19 +87,19 @@ export default StyleSheet.create({
 
   divider: {
     height: 1,
-    backgroundColor: '#ececec',
+    backgroundColor: '#E5E7EB',
   },
 
   menuText: {
     fontSize: 15,
-    color: '#333',
+    color: '#1F2937',
     fontWeight: '400',
   },
 
   subText: {
     marginTop: 2,
     fontSize: 12,
-    color: '#999',
+    color: '#9CA3AF',
   },
 
   arrowIcon: {
@@ -111,16 +111,16 @@ export default StyleSheet.create({
   logoutButton: {
     height: 45,
     borderWidth: 1,
-    borderColor: '#d87b7b',
+    borderColor: '#D87B7B',
     borderRadius: 8,
-    backgroundColor: '#fff4f4',
+    backgroundColor: '#FFF4F4',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
   },
 
   logoutText: {
-    color: '#c25555',
+    color: '#C25555',
     fontSize: 16,
     fontWeight: '700',
   },
@@ -128,16 +128,16 @@ export default StyleSheet.create({
   deleteButton: {
     height: 45,
     borderWidth: 1,
-    borderColor: '#d87b7b',
+    borderColor: '#D87B7B',
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
   },
 
   deleteText: {
-    color: '#c25555',
+    color: '#C25555',
     fontSize: 16,
     fontWeight: '700',
   },

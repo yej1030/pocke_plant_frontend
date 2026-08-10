@@ -3,18 +3,18 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
 	background: {
 		flex: 1,
-		backgroundColor: '#fafafa',
+		backgroundColor: '#F8FAFC',
 	},
 
 	container: {
-		backgroundColor: '#fff',
+		backgroundColor: '#FFFFFF',
 		paddingHorizontal: 20,
 		paddingTop: 14,
 	},
 
 	labelMain: {
 		fontSize: 16,
-		color: '#222',
+		color: '#1F2937',
 		fontWeight: '600',
 	},
 
@@ -24,24 +24,24 @@ export default StyleSheet.create({
 	formLabel: {
 		fontSize: 15,
 		fontWeight: '500',
-		color: '#b0b0b0',
+		color: '#9CA3AF',
 		marginTop: 14,
 		marginBottom: 6,
 	},
 	formLabelOpt: {
 		fontSize: 12,
 		fontWeight: '400',
-		color: '#C4C4C4',
+		color: '#9CA3AF',
 	},
 
 	// 통일: 밑줄 → 테두리 박스 입력창
 	input: {
 		borderWidth: 1,
-		borderColor: '#e0e0e0',
+		borderColor: '#E5E7EB',
 		borderRadius: 10,
 		fontSize: 15,
-		color: '#222',
-		backgroundColor: '#fff',
+		color: '#1F2937',
+		backgroundColor: '#FFFFFF',
 		paddingHorizontal: 12,
 		paddingVertical: 10,
 	},
@@ -62,14 +62,14 @@ export default StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		borderWidth: 1,
-		borderColor: '#e0e0e0',
+		borderColor: '#E5E7EB',
 		borderRadius: 10,
 		paddingHorizontal: 12,
 		paddingVertical: 10,
 	},
 	dateText: {
 		fontSize: 15,
-		color: '#222',
+		color: '#1F2937',
 	},
 	dateArrowIcon: {
 		width: 18,
@@ -80,19 +80,19 @@ export default StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		borderColor: '#e0e0e0',
+		borderColor: '#E5E7EB',
 		borderRadius: 10,
 		paddingHorizontal: 12,
 	},
 	ageInput: {
 		flex: 1,
 		fontSize: 15,
-		color: '#222',
+		color: '#1F2937',
 		textAlign: 'center',
 	},
 	ageText: {
 		fontSize: 15,
-		color: '#222',
+		color: '#1F2937',
 	},
 
 	// ============================================================
@@ -109,7 +109,7 @@ export default StyleSheet.create({
 		width: 220,
 		height: 220,
 		borderRadius: 12,
-		backgroundColor: '#EFEFEF',
+		backgroundColor: '#E5E7EB',
 		resizeMode: 'cover',
 	},
 	photoRemoveBtn: {
@@ -128,16 +128,16 @@ export default StyleSheet.create({
 		height: 120,
 		borderRadius: 12,
 		borderWidth: 1,
-		borderColor: '#E8E8E8',
+		borderColor: '#E5E7EB',
 		borderStyle: 'dashed',
-		backgroundColor: '#FAFAFA',
+		backgroundColor: '#E5E7EB',
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
 	photoAddBoxText: {
 		fontSize: 12,
 		fontWeight: '600',
-		color: '#C4C4C4',
+		color: '#9CA3AF',
 		marginTop: 4,
 	},
 
@@ -151,23 +151,23 @@ export default StyleSheet.create({
 	},
 	chip: {
     borderWidth: 1,
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     borderRadius: 14,
     paddingHorizontal: 12,
     paddingVertical: 4,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
 	},
 	chipActive: {
-		backgroundColor: '#7fc77c',
-		borderColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
+		borderColor: '#7FC77C',
 	},
 	chipText: {
-		color: '#7fc77c',
+		color: '#7FC77C',
 		fontWeight: '500',
 		fontSize: 14,
 	},
 	chipTextActive: {
-		color: '#fff',
+		color: '#FFFFFF',
 		fontWeight: '600',
 	},
 
@@ -178,19 +178,19 @@ export default StyleSheet.create({
 	aiGuide: {
 		marginTop: 10,
 		fontSize: 13,
-		color: '#7fc77c',
+		color: '#7FC77C',
 	},
 
 	analyzeButton: {
 		marginTop: 10,
 		borderWidth: 1,
-		borderColor: '#7fc77c',
+		borderColor: '#7FC77C',
 		borderRadius: 10,
 		paddingVertical: 12,
 		alignItems: 'center',
 	},
 	analyzeButtonText: {
-		color: '#7fc77c',
+		color: '#7FC77C',
 		fontSize: 14,
 		fontWeight: '600',
 	},
@@ -216,7 +216,7 @@ export default StyleSheet.create({
 	},
 	aiRetry: {
 		fontSize: 13,
-		color: '#777777',
+		color: '#6B7280',
 		fontWeight: '600',
 	},
 	aiResultDesc: {
@@ -227,9 +227,9 @@ export default StyleSheet.create({
 
 	suggestionList: {
 		marginTop: 6,
-		backgroundColor: '#fff',
+		backgroundColor: '#FFFFFF',
 		borderWidth: 1,
-		borderColor: '#e6e6e6',
+		borderColor: '#E5E7EB',
 		borderRadius: 8,
 		overflow: 'hidden',
 		maxHeight: 200,
@@ -238,11 +238,11 @@ export default StyleSheet.create({
 		paddingVertical: 10,
 		paddingHorizontal: 12,
 		borderBottomWidth: 1,
-		borderBottomColor: '#f1f1f1',
+		borderBottomColor: '#E5E7EB',
 	},
 	suggestionText: {
 		fontSize: 15,
-		color: '#333',
+		color: '#1F2937',
 	},
 
 	characterSelector: {
@@ -260,7 +260,7 @@ export default StyleSheet.create({
 	},
 	arrowText: {
 		fontSize: 18,
-		color: '#444',
+		color: '#6B7280',
 		fontWeight: '500',
 	},
 	characterImage: {
@@ -273,7 +273,7 @@ export default StyleSheet.create({
 		marginTop: 8,
 		fontSize: 15,
 		fontWeight: '600',
-		color: '#333',
+		color: '#1F2937',
 	},
 	dotContainer: {
 		flexDirection: 'row',
@@ -284,23 +284,23 @@ export default StyleSheet.create({
 		width: 8,
 		height: 8,
 		borderRadius: 4,
-		backgroundColor: '#D9D9D9',
+		backgroundColor: '#E5E7EB',
 		marginHorizontal: 4,
 	},
 	activeDot: {
-		backgroundColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
 	},
 
 	qrButton: {
 		borderWidth: 1,
-		borderColor: '#7fc77c',
+		borderColor: '#7FC77C',
 		borderRadius: 10,
 		paddingVertical: 10,
 		alignItems: 'center',
 		backgroundColor: '#F7FCF8',
 	},
 	qrButtonText: {
-		color: '#7fc77c',
+		color: '#7FC77C',
 		fontSize: 14,
 		fontWeight: '600',
 	},
@@ -315,7 +315,7 @@ export default StyleSheet.create({
 	},
 	macAddressText: {
 		fontSize: 14,
-		color: '#555',
+		color: '#6B7280',
 		flex: 1,
 	},
 	connectedBadge: {
