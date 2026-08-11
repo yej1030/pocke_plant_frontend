@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
 
   content: {
@@ -25,11 +25,11 @@ export default StyleSheet.create({
     flex: 1,
     height: 4,
     borderRadius: 999,
-    backgroundColor: '#E6E6E6',
+    backgroundColor: '#E5E7EB',
   },
 
   progressBarActive: {
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
   },
 
   /* STEP 1 — 펄스 스캔 */
@@ -46,7 +46,7 @@ export default StyleSheet.create({
     height: 160,
     borderRadius: 80,
     borderWidth: 1,
-    borderColor: '#EFEFEF',
+    borderColor: '#E5E7EB',
   },
 
   pulseMiddle: {
@@ -55,7 +55,7 @@ export default StyleSheet.create({
     height: 120,
     borderRadius: 60,
     borderWidth: 1,
-    borderColor: '#EAEAEA',
+    borderColor: '#E5E7EB',
   },
 
   pulseInner: {
@@ -64,7 +64,7 @@ export default StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 1.5,
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
   },
 
   iconCircle: {
@@ -73,7 +73,7 @@ export default StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     shadowColor: '#000',
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -85,27 +85,19 @@ export default StyleSheet.create({
     height: 36,
   },
 
-  title_1: {
-    marginTop: 30,
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#333',
-    textAlign: 'center',
-  },
-
   /* 공통 */
   title: {
     marginTop: 20,
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: '700',
-    color: '#333',
+    color: '#1F2937',
     textAlign: 'center',
   },
 
   subtitle: {
     marginTop: 10,
     fontSize: 14,
-    color: '#999',
+    color: '#9CA3AF',
     lineHeight: 20,
     textAlign: 'center',
   },
@@ -135,7 +127,7 @@ export default StyleSheet.create({
   },
 
   progressBarOverlayActive: {
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
   },
 
   /* 스캔 가이드 프레임 (모서리) */
@@ -153,7 +145,7 @@ export default StyleSheet.create({
     position: 'absolute',
     width: 28,
     height: 28,
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     borderWidth: 3,
   },
 
@@ -203,14 +195,14 @@ export default StyleSheet.create({
   qrTitle: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#fff',
+    color: '#FFFFFF',
     textAlign: 'center',
   },
 
   qrHint: {
     marginTop: 8,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#ffffffbf',
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -226,7 +218,7 @@ export default StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 1.5,
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
@@ -241,12 +233,12 @@ export default StyleSheet.create({
     marginTop: 28,
     width: '100%',
     borderWidth: 1,
-    borderColor: '#E4E4E4',
+    borderColor: '#E5E7EB',
     borderRadius: 12,
     padding: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     shadowColor: '#000',
     shadowOpacity: 0.04,
     shadowRadius: 6,
@@ -254,7 +246,7 @@ export default StyleSheet.create({
   },
 
   deviceCardSelected: {
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     backgroundColor: '#F6FFF9',
   },
 
@@ -271,13 +263,13 @@ export default StyleSheet.create({
   deviceName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#1F2937',
   },
 
   deviceIp: {
     marginTop: 3,
     fontSize: 12,
-    color: '#999',
+    color: '#9CA3AF',
   },
 
   radio: {
@@ -285,7 +277,7 @@ export default StyleSheet.create({
     height: 18,
     borderRadius: 9,
     borderWidth: 2,
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -294,7 +286,7 @@ export default StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
   },
 
   /* STEP 3 — Wi-Fi 입력 */
@@ -311,7 +303,7 @@ export default StyleSheet.create({
     marginTop: 10,
     marginBottom: 6,
     fontSize: 14,
-    color: '#999',
+    color: '#9CA3AF',
     lineHeight: 20,
     textAlign: 'center',
   },
@@ -321,27 +313,27 @@ export default StyleSheet.create({
     marginBottom: 4,
     paddingHorizontal: 12,
     paddingVertical: 5,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: '#E5E7EB',
     borderRadius: 20,
   },
 
   macText: {
     fontSize: 12,
-    color: '#666',
-    fontWeight: '500',
+    color: '#6B7280',
+    fontWeight: '600',
   },
 
   input: {
     width: '100%',
     height: 50,
     borderWidth: 1,
-    borderColor: '#E2E2E2',
+    borderColor: '#E5E7EB',
     borderRadius: 10,
     paddingHorizontal: 15,
     marginTop: 12,
     fontSize: 15,
-    color: '#333',
-    backgroundColor: '#FAFAFA',
+    color: '#1F2937',
+    backgroundColor: '#FFFFFF',
   },
 
   noticeBox: {
@@ -358,7 +350,7 @@ export default StyleSheet.create({
   },
 
   noticeIcon: {
-    fontSize: 13,
+    fontSize: 12,
     marginTop: 1,
   },
 
@@ -381,7 +373,7 @@ export default StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 1.5,
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F6FFF9',
@@ -389,8 +381,8 @@ export default StyleSheet.create({
 
   loadingText: {
     marginTop: 20,
-    fontSize: 15,
-    color: '#555',
+    fontSize: 14,
+    color: '#6B7280',
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -406,7 +398,7 @@ export default StyleSheet.create({
     height: 80,
     borderRadius: 40,
     borderWidth: 1.5,
-    borderColor: '#7fc77c',
+    borderColor: '#7FC77C',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 30,
@@ -415,7 +407,7 @@ export default StyleSheet.create({
 
   doneIcon: {
     fontSize: 34,
-    color: '#7fc77c',
+    color: '#7FC77C',
     fontWeight: '700',
   },
 
@@ -423,7 +415,7 @@ export default StyleSheet.create({
     width: '100%',
     marginTop: 28,
     borderWidth: 1,
-    borderColor: '#E4E4E4',
+    borderColor: '#E5E7EB',
     borderRadius: 12,
     overflow: 'hidden',
   },
@@ -434,7 +426,7 @@ export default StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#EFEFEF',
+    borderBottomColor: '#E5E7EB',
   },
 
   summaryRowLast: {
@@ -443,12 +435,12 @@ export default StyleSheet.create({
 
   summaryLabel: {
     fontSize: 14,
-    color: '#999',
+    color: '#9CA3AF',
   },
 
   summaryValue: {
     fontSize: 14,
-    color: '#333',
+    color: '#1F2937',
     fontWeight: '600',
   },
 

@@ -250,23 +250,10 @@ const styles = StyleSheet.create({
     borderColor: '#E3E7E4',
   },
   actionButtonText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '700',
   },
   actionButtonPrimaryText: {
     color: '#fff',
-  },
-  primaryButton: {
-    width: '100%',
-    minHeight: 42,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 14,
-  },
-  primaryButtonText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '700',
   },
 });

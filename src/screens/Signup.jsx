@@ -353,6 +353,7 @@ export default function SignUp({ navigation }) {
           <TextInput
             style={styles.inputFlex}
             placeholder="아이디 (이메일)"
+            placeholderTextColor="#aaa"
             value={email}
             onChangeText={text => {
               setEmail(text);
@@ -381,6 +382,7 @@ export default function SignUp({ navigation }) {
           <TextInput
             style={styles.inputFlex}
             placeholder="인증번호"
+            placeholderTextColor="#aaa"
             value={code}
             onChangeText={text => {
               setCode(text);
@@ -403,6 +405,7 @@ export default function SignUp({ navigation }) {
           <TextInput
             style={styles.passwordInput}
             placeholder="비밀번호"
+            placeholderTextColor="#aaa"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
@@ -443,6 +446,7 @@ export default function SignUp({ navigation }) {
           <TextInput
             style={styles.passwordInput}
             placeholder="비밀번호 확인"
+            placeholderTextColor="#aaa"
             value={passwordCheck}
             onChangeText={setPasswordCheck}
             secureTextEntry={!showPasswordCheck}
@@ -477,6 +481,7 @@ export default function SignUp({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder="이름"
+          placeholderTextColor="#aaa"
           value={name}
           onChangeText={setName}
         />

@@ -4,7 +4,7 @@ export default StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
 
   content: {
@@ -26,7 +26,7 @@ export default StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#E8F7EF', // 연한 초록 (앱 포인트 컬러 톤)
+    backgroundColor: '#E8F7EF',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -34,7 +34,7 @@ export default StyleSheet.create({
   profileAvatarText: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#7fc77c',
+    color: '#7FC77C',
   },
 
   profileTextWrap: {
@@ -42,29 +42,28 @@ export default StyleSheet.create({
   },
 
   name: {
-    fontSize: 19,
+    fontSize: 18,
     fontWeight: '700',
-    color: '#111',
+    color: '#1F2937',
   },
 
   email: {
-    marginTop: 2,
     fontSize: 14,
-    color: '#8b8b8b',
+    color: '#6B7280',
   },
 
   groupTitle: {
-    fontSize: 14,
-    fontWeight: '700', // 500 → 700, 섹션 제목이 더 잘 보이도록
-    color: '#7a7a7a',  // 999 → 살짝 진하게
+    fontSize: 15,
+    fontWeight: '500', 
+    color: '#6B7280',  
     marginBottom: 6,
     marginLeft: 8,
   },
 
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#dddddd',
+    borderColor: '#E5E7EB',
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 14,
@@ -75,7 +74,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
   },
 
   switchRow: {
@@ -88,19 +87,19 @@ export default StyleSheet.create({
 
   divider: {
     height: 1,
-    backgroundColor: '#ececec',
+    backgroundColor: '#E5E7EB',
   },
 
   menuText: {
-    fontSize: 16,
-    color: '#222',
-    fontWeight: '500',
+    fontSize: 15,
+    color: '#1F2937',
+    fontWeight: '400',
   },
 
   subText: {
     marginTop: 2,
-    fontSize: 13,
-    color: '#999',
+    fontSize: 12,
+    color: '#9CA3AF',
   },
 
   arrowIcon: {
@@ -112,34 +111,34 @@ export default StyleSheet.create({
   logoutButton: {
     height: 45,
     borderWidth: 1,
-    borderColor: '#d87b7b',
+    borderColor: '#D87B7B',
     borderRadius: 8,
-    backgroundColor: '#fff4f4',
+    backgroundColor: '#FFF4F4',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
   },
 
   logoutText: {
-    color: '#c25555',
-    fontSize: 18,
+    color: '#C25555',
+    fontSize: 16,
     fontWeight: '700',
   },
 
   deleteButton: {
     height: 45,
     borderWidth: 1,
-    borderColor: '#d87b7b',
+    borderColor: '#D87B7B',
     borderRadius: 8,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 12,
+    marginTop: 10,
   },
 
   deleteText: {
-    color: '#c25555',
-    fontSize: 18,
+    color: '#C25555',
+    fontSize: 16,
     fontWeight: '700',
   },
 

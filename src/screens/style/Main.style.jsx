@@ -5,7 +5,7 @@ export default StyleSheet.create({
   // 전체 컨테이너
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 10,
     paddingTop: 20,
   },
@@ -17,7 +17,7 @@ export default StyleSheet.create({
 		paddingVertical: 12,
 		paddingHorizontal: 14,
 		borderRadius: 18,
-		backgroundColor: '#fff',
+		backgroundColor: '#FFFFFF',
 	},
 
 	plantImage: {
@@ -28,7 +28,7 @@ export default StyleSheet.create({
 		borderRadius: 32,
 		backgroundColor: '#F2FBF6',
 		borderWidth: 1,
-		borderColor: '#dff0e6',
+		borderColor: '#DFF0E6',
 	},
 	plantTextWrap: {
 		flex: 1,
@@ -37,13 +37,13 @@ export default StyleSheet.create({
 	plantName: {
 		fontSize: 16,
 		fontWeight: '700',
-		color: '#1f1f1f',
+		color: '#1F2937',
 		marginBottom: 6,
 	},
 	plantMeta: {
 		fontSize: 14,
-		color: '#8f8f8f',
-		fontWeight: '500',
+		color: '#6B7280',
+		fontWeight: '400',
 	},
 	settingsButton: {
 		width: 34,
@@ -81,9 +81,9 @@ export default StyleSheet.create({
 	},
 
 	swipeActionText: {
-		color: '#000000',
-		fontSize: 13,
-		fontWeight: '700',
+		color: '#1F2937',
+		fontSize: 14,
+		fontWeight: '600',
 	},
 
 	// 새 식물 등록 카드 - 다른 카드와 통일감
@@ -94,9 +94,9 @@ export default StyleSheet.create({
 		paddingHorizontal: 16,
 		borderRadius: 18,
 		borderWidth: 1,
-		borderColor: '#EFEFEF',
+		borderColor: '#E5E7EB',
 		borderStyle: 'broken',
-		backgroundColor: '#ffffff',
+		backgroundColor: '#FFFFFF',
 		marginHorizontal: 10,
 		marginTop: 8,
 	},
@@ -114,13 +114,13 @@ export default StyleSheet.create({
 	addPlantIcon: {
 		fontSize: 16,
 		fontWeight: '700',
-		color: '#b1deb5',
+		color: '#B1DEB5',
 	},
 
 	addPlantText: {
-		fontSize: 15,
-		fontWeight: '600',
-		color: '#878787',
+		fontSize: 16,
+		fontWeight: '500',
+		color: '#9CA3AF',
 	},
 
 });

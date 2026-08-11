@@ -13,7 +13,7 @@ import {
 	launchCamera,
 	launchImageLibrary,
 } from 'react-native-image-picker';
-import { IconPhoto, IconX, IconPlus } from '@tabler/icons-react-native';
+import { IconCameraPlus, IconX } from '@tabler/icons-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Header from '../components/Header';
@@ -141,10 +141,8 @@ export default function BoardWrite({ navigation, route }) {
 
 		const postData = {
 			id: editingPost?.id ?? String(Date.now()),
-
 			userId: editingPost?.userId ?? userId,
 			writer: editingPost?.writer ?? nickname,
-
 			category,
 			title: title.trim(),
 			content: content.trim(),
@@ -157,7 +155,7 @@ export default function BoardWrite({ navigation, route }) {
 
 		if (editingPost) {
 			updatePost(postData);
-			navigation.goBack(); // 수정: 원래 있던 상세화면으로 복귀 (스택에 쌓이지 않음)
+			navigation.goBack();
 		} else {
 			addPost(postData);
 			navigation.replace('BoardDetail', {
@@ -184,102 +182,88 @@ export default function BoardWrite({ navigation, route }) {
 					contentContainerStyle={styles.writeContent}
 					keyboardShouldPersistTaps="handled"
 				>
-					<View style={styles.writeRow}>
-						<Text style={styles.writeLabel}>제목</Text>
-						<View style={styles.writeContentWrap}>
-							<TextInput
-								value={title}
-								onChangeText={setTitle}
-								placeholder="제목을 입력하세요"
-								placeholderTextColor="#B8B8B8"
-								style={styles.writeInput}
-							/>
-						</View>
-					</View>
+					{/* 제목 */}
+					<Text style={styles.writeLabell}>제목</Text>
+					<TextInput
+						value={title}
+						onChangeText={setTitle}
+						placeholder="제목을 입력하세요"
+						placeholderTextColor="#B8B8B8"
+						style={styles.writeInput}
+					/>
 
-					<View style={styles.writeRow}>
-						<Text style={styles.writeLabel}>내용</Text>
-						<View style={styles.writeContentWrap}>
-							<TextInput
-								value={content}
-								onChangeText={setContent}
-								placeholder="내용을 입력하세요"
-								placeholderTextColor="#B8B8B8"
-								style={[styles.writeInput, styles.writeTextarea]}
-								multiline
-								textAlignVertical="top"
-							/>
-						</View>
-					</View>
+					{/* 내용 */}
+					<Text style={styles.writeLabel}>내용</Text>
+					<TextInput
+						value={content}
+						onChangeText={setContent}
+						placeholder="내용을 입력하세요"
+						placeholderTextColor="#B8B8B8"
+						style={[styles.writeInput, styles.writeTextarea]}
+						multiline
+						textAlignVertical="top"
+					/>
 
-					<View style={styles.writeRow}>
-						<Text style={styles.writeLabel}>카테고리</Text>
-						<View style={styles.writeContentWrap}>
-							<View style={styles.categoryWrap}>
-								{WRITE_CATEGORIES.map((item) => {
-									const isActive = category === item.key;
+					{/* 카테고리 */}
+					<Text style={styles.writeLabel}>카테고리</Text>
+					<View style={styles.categoryWrap}>
+						{WRITE_CATEGORIES.map((item) => {
+							const isActive = category === item.key;
 
-									return (
-										<TouchableOpacity
-											key={item.key}
-											style={[
-												styles.writeCategoryPill,
-												isActive && styles.writeCategoryPillActive,
-											]}
-											activeOpacity={0.85}
-											onPress={() => setCategory(item.key)}
-										>
-											<Text
-												style={[
-													styles.writeCategoryText,
-													isActive && styles.writeCategoryTextActive,
-												]}
-											>
-												{item.label}
-											</Text>
-										</TouchableOpacity>
-									);
-								})}
-							</View>
-						</View>
-					</View>
-
-					<View style={styles.writeRow}>
-						<Text style={styles.writeLabel}>사진</Text>
-						<View style={styles.writeContentWrap}>
-							<ScrollView
-								horizontal
-								showsHorizontalScrollIndicator={false}
-								contentContainerStyle={styles.imageListContent}
-							>
-								{imageUris.map((uri, index) => (
-									<View key={uri + index} style={styles.imageThumbWrap}>
-										<Image source={{ uri }} style={styles.imageThumb} />
-
-										<TouchableOpacity
-											style={styles.imageRemoveBtn}
-											onPress={() => handleRemoveImage(index)}
-											activeOpacity={0.8}
-										>
-											<IconX size={12} color="#FFFFFF" strokeWidth={2.5} />
-										</TouchableOpacity>
-									</View>
-								))}
-
-								{imageUris.length < MAX_IMAGES && (
-									<TouchableOpacity
-										style={styles.imageAddBox}
-										onPress={handleAddImage}
-										activeOpacity={0.85}
+							return (
+								<TouchableOpacity
+									key={item.key}
+									style={[
+										styles.writeCategoryPill,
+										isActive && styles.writeCategoryPillActive,
+									]}
+									activeOpacity={0.85}
+									onPress={() => setCategory(item.key)}
+								>
+									<Text
+										style={[
+											styles.writeCategoryText,
+											isActive && styles.writeCategoryTextActive,
+										]}
 									>
-										<IconPlus size={22} color="#C4C4C4" strokeWidth={1.5} />
-										<Text style={styles.imageAddBoxText}>
-											{imageUris.length}/{MAX_IMAGES}
-										</Text>
-									</TouchableOpacity>
-								)}
-							</ScrollView>
-						</View>
+										{item.label}
+									</Text>
+								</TouchableOpacity>
+							);
+						})}
+					</View>
+
+					{/* 사진 — 가로 스크롤 대신 줄바꿈 그리드로 변경 (최대 5장) */}
+					<Text style={styles.writeLabel}>
+						사진 <Text style={styles.writeLabelOpt}>선택, 최대 {MAX_IMAGES}장</Text>
+					</Text>
+					<View style={styles.photoRow}>
+						{imageUris.map((uri, index) => (
+							<View key={uri + index} style={styles.photoThumbWrap}>
+								<Image source={{ uri }} style={styles.photoThumb} />
+
+								<TouchableOpacity
+									style={styles.photoRemoveBtn}
+									onPress={() => handleRemoveImage(index)}
+									activeOpacity={0.8}
+								>
+									<IconX size={12} color="#FFFFFF" strokeWidth={2.5} />
+								</TouchableOpacity>
+							</View>
+						))}
+
+						{imageUris.length < MAX_IMAGES && (
+							<TouchableOpacity
+								style={styles.photoAddBox}
+								onPress={handleAddImage}
+								activeOpacity={0.85}
+							>
+								<IconCameraPlus size={22} color="#7fc77c" strokeWidth={1.5} />
+								<Text style={styles.photoAddBoxText}>
+									{imageUris.length}/{MAX_IMAGES}
+								</Text>
+							</TouchableOpacity>
+						)}
 					</View>
 
 					<TouchableOpacity

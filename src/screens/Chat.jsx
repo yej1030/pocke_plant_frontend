@@ -92,9 +92,6 @@ export default function Chat({ navigation, route }) {
   const [message, setMessage] =
     useState('');
 
-  const [inputHeight, setInputHeight] =
-    useState(52);
-
   const [messages, setMessages] =
     useState(initialMessages);
 
@@ -135,12 +132,12 @@ export default function Chat({ navigation, route }) {
       context: {
         plant: plant
           ? {
-              id: plant.id ?? null,
-              name: plant.name ?? null,
-              imageUri: plant.imageUri ?? null,
-              personality:
-                plant.personality ?? null,
-            }
+            id: plant.id ?? null,
+            name: plant.name ?? null,
+            imageUri: plant.imageUri ?? null,
+            personality:
+              plant.personality ?? null,
+          }
           : null,
       },
     });
@@ -188,7 +185,7 @@ export default function Chat({ navigation, route }) {
           console.log(
             '채팅방 생성 실패:',
             error.response?.data ||
-              error.message
+            error.message
           );
 
           setMessages(current => [
@@ -529,32 +526,11 @@ export default function Chat({ navigation, route }) {
                   : '말걸기'
               }
               placeholderTextColor="#aaa"
-              multiline
-              editable={
-                !isRoomCreating &&
-                !!roomId
-              }
+              editable={!isRoomCreating && !!roomId}
               blurOnSubmit={false}
-              textAlignVertical="top"
-              onContentSizeChange={event => {
-                const nextHeight =
-                  Math.max(
-                    52,
-                    Math.min(
-                      120,
-                      event.nativeEvent
-                        .contentSize.height
-                    )
-                  );
-
-                setInputHeight(
-                  nextHeight
-                );
-              }}
-              style={[
-                styles.input,
-                { height: inputHeight },
-              ]}
+              returnKeyType="send"
+              onSubmitEditing={() => sendMessage(message)}
+              style={styles.input}
             />
 
             <TouchableOpacity

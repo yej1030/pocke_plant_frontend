@@ -9,7 +9,7 @@ export default StyleSheet.create({
 
   // 전체 컨테이너
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -20,9 +20,9 @@ export default StyleSheet.create({
 
   // 앱 이름
   title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#333',
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#1F2937',
     marginTop: 60,
   },
 
@@ -64,40 +64,40 @@ export default StyleSheet.create({
     marginRight: 8,
   },
   kakaoText: {
-    fontSize: 17,
-    color: '#381E1F',
+    fontSize: 16,
+    color: '#1F2937',
     fontWeight: '700',
   },
 
   // 신규 회원가입 버튼
   signupButton: {
     width: '100%',
-    backgroundColor: '#7fc77c',
+    backgroundColor: '#7FC77C',
     paddingVertical: 14,
     borderRadius: 4,
     alignItems: 'center',
     marginBottom: 10,
   },
   signupText: {
-    fontSize: 17,
-    color: '#fff',
-    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: '700',
   },
 
   // 기존 유저 로그인 버튼
   loginButton: {
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 13,
     borderRadius: 4,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#d7d7d7',
+    borderColor: '#E5E7EB',
   },
   loginText: {
-    fontSize: 17,
-    color: '#333',
-    fontWeight: '600',
+    fontSize: 16,
+    color: '#1F2937',
+    fontWeight: '700',
   },
 
 });

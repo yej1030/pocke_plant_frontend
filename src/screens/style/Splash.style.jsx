@@ -5,7 +5,7 @@ export default StyleSheet.create({
   // 전체 컨테이너
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -22,7 +22,7 @@ export default StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     marginTop: 40,
-    color: '#333',
+    color: '#1F2937',
   },
 
 });
