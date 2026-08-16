@@ -25,9 +25,10 @@ import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/PlantRegister.style';
 import { PlantsContext } from '../context/PlantsContext';
 import {
-	registerPlant,
-	updatePlantApi,
-	identifyPlantApi,
+  registerPlant,
+  updatePlantApi,
+  identifyPlantApi,
+  uploadImageApi,
 } from '../api/api';
 
 const personalityList = [
@@ -171,65 +172,104 @@ export default function PlantRegister({ navigation, route }) {
 		setFilteredSpecies(matches);
 	}, [species]);
 
-	const handleSubmit = async () => {
-		const missing = [];
-		if (!name || name.trim() === '') missing.push('이름');
-		if (!species || species.trim() === '') missing.push('종');
+const handleSubmit = async () => {
+  const missing = [];
 
-		if (missing.length > 0) {
-			showAlert({
-				title: '필수 입력',
-				message: `${missing.join(' 및 ')}을(를) 입력해주세요.`,
-				variant: 'warning',
-			});
-			return;
-		}
+  if (!name || name.trim() === '') {
+    missing.push('이름');
+  }
 
-		try {
-			const plantData = {
-				name: name || '',
-				species: species || '',
-				adoptDate: adoptDate ? adoptDate.toISOString().slice(0, 10) : '',
-				age: age ? Number(age) : null,
-				personality: customPersonality || selectedPersonality,
-				imageUri: imageUri || '',
-				character_id: selectedCharacter,
-				macAddress: macAddress || '',
-			};
+  if (!species || species.trim() === '') {
+    missing.push('종');
+  }
 
-			let response;
-			if (editingId) {
-				response = await updatePlantApi(editingId, plantData);
-			} else {
-				response = await registerPlant(plantData);
-			}
+  if (missing.length > 0) {
+    showAlert({
+      title: '필수 입력',
+      message:
+        `${missing.join(' 및 ')}을(를) 입력해주세요.`,
+      variant: 'warning',
+    });
 
-			try {
-				if (editingId) {
-					updatePlant(editingId, response || plantData);
-				} else {
-					addPlant(response || plantData);
-				}
-			} catch (e) {
-				console.log('Context update failed:', e.message);
-			}
+    return;
+  }
 
-			showAlert({
-				title: '성공',
-				message: editingId ? '식물 정보가 수정되었습니다.' : '식물이 등록되었습니다.',
-				buttonText: '확인',
-				onPress: () => navigation.replace('Main'),
-				variant: 'success',
-			});
-		} catch (error) {
-			console.log('식물 등록 실패:', error.response?.data);
-			showAlert({
-				title: '실패',
-				message: error.response?.data?.message || '식물 등록에 실패했습니다.',
-				variant: 'error',
-			});
-		}
-	};
+  try {
+    const savedImageUri =
+      imageUri
+        ? await uploadImageApi(imageUri)
+        : null;
+
+    const plantData = {
+      name: name.trim(),
+      species: species.trim(),
+      adoptDate: adoptDate
+        ? adoptDate
+            .toISOString()
+            .slice(0, 10)
+        : null,
+      age: age
+        ? Number(age)
+        : null,
+      personality:
+        customPersonality.trim() ||
+        selectedPersonality,
+      imageUri: savedImageUri,
+      character_id:
+        selectedCharacter,
+      macAddress:
+        macAddress.trim() || null,
+    };
+
+    let savedPlant;
+
+    if (editingId) {
+      savedPlant =
+        await updatePlantApi(
+          editingId,
+          plantData
+        );
+
+      updatePlant(
+        editingId,
+        savedPlant
+      );
+    } else {
+      savedPlant =
+        await registerPlant(
+          plantData
+        );
+
+      addPlant(savedPlant);
+    }
+
+    showAlert({
+      title: '성공',
+      message: editingId
+        ? '식물 정보가 수정되었습니다.'
+        : '식물이 등록되었습니다.',
+      buttonText: '확인',
+      variant: 'success',
+      onPress: () =>
+        navigation.replace('Main'),
+    });
+  } catch (error) {
+    console.log(
+      '식물 저장 실패:',
+      error.response?.data ||
+      error.message
+    );
+
+    showAlert({
+      title: '실패',
+      message:
+        error.response?.data?.message ||
+        error.response?.data ||
+        '식물 저장에 실패했습니다.',
+      variant: 'error',
+    });
+  }
+};
 
 	useEffect(() => {
 		if (route?.params?.plant) {

@@ -1,298 +1,620 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, {
+  useMemo,
+  useState,
+} from 'react';
+
 import {
-	View,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	Image,
-	ScrollView,
-	KeyboardAvoidingView,
-	Platform,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
+
 import {
-	launchCamera,
-	launchImageLibrary,
+  launchCamera,
+  launchImageLibrary,
 } from 'react-native-image-picker';
-import { IconCameraPlus, IconX } from '@tabler/icons-react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {
+  IconCameraPlus,
+  IconX,
+} from '@tabler/icons-react-native';
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/Board.style';
-import { useBoard } from '../context/BoardContext';
-import { WRITE_CATEGORIES } from './boardUtils';
+
+import {
+  useBoard,
+} from '../context/BoardContext';
+
+import {
+  WRITE_CATEGORIES,
+} from './boardUtils';
+
+import {
+  uploadImageApi,
+} from '../api/api';
 
 const MAX_IMAGES = 5;
 
-export default function BoardWrite({ navigation, route }) {
-	const { addPost, updatePost } = useBoard();
-	const { alertConfig, showAlert, closeAlert } = useCustomAlert();
+export default function BoardWrite({
+  navigation,
+  route,
+}) {
+  const {
+    addPost,
+    updatePost,
+  } = useBoard();
 
-	const editingPost = route?.params?.post ?? null;
+  const {
+    alertConfig,
+    showAlert,
+    closeAlert,
+  } = useCustomAlert();
 
-	const initialCategory = useMemo(() => {
-		const matched = WRITE_CATEGORIES.find(
-			(category) =>
-				category.key ===
-				(editingPost?.category ?? route?.params?.category)
-		);
-		return matched?.key ?? 'free';
-	}, [route, editingPost]);
+  const editingPost =
+    route?.params?.post || null;
 
-	const [category, setCategory] = useState(initialCategory);
-	const [title, setTitle] = useState(editingPost?.title ?? '');
-	const [content, setContent] = useState(editingPost?.content ?? '');
+  const initialCategory =
+    useMemo(() => {
+      const target =
+        editingPost?.category ||
+        route?.params?.category;
 
-	const [imageUris, setImageUris] = useState(() => {
-		if (editingPost?.imageUris?.length > 0) return editingPost.imageUris;
-		if (editingPost?.imageUri) return [editingPost.imageUri];
-		return [];
-	});
+      const matched =
+        WRITE_CATEGORIES.find(
+          category =>
+            category.key ===
+            target,
+        );
 
-	const [userId, setUserId] = useState('');
-	const [nickname, setNickname] = useState('');
+      return matched?.key || 'free';
+    }, [
+      editingPost,
+      route?.params?.category,
+    ]);
 
-	useEffect(() => {
-		const loadUser = async () => {
-			const id = await AsyncStorage.getItem('userId');
-			const name = await AsyncStorage.getItem('nickname');
+  const [
+    category,
+    setCategory,
+  ] = useState(initialCategory);
 
-			setUserId(id || '');
-			setNickname(name || '');
-		};
+  const [
+    title,
+    setTitle,
+  ] = useState(
+    editingPost?.title || '',
+  );
 
-		loadUser();
-	}, []);
+  const [
+    content,
+    setContent,
+  ] = useState(
+    editingPost?.content || '',
+  );
 
-	const handleAddImage = () => {
-		if (imageUris.length >= MAX_IMAGES) {
-			showAlert({
-				title: '최대 개수 초과',
-				message: `사진은 최대 ${MAX_IMAGES}장까지 첨부할 수 있어요.`,
-				variant: 'warning',
-			});
-			return;
-		}
+  const [
+    imageUris,
+    setImageUris,
+  ] = useState(() => {
+    if (
+      editingPost?.imageUris
+        ?.length > 0
+    ) {
+      return editingPost.imageUris;
+    }
 
-		const remaining = MAX_IMAGES - imageUris.length;
+    if (editingPost?.imageUri) {
+      return [
+        editingPost.imageUri,
+      ];
+    }
 
-		showAlert({
-			title: '이미지 선택',
-			message: '이미지 선택 방법을 골라주세요.',
-			actions: [
-				{
-					text: '카메라로 촬영',
-					kind: 'primary',
-					onPress: () => {
-						launchCamera(
-							{ mediaType: 'photo', cameraType: 'back' },
-							(res) => {
-								if (res.didCancel || res.errorCode) return;
-								if (res.assets?.length > 0) {
-									setImageUris((prev) => [...prev, res.assets[0].uri]);
-								}
-							}
-						);
-					},
-				},
-				{
-					text: '갤러리에서 선택',
-					kind: 'primary',
-					onPress: () => {
-						launchImageLibrary(
-							{ mediaType: 'photo', selectionLimit: remaining },
-							(res) => {
-								if (res.didCancel || res.errorCode) return;
-								if (res.assets?.length > 0) {
-									const newUris = res.assets.map((asset) => asset.uri);
-									setImageUris((prev) =>
-										[...prev, ...newUris].slice(0, MAX_IMAGES)
-									);
-								}
-							}
-						);
-					},
-				},
-				{ text: '취소', kind: 'cancel' },
-			],
-		});
-	};
+    return [];
+  });
 
-	const handleRemoveImage = (index) => {
-		setImageUris((prev) => prev.filter((_, i) => i !== index));
-	};
+  const [
+    isSaving,
+    setIsSaving,
+  ] = useState(false);
 
-	const handleSubmit = () => {
-		const missing = [];
-		if (!title || title.trim() === '') missing.push('제목');
-		if (!content || content.trim() === '') missing.push('내용');
-		if (!category) missing.push('카테고리');
+  const handleAddImage = () => {
+    if (
+      imageUris.length >=
+      MAX_IMAGES
+    ) {
+      showAlert({
+        title: '최대 개수 초과',
+        message:
+          `사진은 최대 ${MAX_IMAGES}장까지 첨부할 수 있어요.`,
+        variant: 'warning',
+      });
 
-		if (missing.length > 0) {
-			showAlert({
-				title: '필수 입력',
-				message: `${missing.join(', ')}을(를) 입력해주세요.`,
-				variant: 'warning',
-			});
-			return;
-		}
+      return;
+    }
 
-		const postData = {
-			id: editingPost?.id ?? String(Date.now()),
-			userId: editingPost?.userId ?? userId,
-			writer: editingPost?.writer ?? nickname,
-			category,
-			title: title.trim(),
-			content: content.trim(),
-			imageUris,
-			imageUri: imageUris[0] ?? null,
-			date: editingPost?.date ?? new Date().toISOString(),
-			views: editingPost?.views ?? 0,
-			commentsCount: editingPost?.commentsCount ?? 0,
-		};
+    const remaining =
+      MAX_IMAGES -
+      imageUris.length;
 
-		if (editingPost) {
-			updatePost(postData);
-			navigation.goBack();
-		} else {
-			addPost(postData);
-			navigation.replace('BoardDetail', {
-				post: postData,
-				postId: postData.id,
-			});
-		}
-	};
+    showAlert({
+      title: '이미지 선택',
+      message:
+        '이미지 선택 방법을 골라주세요.',
+      actions: [
+        {
+          text: '카메라로 촬영',
+          kind: 'primary',
+          onPress: () => {
+            launchCamera(
+              {
+                mediaType: 'photo',
+                cameraType: 'back',
+              },
+              response => {
+                if (
+                  response.didCancel ||
+                  response.errorCode
+                ) {
+                  return;
+                }
 
-	const isValid =
-		title.trim() !== '' && content.trim() !== '' && !!category;
+                const uri =
+                  response.assets?.[0]
+                    ?.uri;
 
-	return (
-		<>
-			<Header title="글 작성" navigation={navigation} type="full" />
+                if (uri) {
+                  setImageUris(
+                    previous => [
+                      ...previous,
+                      uri,
+                    ],
+                  );
+                }
+              },
+            );
+          },
+        },
+        {
+          text: '갤러리에서 선택',
+          kind: 'primary',
+          onPress: () => {
+            launchImageLibrary(
+              {
+                mediaType: 'photo',
+                selectionLimit:
+                  remaining,
+              },
+              response => {
+                if (
+                  response.didCancel ||
+                  response.errorCode
+                ) {
+                  return;
+                }
 
-			<KeyboardAvoidingView
-				style={{ flex: 1 }}
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-			>
-				<ScrollView
-					style={styles.container}
-					contentContainerStyle={styles.writeContent}
-					keyboardShouldPersistTaps="handled"
-				>
-					{/* 제목 */}
-					<Text style={styles.writeLabell}>제목</Text>
-					<TextInput
-						value={title}
-						onChangeText={setTitle}
-						placeholder="제목을 입력하세요"
-						placeholderTextColor="#B8B8B8"
-						style={styles.writeInput}
-					/>
+                const newUris =
+                  (response.assets || [])
+                    .map(
+                      asset =>
+                        asset.uri,
+                    )
+                    .filter(Boolean);
 
-					{/* 내용 */}
-					<Text style={styles.writeLabel}>내용</Text>
-					<TextInput
-						value={content}
-						onChangeText={setContent}
-						placeholder="내용을 입력하세요"
-						placeholderTextColor="#B8B8B8"
-						style={[styles.writeInput, styles.writeTextarea]}
-						multiline
-						textAlignVertical="top"
-					/>
+                setImageUris(
+                  previous =>
+                    [
+                      ...previous,
+                      ...newUris,
+                    ].slice(
+                      0,
+                      MAX_IMAGES,
+                    ),
+                );
+              },
+            );
+          },
+        },
+        {
+          text: '취소',
+          kind: 'cancel',
+        },
+      ],
+    });
+  };
 
-					{/* 카테고리 */}
-					<Text style={styles.writeLabel}>카테고리</Text>
-					<View style={styles.categoryWrap}>
-						{WRITE_CATEGORIES.map((item) => {
-							const isActive = category === item.key;
+  const handleRemoveImage =
+    index => {
+      setImageUris(previous =>
+        previous.filter(
+          (_, itemIndex) =>
+            itemIndex !== index,
+        ),
+      );
+    };
 
-							return (
-								<TouchableOpacity
-									key={item.key}
-									style={[
-										styles.writeCategoryPill,
-										isActive && styles.writeCategoryPillActive,
-									]}
-									activeOpacity={0.85}
-									onPress={() => setCategory(item.key)}
-								>
-									<Text
-										style={[
-											styles.writeCategoryText,
-											isActive && styles.writeCategoryTextActive,
-										]}
-									>
-										{item.label}
-									</Text>
-								</TouchableOpacity>
-							);
-						})}
-					</View>
+  const handleSubmit =
+    async () => {
+      if (isSaving) {
+        return;
+      }
 
-					{/* 사진 — 가로 스크롤 대신 줄바꿈 그리드로 변경 (최대 5장) */}
-					<Text style={styles.writeLabel}>
-						사진 <Text style={styles.writeLabelOpt}>선택, 최대 {MAX_IMAGES}장</Text>
-					</Text>
-					<View style={styles.photoRow}>
-						{imageUris.map((uri, index) => (
-							<View key={uri + index} style={styles.photoThumbWrap}>
-								<Image source={{ uri }} style={styles.photoThumb} />
+      const missing = [];
 
-								<TouchableOpacity
-									style={styles.photoRemoveBtn}
-									onPress={() => handleRemoveImage(index)}
-									activeOpacity={0.8}
-								>
-									<IconX size={12} color="#FFFFFF" strokeWidth={2.5} />
-								</TouchableOpacity>
-							</View>
-						))}
+      if (!title.trim()) {
+        missing.push('제목');
+      }
 
-						{imageUris.length < MAX_IMAGES && (
-							<TouchableOpacity
-								style={styles.photoAddBox}
-								onPress={handleAddImage}
-								activeOpacity={0.85}
-							>
-								<IconCameraPlus size={22} color="#7fc77c" strokeWidth={1.5} />
-								<Text style={styles.photoAddBoxText}>
-									{imageUris.length}/{MAX_IMAGES}
-								</Text>
-							</TouchableOpacity>
-						)}
-					</View>
+      if (!content.trim()) {
+        missing.push('내용');
+      }
 
-					<TouchableOpacity
-						style={[
-							styles.writeSubmitButton,
-							!isValid && styles.writeSubmitButtonDisabled,
-						]}
-						activeOpacity={0.85}
-						onPress={handleSubmit}
-					>
-						<Text style={styles.writeSubmitText}>게시하기</Text>
-					</TouchableOpacity>
-				</ScrollView>
-			</KeyboardAvoidingView>
+      if (!category) {
+        missing.push('카테고리');
+      }
 
-			<CustomAlert
-				visible={alertConfig.visible}
-				title={alertConfig.title}
-				message={alertConfig.message}
-				buttonText={alertConfig.buttonText}
-				onPress={alertConfig.onPress}
-				secondaryButtonText={alertConfig.secondaryButtonText}
-				onSecondaryPress={alertConfig.onSecondaryPress}
-				actions={alertConfig.actions}
-				variant={alertConfig.variant}
-				onRequestClose={closeAlert}
-			/>
+      if (missing.length > 0) {
+        showAlert({
+          title: '필수 입력',
+          message:
+            `${missing.join(', ')}을(를) 입력해주세요.`,
+          variant: 'warning',
+        });
 
-			<Bottom type="main" active="board" navigation={navigation} />
-		</>
-	);
+        return;
+      }
+
+      try {
+        setIsSaving(true);
+
+        const uploadedImages =
+          await Promise.all(
+            imageUris.map(uri =>
+              uploadImageApi(uri),
+            ),
+          );
+
+        const postData = {
+          id: editingPost?.id,
+          title: title.trim(),
+          content:
+            content.trim(),
+          category,
+          imageUris:
+            uploadedImages
+              .filter(Boolean),
+        };
+
+        if (editingPost) {
+          await updatePost(
+            postData,
+          );
+
+          navigation.goBack();
+        } else {
+          const savedPost =
+            await addPost(
+              postData,
+            );
+
+          navigation.replace(
+            'BoardDetail',
+            {
+              postId:
+                savedPost.id,
+            },
+          );
+        }
+      } catch (error) {
+        console.log(
+          '게시글 저장 실패:',
+          error.response?.data ||
+          error.message,
+        );
+
+        showAlert({
+          title: '저장 실패',
+          message:
+            error.response?.data
+              ?.message ||
+            error.response?.data ||
+            '게시글 저장에 실패했습니다.',
+          variant: 'error',
+        });
+      } finally {
+        setIsSaving(false);
+      }
+    };
+
+  const isValid =
+    title.trim() !== '' &&
+    content.trim() !== '' &&
+    Boolean(category);
+
+  return (
+    <>
+      <Header
+        title={
+          editingPost
+            ? '글 수정'
+            : '글 작성'
+        }
+        navigation={navigation}
+        type="full"
+      />
+
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={
+          Platform.OS === 'ios'
+            ? 'padding'
+            : 'height'
+        }
+        keyboardVerticalOffset={
+          Platform.OS === 'ios'
+            ? 90
+            : 0
+        }
+      >
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={
+            styles.writeContent
+          }
+          keyboardShouldPersistTaps="handled"
+        >
+          <Text
+            style={
+              styles.writeLabell
+            }
+          >
+            제목
+          </Text>
+
+          <TextInput
+            value={title}
+            onChangeText={setTitle}
+            placeholder="제목을 입력하세요"
+            placeholderTextColor="#B8B8B8"
+            style={
+              styles.writeInput
+            }
+          />
+
+          <Text
+            style={
+              styles.writeLabel
+            }
+          >
+            내용
+          </Text>
+
+          <TextInput
+            value={content}
+            onChangeText={
+              setContent
+            }
+            placeholder="내용을 입력하세요"
+            placeholderTextColor="#B8B8B8"
+            style={[
+              styles.writeInput,
+              styles.writeTextarea,
+            ]}
+            multiline
+            textAlignVertical="top"
+          />
+
+          <Text
+            style={
+              styles.writeLabel
+            }
+          >
+            카테고리
+          </Text>
+
+          <View
+            style={
+              styles.categoryWrap
+            }
+          >
+            {WRITE_CATEGORIES.map(
+              item => {
+                const isActive =
+                  category ===
+                  item.key;
+
+                return (
+                  <TouchableOpacity
+                    key={item.key}
+                    style={[
+                      styles.writeCategoryPill,
+                      isActive &&
+                        styles.writeCategoryPillActive,
+                    ]}
+                    activeOpacity={
+                      0.85
+                    }
+                    onPress={() =>
+                      setCategory(
+                        item.key,
+                      )
+                    }
+                  >
+                    <Text
+                      style={[
+                        styles.writeCategoryText,
+                        isActive &&
+                          styles.writeCategoryTextActive,
+                      ]}
+                    >
+                      {item.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              },
+            )}
+          </View>
+
+          <Text
+            style={
+              styles.writeLabel
+            }
+          >
+            사진{' '}
+            <Text
+              style={
+                styles.writeLabelOpt
+              }
+            >
+              선택, 최대{' '}
+              {MAX_IMAGES}장
+            </Text>
+          </Text>
+
+          <View
+            style={styles.photoRow}
+          >
+            {imageUris.map(
+              (uri, index) => (
+                <View
+                  key={`${uri}-${index}`}
+                  style={
+                    styles.photoThumbWrap
+                  }
+                >
+                  <Image
+                    source={{ uri }}
+                    style={
+                      styles.photoThumb
+                    }
+                  />
+
+                  <TouchableOpacity
+                    style={
+                      styles.photoRemoveBtn
+                    }
+                    onPress={() =>
+                      handleRemoveImage(
+                        index,
+                      )
+                    }
+                    activeOpacity={
+                      0.8
+                    }
+                  >
+                    <IconX
+                      size={12}
+                      color="#FFFFFF"
+                      strokeWidth={
+                        2.5
+                      }
+                    />
+                  </TouchableOpacity>
+                </View>
+              ),
+            )}
+
+            {imageUris.length <
+            MAX_IMAGES ? (
+              <TouchableOpacity
+                style={
+                  styles.photoAddBox
+                }
+                onPress={
+                  handleAddImage
+                }
+                activeOpacity={0.85}
+              >
+                <IconCameraPlus
+                  size={22}
+                  color="#7fc77c"
+                  strokeWidth={1.5}
+                />
+
+                <Text
+                  style={
+                    styles.photoAddBoxText
+                  }
+                >
+                  {imageUris.length}/
+                  {MAX_IMAGES}
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
+
+          <TouchableOpacity
+            style={[
+              styles.writeSubmitButton,
+              (!isValid ||
+                isSaving) &&
+                styles.writeSubmitButtonDisabled,
+            ]}
+            activeOpacity={0.85}
+            disabled={
+              !isValid ||
+              isSaving
+            }
+            onPress={handleSubmit}
+          >
+            <Text
+              style={
+                styles.writeSubmitText
+              }
+            >
+              {isSaving
+                ? '저장 중...'
+                : editingPost
+                  ? '수정하기'
+                  : '게시하기'}
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+
+      <CustomAlert
+        visible={
+          alertConfig.visible
+        }
+        title={alertConfig.title}
+        message={
+          alertConfig.message
+        }
+        buttonText={
+          alertConfig.buttonText
+        }
+        onPress={
+          alertConfig.onPress
+        }
+        secondaryButtonText={
+          alertConfig.secondaryButtonText
+        }
+        onSecondaryPress={
+          alertConfig.onSecondaryPress
+        }
+        actions={
+          alertConfig.actions
+        }
+        variant={
+          alertConfig.variant
+        }
+        onRequestClose={
+          closeAlert
+        }
+      />
+
+      <Bottom
+        type="main"
+        active="board"
+        navigation={navigation}
+      />
+    </>
+  );
 }
