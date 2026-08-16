@@ -1,15 +1,26 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
 import {
-	View,
-	Text,
-	Image,
-	ScrollView,
-	TouchableOpacity,
-	TextInput,
-	KeyboardAvoidingView,
-	Platform,
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import { IconEye, IconMessageCircle, IconEdit } from '@tabler/icons-react-native';
+
+import {
+  IconEye,
+  IconMessageCircle,
+  IconEdit,
+} from '@tabler/icons-react-native';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Header from '../components/Header';
@@ -17,349 +28,849 @@ import Bottom from '../components/Bottom';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/Board.style';
-import { useBoard } from '../context/BoardContext';
-import { formatDate, CategoryBadge } from './boardUtils';
 
-export default function BoardDetail({ navigation, route }) {
-	const {
-		getPost,
-		deletePost,
-		increaseView,
-		getCommentsByPost,
-		addComment,
-		deleteComment,
-	} = useBoard();
+import {
+  useBoard,
+} from '../context/BoardContext';
 
-	const [myUserId, setMyUserId] = useState('');
-	const [commentText, setCommentText] = useState('');
-	const [replyTarget, setReplyTarget] = useState(null);
-	const [replyText, setReplyText] = useState('');
-	const { alertConfig, showAlert, closeAlert } = useCustomAlert();
+import {
+  formatDate,
+  CategoryBadge,
+} from './boardUtils';
 
-	useEffect(() => {
-		const loadUser = async () => {
-			const id = await AsyncStorage.getItem('userId');
-			setMyUserId(id || '');
-		};
+export default function BoardDetail({
+  navigation,
+  route,
+}) {
+  const {
+    getPost,
+    loadPost,
+    deletePost,
+    loadComments,
+    getCommentsByPost,
+    addComment,
+    deleteComment,
+  } = useBoard();
 
-		loadUser();
-	}, []);
+  const postId =
+    route?.params?.postId ||
+    route?.params?.post?.id;
 
-	const post = useMemo(() => {
-		if (route?.params?.post) {
-			return route.params.post;
-		}
+  const [
+    remotePost,
+    setRemotePost,
+  ] = useState(
+    route?.params?.post || null,
+  );
 
-		if (route?.params?.postId) {
-			return getPost(route.params.postId);
-		}
+  const [
+    isLoading,
+    setIsLoading,
+  ] = useState(
+    !route?.params?.post,
+  );
 
-		return null;
-	}, [route, getPost]);
+  const [
+    myUserId,
+    setMyUserId,
+  ] = useState('');
 
-	const isMine = post?.userId === myUserId;
+  const [
+    commentText,
+    setCommentText,
+  ] = useState('');
 
-	useEffect(() => {
-		if (!post) return;
+  const [
+    replyTarget,
+    setReplyTarget,
+  ] = useState(null);
 
-		const markAsViewed = async () => {
-			try {
-				const raw = await AsyncStorage.getItem('viewedPostIds');
-				const viewedIds = raw ? JSON.parse(raw) : [];
+  const [
+    replyText,
+    setReplyText,
+  ] = useState('');
 
-				if (viewedIds.includes(post.id)) return;
+  const {
+    alertConfig,
+    showAlert,
+    closeAlert,
+  } = useCustomAlert();
 
-				increaseView(post.id);
+  useEffect(() => {
+    const loadUser = async () => {
+      const id =
+        await AsyncStorage.getItem(
+          'userId',
+        );
 
-				const updated = [...viewedIds, post.id];
-				await AsyncStorage.setItem('viewedPostIds', JSON.stringify(updated));
-			} catch (e) {
-				console.log('조회수 처리 실패:', e.message);
-			}
-		};
+      setMyUserId(id || '');
+    };
 
-		markAsViewed();
-	}, [post?.id]);
+    loadUser();
+  }, []);
 
-	if (!post) {
-		return (
-			<>
-				<Header title="게시판" navigation={navigation} type="full" />
-				<View style={styles.container}>
-					<Text style={styles.emptyText}>게시글을 찾을 수 없습니다.</Text>
-				</View>
-				<Bottom type="main" active="board" navigation={navigation} />
-			</>
-		);
-	}
+  useEffect(() => {
+    if (!postId) {
+      setIsLoading(false);
+      return;
+    }
 
-	const allComments = getCommentsByPost(post.id);
-	const topLevelComments = allComments.filter((c) => !c.parentId);
-	const repliesByParent = (parentId) =>
-		allComments.filter((c) => c.parentId === parentId);
+    let active = true;
 
-	const confirmDelete = ({ title, message, onConfirm }) => {
-		showAlert({
-			title,
-			message,
-			variant: 'error',
-			actions: [
-				{ text: '취소', kind: 'cancel' },
-				{
-					text: '삭제',
-					kind: 'destructive',
-					onPress: onConfirm,
-				},
-			],
-		});
-	};
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
 
-	const handleDeletePost = () => {
-		confirmDelete({
-			title: '게시글 삭제',
-			message: '작성한 게시글을 삭제하시겠습니까?',
-			onConfirm: () => {
-				deletePost(post.id);
-				navigation.goBack();
-			},
-		});
-	};
+        const [
+          loadedPost,
+        ] = await Promise.all([
+          loadPost(postId),
+          loadComments(postId),
+        ]);
 
-	const handleDeleteComment = (commentId) => {
-		confirmDelete({
-			title: '댓글 삭제',
-			message: '이 댓글을 삭제하시겠습니까?',
-			onConfirm: () => deleteComment(post.id, commentId),
-		});
-	};
+        if (active) {
+          setRemotePost(
+            loadedPost,
+          );
+        }
+      } catch (error) {
+        console.log(
+          '게시글 상세 조회 실패:',
+          error.response?.data ||
+          error.message,
+        );
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    };
 
-	const handleDeleteReply = (replyId) => {
-		confirmDelete({
-			title: '답글 삭제',
-			message: '이 답글을 삭제하시겠습니까?',
-			onConfirm: () => deleteComment(post.id, replyId),
-		});
-	};
+    loadData();
 
-	const handleSubmitComment = () => {
-		if (!commentText.trim()) return;
+    return () => {
+      active = false;
+    };
+  }, [
+    postId,
+    loadPost,
+    loadComments,
+  ]);
 
-		addComment({
-			postId: post.id,
-			userId: myUserId,
-			content: commentText.trim(),
-		});
+  const post = useMemo(
+    () =>
+      remotePost ||
+      getPost(postId),
+    [
+      remotePost,
+      getPost,
+      postId,
+    ],
+  );
 
-		setCommentText('');
-	};
+  const allComments =
+    postId
+      ? getCommentsByPost(postId)
+      : [];
 
-	const handleToggleReply = (commentId) => {
-		const next = replyTarget === commentId ? null : commentId;
-		setReplyTarget(next);
-		setReplyText('');
-	};
+  const topLevelComments =
+    allComments.filter(
+      comment =>
+        !comment.parentId,
+    );
 
-	const handleSubmitReply = (parentId) => {
-		if (!replyText.trim()) return;
+  const repliesByParent =
+    parentId =>
+      allComments.filter(
+        comment =>
+          String(
+            comment.parentId,
+          ) ===
+          String(parentId),
+      );
 
-		addComment({
-			postId: post.id,
-			parentId,
-			userId: myUserId,
-			content: replyText.trim(),
-		});
+  const isMine =
+    post &&
+    String(post.userId) ===
+      String(myUserId);
 
-		setReplyText('');
-		setReplyTarget(null);
-	};
+  const confirmDelete = ({
+    title,
+    message,
+    onConfirm,
+  }) => {
+    showAlert({
+      title,
+      message,
+      variant: 'error',
+      actions: [
+        {
+          text: '취소',
+          kind: 'cancel',
+        },
+        {
+          text: '삭제',
+          kind: 'destructive',
+          onPress: onConfirm,
+        },
+      ],
+    });
+  };
 
-	return (
-		<>
-			<Header title="게시판" navigation={navigation} type="full" />
+  const handleDeletePost = () => {
+    confirmDelete({
+      title: '게시글 삭제',
+      message:
+        '작성한 게시글을 삭제하시겠습니까?',
+      onConfirm: async () => {
+        try {
+          await deletePost(
+            post.id,
+          );
 
-			<KeyboardAvoidingView
-				style={{ flex: 1 }}
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-			>
-				<ScrollView style={styles.container} contentContainerStyle={styles.detailContent}>
-					<View style={styles.detailCard}>
-						<CategoryBadge categoryKey={post.category} />
+          navigation.goBack();
+        } catch (error) {
+          showAlert({
+            title: '삭제 실패',
+            message:
+              error.response?.data ||
+              '게시글 삭제에 실패했습니다.',
+            variant: 'error',
+          });
+        }
+      },
+    });
+  };
 
-						<Text style={styles.detailTitle}>{post.title}</Text>
+  const handleDeleteComment =
+    commentId => {
+      confirmDelete({
+        title: '댓글 삭제',
+        message:
+          '이 댓글을 삭제하시겠습니까?',
+        onConfirm: async () => {
+          try {
+            await deleteComment(
+              post.id,
+              commentId,
+            );
+          } catch (error) {
+            showAlert({
+              title: '삭제 실패',
+              message:
+                error.response
+                  ?.data ||
+                '댓글 삭제에 실패했습니다.',
+              variant: 'error',
+            });
+          }
+        },
+      });
+    };
 
-						<View style={styles.detailMetaRow}>
-							<Text style={styles.metaDate}>{formatDate(post.date)}</Text>
+  const handleSubmitComment =
+    async () => {
+      const content =
+        commentText.trim();
 
-							<View style={styles.metaIconGroup}>
-								<IconEye size={13} color="#A7A7A7" strokeWidth={1.75} />
-								<Text style={styles.metaCount}>{post.views ?? 0}</Text>
+      if (!content) {
+        return;
+      }
 
-								<IconMessageCircle size={13} color="#A7A7A7" strokeWidth={1.75} />
-								<Text style={styles.metaCount}>{allComments.length}</Text>
-							</View>
-						</View>
+      try {
+        await addComment({
+          postId: post.id,
+          content,
+        });
 
-						{post.imageUris?.length > 0 ? (
-							<ScrollView
-								horizontal
-								showsHorizontalScrollIndicator={false}
-								style={styles.detailImageScroll}
-							>
-								{post.imageUris.map((uri, index) => (
-									<Image
-										key={uri + index}
-										source={{ uri }}
-										style={styles.detailImageMulti}
-									/>
-								))}
-							</ScrollView>
-						) : (
-							post.imageUri && (
-								<Image source={{ uri: post.imageUri }} style={styles.detailImage} />
-							)
-						)}
+        setCommentText('');
+      } catch (error) {
+        showAlert({
+          title: '댓글 등록 실패',
+          message:
+            error.response?.data ||
+            '댓글 등록에 실패했습니다.',
+          variant: 'error',
+        });
+      }
+    };
 
-						<Text style={styles.detailText}>{post.content}</Text>
+  const handleToggleReply =
+    commentId => {
+      setReplyTarget(
+        replyTarget === commentId
+          ? null
+          : commentId,
+      );
 
-						{isMine && (
-							<View style={styles.detailActionRow}>
-								<TouchableOpacity
-									style={[styles.detailActionButton, styles.detailActionButtonHalf]}
-									activeOpacity={0.85}
-									onPress={() =>
-										navigation.navigate('BoardWrite', {
-											category: post.category,
-											post,
-										})
-									}
-								>
-									<IconEdit size={18} color="#FFFFFF" strokeWidth={2} />
-									<Text style={styles.detailActionText}>수정하기</Text>
-								</TouchableOpacity>
+      setReplyText('');
+    };
 
-								<TouchableOpacity
-									style={[
-										styles.detailActionButton,
-										styles.detailActionButtonHalf,
-										{ backgroundColor: '#E74C3C' },
-									]}
-									activeOpacity={0.85}
-									onPress={handleDeletePost}
-								>
-									<Text style={styles.detailActionText}>삭제하기</Text>
-								</TouchableOpacity>
-							</View>
-						)}
+  const handleSubmitReply =
+    async parentId => {
+      const content =
+        replyText.trim();
 
-						<View style={styles.sectionDivider} />
+      if (!content) {
+        return;
+      }
 
-						<Text style={styles.commentSectionTitle}>
-							댓글 {allComments.length}
-						</Text>
+      try {
+        await addComment({
+          postId: post.id,
+          parentId,
+          content,
+        });
 
-						{topLevelComments.length === 0 ? (
-							<Text style={styles.commentEmptyText}>
-								아직 댓글이 없습니다.
-							</Text>
-						) : (
-							topLevelComments.map((comment) => (
-								<View key={comment.id} style={styles.commentItem}>
-									<View style={styles.commentHeaderRow}>
-										<Text style={styles.commentAuthor}>
-											{comment.userId || '익명'}
-										</Text>
-										<Text style={styles.commentDate}>
-											{formatDate(comment.date)}
-										</Text>
-									</View>
+        setReplyText('');
+        setReplyTarget(null);
+      } catch (error) {
+        showAlert({
+          title: '답글 등록 실패',
+          message:
+            error.response?.data ||
+            '답글 등록에 실패했습니다.',
+          variant: 'error',
+        });
+      }
+    };
 
-									<Text style={styles.commentContent}>{comment.content}</Text>
+  if (isLoading && !post) {
+    return (
+      <>
+        <Header
+          title="게시판"
+          navigation={navigation}
+          type="full"
+        />
 
-									<View style={styles.commentActionRow}>
-										<TouchableOpacity onPress={() => handleToggleReply(comment.id)}>
-											<Text style={styles.commentReplyBtn}>답글</Text>
-										</TouchableOpacity>
+        <View
+          style={styles.container}
+        >
+          <Text
+            style={styles.emptyText}
+          >
+            게시글을 불러오는 중입니다.
+          </Text>
+        </View>
 
-										{comment.userId === myUserId && (
-											<TouchableOpacity
-												onPress={() => handleDeleteComment(comment.id)}
-											>
-												<Text style={styles.commentDeleteBtn}>삭제</Text>
-											</TouchableOpacity>
-										)}
-									</View>
+        <Bottom
+          type="main"
+          active="board"
+          navigation={navigation}
+        />
+      </>
+    );
+  }
 
-									{replyTarget === comment.id && (
-										<View style={styles.replyInputRow}>
-											<TextInput
-												value={replyText}
-												onChangeText={setReplyText}
-												placeholder="답글을 입력하세요"
-												placeholderTextColor="#B8B8B8"
-												style={styles.replyInput}
-											/>
-											<TouchableOpacity
-												style={styles.commentSubmitBtn}
-												onPress={() => handleSubmitReply(comment.id)}
-											>
-												<Text style={styles.commentSubmitBtnText}>등록</Text>
-											</TouchableOpacity>
-										</View>
-									)}
+  if (!post) {
+    return (
+      <>
+        <Header
+          title="게시판"
+          navigation={navigation}
+          type="full"
+        />
 
-									{repliesByParent(comment.id).map((reply) => (
-										<View key={reply.id} style={styles.replyItem}>
-											<View style={styles.commentHeaderRow}>
-												<Text style={styles.commentAuthor}>
-													{reply.userId || '익명'}
-												</Text>
-												<Text style={styles.commentDate}>
-													{formatDate(reply.date)}
-												</Text>
-											</View>
+        <View
+          style={styles.container}
+        >
+          <Text
+            style={styles.emptyText}
+          >
+            게시글을 찾을 수 없습니다.
+          </Text>
+        </View>
 
-											<Text style={styles.commentContent}>{reply.content}</Text>
+        <Bottom
+          type="main"
+          active="board"
+          navigation={navigation}
+        />
+      </>
+    );
+  }
 
-											{reply.userId === myUserId && (
-												<TouchableOpacity
-													onPress={() => handleDeleteReply(reply.id)}
-												>
-													<Text style={styles.commentDeleteBtn}>삭제</Text>
-												</TouchableOpacity>
-											)}
-										</View>
-									))}
-								</View>
-							))
-						)}
+  return (
+    <>
+      <Header
+        title="게시판"
+        navigation={navigation}
+        type="full"
+      />
 
-						<View style={styles.commentInputRow}>
-							<TextInput
-								value={commentText}
-								onChangeText={setCommentText}
-								placeholder="댓글을 입력하세요."
-								placeholderTextColor="#B8B8B8"
-								style={styles.commentInput}
-							/>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={
+          Platform.OS === 'ios'
+            ? 'padding'
+            : 'height'
+        }
+        keyboardVerticalOffset={
+          Platform.OS === 'ios'
+            ? 90
+            : 0
+        }
+      >
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={
+            styles.detailContent
+          }
+        >
+          <View
+            style={styles.detailCard}
+          >
+            <CategoryBadge
+              categoryKey={
+                post.category
+              }
+            />
 
-							<TouchableOpacity
-								style={styles.commentSubmitBtn}
-								onPress={handleSubmitComment}
-							>
-								<Text style={styles.commentSubmitBtnText}>등록</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</ScrollView>
-			</KeyboardAvoidingView>
+            <Text
+              style={
+                styles.detailTitle
+              }
+            >
+              {post.title}
+            </Text>
 
-			<CustomAlert
-				{...alertConfig}
-				onRequestClose={closeAlert}
-			/>
+            <View
+              style={
+                styles.detailMetaRow
+              }
+            >
+              <Text
+                style={
+                  styles.metaDate
+                }
+              >
+                {formatDate(
+                  post.date,
+                )}
+              </Text>
 
-			<Bottom type="main" active="board" navigation={navigation} />
-		</>
-	);
+              <View
+                style={
+                  styles.metaIconGroup
+                }
+              >
+                <IconEye
+                  size={13}
+                  color="#A7A7A7"
+                  strokeWidth={1.75}
+                />
+
+                <Text
+                  style={
+                    styles.metaCount
+                  }
+                >
+                  {post.views || 0}
+                </Text>
+
+                <IconMessageCircle
+                  size={13}
+                  color="#A7A7A7"
+                  strokeWidth={1.75}
+                />
+
+                <Text
+                  style={
+                    styles.metaCount
+                  }
+                >
+                  {allComments.length}
+                </Text>
+              </View>
+            </View>
+
+            {post.imageUris
+              ?.length > 0 ? (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={
+                  false
+                }
+                style={
+                  styles.detailImageScroll
+                }
+              >
+                {post.imageUris.map(
+                  (uri, index) => (
+                    <Image
+                      key={`${uri}-${index}`}
+                      source={{ uri }}
+                      style={
+                        styles.detailImageMulti
+                      }
+                    />
+                  ),
+                )}
+              </ScrollView>
+            ) : post.imageUri ? (
+              <Image
+                source={{
+                  uri: post.imageUri,
+                }}
+                style={
+                  styles.detailImage
+                }
+              />
+            ) : null}
+
+            <Text
+              style={
+                styles.detailText
+              }
+            >
+              {post.content}
+            </Text>
+
+            {isMine ? (
+              <View
+                style={
+                  styles.detailActionRow
+                }
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.detailActionButton,
+                    styles.detailActionButtonHalf,
+                  ]}
+                  activeOpacity={0.85}
+                  onPress={() =>
+                    navigation.navigate(
+                      'BoardWrite',
+                      {
+                        category:
+                          post.category,
+                        post,
+                      },
+                    )
+                  }
+                >
+                  <IconEdit
+                    size={18}
+                    color="#FFFFFF"
+                    strokeWidth={2}
+                  />
+
+                  <Text
+                    style={
+                      styles.detailActionText
+                    }
+                  >
+                    수정하기
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.detailActionButton,
+                    styles.detailActionButtonHalf,
+                    {
+                      backgroundColor:
+                        '#E74C3C',
+                    },
+                  ]}
+                  activeOpacity={0.85}
+                  onPress={
+                    handleDeletePost
+                  }
+                >
+                  <Text
+                    style={
+                      styles.detailActionText
+                    }
+                  >
+                    삭제하기
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+
+            <View
+              style={
+                styles.sectionDivider
+              }
+            />
+
+            <Text
+              style={
+                styles.commentSectionTitle
+              }
+            >
+              댓글 {allComments.length}
+            </Text>
+
+            {topLevelComments.length ===
+            0 ? (
+              <Text
+                style={
+                  styles.commentEmptyText
+                }
+              >
+                아직 댓글이 없습니다.
+              </Text>
+            ) : (
+              topLevelComments.map(
+                comment => (
+                  <View
+                    key={String(
+                      comment.id,
+                    )}
+                    style={
+                      styles.commentItem
+                    }
+                  >
+                    <View
+                      style={
+                        styles.commentHeaderRow
+                      }
+                    >
+                      <Text
+                        style={
+                          styles.commentAuthor
+                        }
+                      >
+                        {comment.writer ||
+                          '사용자'}
+                      </Text>
+
+                      <Text
+                        style={
+                          styles.commentDate
+                        }
+                      >
+                        {formatDate(
+                          comment.date,
+                        )}
+                      </Text>
+                    </View>
+
+                    <Text
+                      style={
+                        styles.commentContent
+                      }
+                    >
+                      {comment.content}
+                    </Text>
+
+                    <View
+                      style={
+                        styles.commentActionRow
+                      }
+                    >
+                      <TouchableOpacity
+                        onPress={() =>
+                          handleToggleReply(
+                            comment.id,
+                          )
+                        }
+                      >
+                        <Text
+                          style={
+                            styles.commentReplyBtn
+                          }
+                        >
+                          답글
+                        </Text>
+                      </TouchableOpacity>
+
+                      {String(
+                        comment.userId,
+                      ) ===
+                      String(
+                        myUserId,
+                      ) ? (
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleDeleteComment(
+                              comment.id,
+                            )
+                          }
+                        >
+                          <Text
+                            style={
+                              styles.commentDeleteBtn
+                            }
+                          >
+                            삭제
+                          </Text>
+                        </TouchableOpacity>
+                      ) : null}
+                    </View>
+
+                    {String(
+                      replyTarget,
+                    ) ===
+                    String(
+                      comment.id,
+                    ) ? (
+                      <View
+                        style={
+                          styles.replyInputRow
+                        }
+                      >
+                        <TextInput
+                          value={
+                            replyText
+                          }
+                          onChangeText={
+                            setReplyText
+                          }
+                          placeholder="답글을 입력하세요"
+                          placeholderTextColor="#B8B8B8"
+                          style={
+                            styles.replyInput
+                          }
+                        />
+
+                        <TouchableOpacity
+                          style={
+                            styles.commentSubmitBtn
+                          }
+                          onPress={() =>
+                            handleSubmitReply(
+                              comment.id,
+                            )
+                          }
+                        >
+                          <Text
+                            style={
+                              styles.commentSubmitBtnText
+                            }
+                          >
+                            등록
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : null}
+
+                    {repliesByParent(
+                      comment.id,
+                    ).map(reply => (
+                      <View
+                        key={String(
+                          reply.id,
+                        )}
+                        style={
+                          styles.replyItem
+                        }
+                      >
+                        <View
+                          style={
+                            styles.commentHeaderRow
+                          }
+                        >
+                          <Text
+                            style={
+                              styles.commentAuthor
+                            }
+                          >
+                            {reply.writer ||
+                              '사용자'}
+                          </Text>
+
+                          <Text
+                            style={
+                              styles.commentDate
+                            }
+                          >
+                            {formatDate(
+                              reply.date,
+                            )}
+                          </Text>
+                        </View>
+
+                        <Text
+                          style={
+                            styles.commentContent
+                          }
+                        >
+                          {reply.content}
+                        </Text>
+
+                        {String(
+                          reply.userId,
+                        ) ===
+                        String(
+                          myUserId,
+                        ) ? (
+                          <TouchableOpacity
+                            onPress={() =>
+                              handleDeleteComment(
+                                reply.id,
+                              )
+                            }
+                          >
+                            <Text
+                              style={
+                                styles.commentDeleteBtn
+                              }
+                            >
+                              삭제
+                            </Text>
+                          </TouchableOpacity>
+                        ) : null}
+                      </View>
+                    ))}
+                  </View>
+                ),
+              )
+            )}
+
+            <View
+              style={
+                styles.commentInputRow
+              }
+            >
+              <TextInput
+                value={commentText}
+                onChangeText={
+                  setCommentText
+                }
+                placeholder="댓글을 입력하세요."
+                placeholderTextColor="#B8B8B8"
+                style={
+                  styles.commentInput
+                }
+              />
+
+              <TouchableOpacity
+                style={
+                  styles.commentSubmitBtn
+                }
+                onPress={
+                  handleSubmitComment
+                }
+              >
+                <Text
+                  style={
+                    styles.commentSubmitBtnText
+                  }
+                >
+                  등록
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+
+      <CustomAlert
+        {...alertConfig}
+        onRequestClose={
+          closeAlert
+        }
+      />
+
+      <Bottom
+        type="main"
+        active="board"
+        navigation={navigation}
+      />
+    </>
+  );
 }
