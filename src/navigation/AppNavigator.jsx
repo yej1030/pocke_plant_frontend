@@ -43,6 +43,7 @@ export default function AppNavigator() {
         <Stack.Screen name="PlantDiary" component={PlantDiary} />
         <Stack.Screen name="PlantDiaryDetail" component={PlantDiaryDetail} />
         <Stack.Screen name="PlantDiaryWrite" component={PlantDiaryWrite} />
+        <Stack.Screen name="PlantFriendship" component={PlantFriendship} />
         <Stack.Screen name="Friendship" component={PlantFriendship} />
         <Stack.Screen name="DiseasePredict" component={DiseasePredict} />
         <Stack.Screen name="DiseaseResult" component={DiseaseResult} />

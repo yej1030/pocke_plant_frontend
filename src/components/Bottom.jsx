@@ -11,12 +11,12 @@ import {
 const MAIN_TABS = [
 	{ key: 'home', title: '홈', screen: 'Main', Icon: IconHome },
 	{ key: 'board', title: '게시판', screen: 'Board', Icon: IconClipboardText },
+	{ key: 'friend', title: '친밀도', screen: 'PlantFriendship', Icon: IconHeart },
 ];
 
 const DETAIL_TABS = [
 	{ key: 'plant', title: '식물', screen: 'PlantDetail', Icon: IconLeaf },
 	{ key: 'diary', title: '식물 일지', screen: 'PlantDiary', Icon: IconNotebook },
-	{ key: 'friend', title: '친밀도', screen: 'Friendship', Icon: IconHeart },
 ];
 
 export default function Bottom({ type = 'main', active = 'home', navigation, params = {} }) {
@@ -40,7 +40,7 @@ export default function Bottom({ type = 'main', active = 'home', navigation, par
 					>
 						<tab.Icon
 							size={22}
-							color={isActive ? '#7fc77c' : '#A0A0A0'}
+							color={isActive ? '#7FC77C' : '#9CA3AF'}
 							strokeWidth={1.75}
 						/>
 
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		backgroundColor: '#FFFFFF',
 		borderTopWidth: 1,
-		borderTopColor: '#ECECEC',
+		borderTopColor: '#E5E7EB',
 		height: 58,
 	},
 
@@ -76,11 +76,11 @@ const styles = StyleSheet.create({
 	text: {
 		fontSize: 12,
 		fontWeight: '600',
-		color: '#A0A0A0',
+		color: '#9CA3AF',
 	},
 
 	activeText: {
-		color: '#7fc77c',
+		color: '#7FC77C',
 		fontWeight: '600',
 	},
 
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
 		bottom: -10,
 		width: '100%',
 		height: 3,
-		backgroundColor: '#7fc77c',
+		backgroundColor: '#7FC77C',
 		borderTopLeftRadius: 10,
 		borderTopRightRadius: 10,
 	},
