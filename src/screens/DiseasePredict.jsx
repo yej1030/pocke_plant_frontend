@@ -187,7 +187,7 @@ export default function DiseasePredict({
         <Text
           style={styles.labelMain}
         >
-          진단할 식물 정보를 입력해주세요
+          증상이 보이는 잎을 밝은 곳에서 가까이 촬영해주세요
         </Text>
 
         <Text
@@ -265,7 +265,7 @@ export default function DiseasePredict({
         <Text
           style={styles.formLabel}
         >
-          증상
+          관찰 메모 (기록용)
         </Text>
 
         <TextInput
@@ -273,7 +273,7 @@ export default function DiseasePredict({
             styles.input,
             styles.textarea,
           ]}
-          placeholder="증상 또는 상태를 입력해주세요"
+          placeholder="언제부터 변했는지, 최근 물주기 등을 기록해주세요. 현재 사진 분석에는 사용되지 않습니다."
           placeholderTextColor="#B8B8B8"
           value={note}
           onChangeText={setNote}
