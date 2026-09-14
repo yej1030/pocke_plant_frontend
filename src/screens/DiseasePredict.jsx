@@ -139,6 +139,7 @@ export default function DiseasePredict({
         const prediction =
           await predictDiseaseApi(
             imageUri,
+            plant?.species || '',
           );
 
         navigation.replace(
@@ -151,17 +152,25 @@ export default function DiseasePredict({
           },
         );
       } catch (error) {
+        const serverError =
+          error.response?.data;
+        const errorMessage =
+          serverError?.disease_symptom ||
+          serverError?.diseaseSymptom ||
+          serverError?.message ||
+          (typeof serverError === 'string'
+            ? serverError
+            : null) ||
+          '질병 진단 서버에 연결할 수 없습니다.';
+
         console.log(
           '질병 진단 실패:',
-          error.response?.data ||
-          error.message,
+          errorMessage,
         );
 
         showAlert({
           title: '진단 실패',
-          message:
-            error.response?.data ||
-            '질병 진단 서버에 연결할 수 없습니다.',
+          message: errorMessage,
           variant: 'error',
         });
       } finally {

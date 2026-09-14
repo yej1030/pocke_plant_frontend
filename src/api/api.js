@@ -1,8 +1,11 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_URL =
-  'http://3.25.69.13:8080';
+// Android debug builds reach the PC through `adb reverse tcp:8080 tcp:8080`.
+// Release builds continue to use the deployed backend.
+const BASE_URL = __DEV__
+  ? 'http://127.0.0.1:8080'
+  : 'http://3.25.69.13:8080';
 
 const getToken = async () =>
   AsyncStorage.getItem('serviceToken');
@@ -521,7 +524,7 @@ export const deleteCommentApi =
 
 // 질병 진단
 export const predictDiseaseApi =
-  async imageUri => {
+  async (imageUri, species = '') => {
     if (!imageUri) {
       throw new Error(
         '질병 진단 이미지가 없습니다.',
@@ -541,6 +544,11 @@ export const predictDiseaseApi =
         'disease',
       ),
     );
+
+    // 종을 모르면 별명으로 추측하지 않고 서버가 판단을 보류하도록 한다.
+    if (typeof species === 'string' && species.trim()) {
+      formData.append('species', species.trim());
+    }
 
     const response =
       await axios.post(

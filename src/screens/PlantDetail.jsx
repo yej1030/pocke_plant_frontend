@@ -130,8 +130,7 @@ export default function PlantDetail({
   const [roomId, setRoomId] =
     useState(null);
 
-  const [isRoomCreating, setIsRoomCreating] =
-    useState(false);
+  const roomPromiseRef = useRef(null);
 
   const [mood, setMood] =
     useState('happy');
@@ -218,46 +217,7 @@ export default function PlantDetail({
     loop.start();
 
     return () => loop.stop();
-  }, []);
-
-  useEffect(() => {
-    const createRoom =
-      async () => {
-        if (!plant?.id) {
-          console.log(
-            'plant.id가 없어 채팅방을 생성할 수 없습니다.'
-          );
-
-          return;
-        }
-
-        try {
-          setIsRoomCreating(true);
-
-          const room =
-            await createAiChatRoom(
-              plant.id
-            );
-
-          console.log(
-            '식물 상세 채팅방 생성:',
-            room
-          );
-
-          setRoomId(room.id);
-        } catch (error) {
-          console.log(
-            '채팅방 생성 실패',
-            error.response?.data ||
-            error.message
-          );
-        } finally {
-          setIsRoomCreating(false);
-        }
-      };
-
-    createRoom();
-  }, [plant?.id]);
+  }, [floatAnim]);
 
   /**
    * 최신 센서 데이터 + 전체 센서 히스토리 조회
@@ -278,79 +238,68 @@ export default function PlantDetail({
     let isMounted =
       true;
 
-    const fetchSensorData =
+    const applyLatestSensorData = latest => {
+      if (!isMounted) return;
+
+      setSensorData(latest);
+
+      if (
+        typeof latest?.soil ===
+        'number' &&
+        latest.soil < 30
+      ) {
+        setMood('sad');
+        setSpeechMessage(
+          '목이 말라요.\n물을 조금 주세요 💧'
+        );
+      } else {
+        setMood('happy');
+      }
+    };
+
+    const fetchLatestSensorData =
       async () => {
         try {
           const latest =
             await getLatestSensorData(
               plant.macAddress
             );
-
-          const history =
-            await getSensorHistory(
-              plant.macAddress
-            );
-
-          console.log(
-            '최신 센서 데이터:',
-            latest
-          );
-
-          console.log(
-            '전체 센서 히스토리 개수:',
-            Array.isArray(history)
-              ? history.length
-              : 0
-          );
-
-          console.log(
-            '마지막 센서 데이터:',
-            Array.isArray(history) &&
-              history.length > 0
-              ? history[
-              history.length - 1
-              ]
-              : null
-          );
-
-          if (isMounted) {
-            setSensorData(latest);
-
-            setSensorHistory(
-              Array.isArray(history)
-                ? history
-                : []
-            );
-
-            if (
-              typeof latest?.soil ===
-              'number' &&
-              latest.soil < 30
-            ) {
-              setMood('sad');
-
-              setSpeechMessage(
-                '목이 말라요.\n물을 조금 주세요 💧'
-              );
-            } else {
-              setMood('happy');
-            }
-          }
+          applyLatestSensorData(latest);
         } catch (error) {
           console.log(
-            '센서 조회 실패',
+            '최신 센서 조회 실패',
             error.response?.data ||
             error.message
           );
         }
       };
 
-    fetchSensorData();
+    const fetchInitialSensorData = async () => {
+      await Promise.all([
+        fetchLatestSensorData(),
+        getSensorHistory(plant.macAddress)
+          .then(history => {
+            if (isMounted) {
+              setSensorHistory(
+                Array.isArray(history) ? history : []
+              );
+            }
+          })
+          .catch(error => {
+            console.log(
+              '센서 히스토리 조회 실패',
+              error.response?.data || error.message
+            );
+          }),
+      ]);
+    };
+
+    fetchInitialSensorData();
 
     const interval =
       setInterval(
-        fetchSensorData,
-        5000
+        fetchLatestSensorData,
+        30000
       );
 
     return () => {
@@ -457,36 +406,31 @@ export default function PlantDetail({
 
   const askPlant =
     async question => {
-      if (isRoomCreating) {
-        console.log(
-          '채팅방 생성 중'
-        );
-
-        setSpeechMessage(
-          '잠깐만요, 대화 준비 중이에요 🌱'
-        );
-
-        return;
-      }
-
-      if (!roomId) {
-        console.log(
-          '채팅방 없음'
-        );
-
-        setSpeechMessage(
-          '아직 대화방이 준비되지 않았어요 😢'
-        );
-
-        return;
-      }
-
       setSpeechMessage('생각중...');
 
       try {
+        let activeRoomId = roomId;
+
+        if (!activeRoomId) {
+          if (!plant?.id) {
+            throw new Error('식물 ID가 없습니다.');
+          }
+
+          if (!roomPromiseRef.current) {
+            roomPromiseRef.current = createAiChatRoom(plant.id)
+              .finally(() => {
+                roomPromiseRef.current = null;
+              });
+          }
+
+          const room = await roomPromiseRef.current;
+          activeRoomId = room.id;
+          setRoomId(activeRoomId);
+        }
+
         const answer =
           await sendAiMessage(
-            roomId,
+            activeRoomId,
             question
           );
 
