@@ -5,3 +5,6 @@ android/build/
 android/app/.cxx/
 data-local/
 tools/__pycache__/
+android/.kotlin/
+android/local.properties
+hs_err_pid*.log
