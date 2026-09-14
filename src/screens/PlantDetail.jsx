@@ -30,6 +30,7 @@ import {
   getLatestSensorData,
   getSensorHistory,
   getPlantEnv,
+  increasePlantIntimacy,
 } from '../api/api';
 
 const screenWidth =
@@ -169,6 +170,10 @@ export default function PlantDetail({
 
   const [showHeart, setShowHeart] =
     useState(false);
+
+  // 친밀도 
+  const [intimacy, setIntimacy] = useState(plant?.intimacy || 0);
+  
 
   const getAiText =
     answer => {
@@ -427,7 +432,9 @@ export default function PlantDetail({
     );
   }
 
-  const petPlant = () => {
+  // 캐릭터 클릭시 발동되는 함수
+  const petPlant = async () => {
+
     Animated.sequence([
       Animated.timing(scaleAnim, {
         toValue: 1.15,
@@ -453,6 +460,16 @@ export default function PlantDetail({
     }).start(() => {
       setShowHeart(false);
     });
+
+    //친밀도 올리는 부분
+    try{
+      if(!plant?.id) return;
+
+      const updatedPlant = await increasePlantIntimacy(plant.id);
+      setIntimacy(updatedPlant.intimacy);
+    }catch(error){
+      console.log('친밀도 증가 실패', error.response?.data || error.message)
+    }
   };
 
   const askPlant =
@@ -767,6 +784,7 @@ export default function PlantDetail({
         }
       >
         <View style={styles.heroCard}>
+
           <View style={styles.heroBlobTopRight} />
           <View style={styles.heroBlobBottomLeft} />
           {showHeart && (
@@ -796,6 +814,25 @@ export default function PlantDetail({
               ❤️
             </Animated.Text>
           )}
+
+          {/* 친밀도 */}
+          {/* ======================================================================= */}
+          <View style={styles.statusBadge}>
+
+            <Text>
+              ❤️
+            </Text>
+
+            <Text style={styles.statusBadgeText}>
+              {intimacy}
+              </Text>  
+          </View>       
+
+
+          {/* ======================================================================= */}
+
+
+
           <View style={styles.speechBubble}>
             <Text style={styles.speechText}>
               {speechMessage}
