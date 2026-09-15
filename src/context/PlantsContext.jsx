@@ -9,6 +9,7 @@ export const PlantsContext = createContext({
 export function PlantsProvider({ children }) {
   const [plants, setPlants] = useState([]);
   const loadPromiseRef = useRef(null);
+  const sessionGenerationRef = useRef(0);
 
   // Keep one stable function reference and coalesce overlapping screen-focus loads.
   // An unstable function here retriggered Main's useFocusEffect after every setPlants,
@@ -16,8 +17,12 @@ export function PlantsProvider({ children }) {
   const loadPlants = useCallback(() => {
     if (loadPromiseRef.current) return loadPromiseRef.current;
 
+    const generation = sessionGenerationRef.current;
+
     const request = getMyPlants()
       .then((response) => {
+        if (generation !== sessionGenerationRef.current) return response;
+
         if (Array.isArray(response)) {
           setPlants(response);
         } else if (response && response.data && Array.isArray(response.data)) {
@@ -62,9 +67,15 @@ export function PlantsProvider({ children }) {
     setPlants((prev) => prev.map((item) => (item.id === id ? { ...item, bookmarked: !item.bookmarked } : item)));
   };
 
+  const clearPlants = useCallback(() => {
+    sessionGenerationRef.current += 1;
+    loadPromiseRef.current = null;
+    setPlants([]);
+  }, []);
+
   const value = useMemo(
-    () => ({ plants, addPlant, updatePlant, removePlant, toggleBookmark, loadPlants }),
-    [plants, loadPlants],
+    () => ({ plants, addPlant, updatePlant, removePlant, toggleBookmark, loadPlants, clearPlants }),
+    [plants, loadPlants, clearPlants],
   );
 
   return (

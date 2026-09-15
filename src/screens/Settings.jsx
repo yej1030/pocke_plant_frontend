@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { logout as kakaoLogout } from '@react-native-seoul/kakao-login';
 
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
@@ -16,6 +17,9 @@ import useCustomAlert from '../components/useCustomAlert';
 
 import styles from './style/Settings.style';
 import { getMyInfo } from '../api/api';
+import { clearAuthSession } from '../auth/authStorage';
+import { PlantsContext } from '../context/PlantsContext';
+import { usePlantDiary } from '../context/PlantDiaryContext';
 
 const SWITCH_TRACK_COLOR = { false: '#E0E0E0', true: '#B8E6B0' };
 const SWITCH_THUMB_COLOR_ON = '#7fc77c';
@@ -25,6 +29,8 @@ export default function Settings({ navigation }) {
   const [waterAlert, setWaterAlert] = useState(true);
   const [pumpEnabled, setPumpEnabled] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
+  const { clearPlants } = useContext(PlantsContext);
+  const { clearDiaryEntries } = usePlantDiary();
 
   const { alertConfig, showAlert, closeAlert } = useCustomAlert();
 
@@ -50,6 +56,25 @@ export default function Settings({ navigation }) {
     loadUserInfo();
   }, []);
 
+  const resetLocalSession = async () => {
+    try {
+      await kakaoLogout();
+    } catch (error) {
+      // A general-login user may not have an active Kakao SDK session.
+      console.log('카카오 세션 없음:', error?.message);
+    }
+
+    await clearAuthSession();
+    clearPlants();
+    clearDiaryEntries();
+    setUserInfo(null);
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login_1' }],
+    });
+  };
+
   const onLogout = () => {
     showAlert({
       title: '로그아웃',
@@ -61,12 +86,7 @@ export default function Settings({ navigation }) {
           text: '로그아웃',
           kind: 'destructive',
           onPress: async () => {
-            await AsyncStorage.removeItem('serviceToken');
-
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Login_1' }],
-            });
+            await resetLocalSession();
           },
         },
       ],
@@ -83,11 +103,8 @@ export default function Settings({ navigation }) {
         {
           text: '탈퇴',
           kind: 'destructive',
-          onPress: () => {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Login_1' }],
-            });
+          onPress: async () => {
+            await resetLocalSession();
           },
         },
       ],

@@ -1,7 +1,4 @@
-import React, { useRef, useState } from 'react';
-
-import AsyncStorage
-  from '@react-native-async-storage/async-storage';
+import React, { useContext, useRef, useState } from 'react';
 
 import {
   View,
@@ -30,6 +27,9 @@ import {
   kakaoLoginApi,
   loginUser,
 } from '../api/api';
+import { saveAuthSession } from '../auth/authStorage';
+import { PlantsContext } from '../context/PlantsContext';
+import { usePlantDiary } from '../context/PlantDiaryContext';
 
 export default function Login_2({
   navigation,
@@ -37,6 +37,8 @@ export default function Login_2({
 
   const authInFlightRef = useRef(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const { clearPlants } = useContext(PlantsContext);
+  const { clearDiaryEntries } = usePlantDiary();
 
   // 입력값
   const [email, setEmail] =
@@ -118,26 +120,9 @@ export default function Login_2({
         response
       );
 
-      // 자동로그인용 토큰 저장
-      await AsyncStorage.setItem(
-        'serviceToken',
-        response.data.serviceToken
-      );
-
-      await AsyncStorage.setItem(
-        'userId',
-        String(response.data.userId)
-      );
-
-      await AsyncStorage.setItem(
-        'nickname',
-        response.data.nickname || ''
-      );
-
-      await AsyncStorage.setItem(
-        'email',
-        response.data.email || ''
-      );
+      await saveAuthSession(response);
+      clearPlants();
+      clearDiaryEntries();
 
       showAlert({
         title: '성공',
@@ -212,18 +197,9 @@ export default function Login_2({
           response
         );
 
-        const serviceToken =
-          response?.data?.serviceToken ||
-          response?.serviceToken ||
-          response?.accessToken ||
-          response?.token;
-
-        if (serviceToken) {
-          await AsyncStorage.setItem(
-            'serviceToken',
-            serviceToken
-          );
-        }
+        await saveAuthSession(response);
+        clearPlants();
+        clearDiaryEntries();
 
         showAlert({
           title: '성공',

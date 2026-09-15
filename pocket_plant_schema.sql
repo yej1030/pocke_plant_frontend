@@ -26,6 +26,7 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE,
     profile_image VARCHAR(255),
     role VARCHAR(255),
+    auth_version VARCHAR(36) UNIQUE,
     is_email_verified BOOLEAN NOT NULL DEFAULT FALSE,
     kakao_id VARCHAR(255) UNIQUE,
     naver_id VARCHAR(255) UNIQUE,
@@ -74,8 +75,9 @@ CREATE TABLE social_logins (
     created_at VARCHAR(255),
     CONSTRAINT fk_social_logins_user FOREIGN KEY (user_id)
         REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_social_logins_user_id (user_id),
-    INDEX idx_social_logins_provider_social_id (provider, social_id)
+    CONSTRAINT uq_social_logins_provider_social_id
+        UNIQUE (provider, social_id),
+    INDEX idx_social_logins_user_id (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE sensor_data (
