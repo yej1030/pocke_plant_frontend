@@ -264,7 +264,9 @@ export default function PlantDetail({
             await getLatestSensorData(
               plant.macAddress
             );
-          applyLatestSensorData(latest);
+          if (latest) {
+            applyLatestSensorData(latest);
+          }
         } catch (error) {
           console.log(
             '최신 센서 조회 실패',

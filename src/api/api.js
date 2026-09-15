@@ -7,6 +7,9 @@ const BASE_URL = __DEV__
   ? 'http://127.0.0.1:8080'
   : 'http://3.25.69.13:8080';
 
+const plantEnvCache = new Map();
+const plantEnvRequests = new Map();
+
 const getToken = async () =>
   AsyncStorage.getItem('serviceToken');
 
@@ -350,7 +353,9 @@ export const getLatestSensorData =
         { headers },
       );
 
-    return response.data;
+    return response.status === 204
+      ? null
+      : response.data;
   };
 
 // 센서 전체 이력
@@ -377,17 +382,33 @@ export const getSensorHistory =
 // 식물 환경 정보
 export const getPlantEnv =
   async plantName => {
-    const response =
-      await axios.get(
+    const cacheKey = String(plantName || '').trim().toLowerCase();
+    if (!cacheKey) throw new Error('식물 이름이 없습니다.');
+
+    if (plantEnvCache.has(cacheKey)) {
+      return plantEnvCache.get(cacheKey);
+    }
+
+    if (plantEnvRequests.has(cacheKey)) {
+      return plantEnvRequests.get(cacheKey);
+    }
+
+    const request = axios.get(
         `${BASE_URL}/api/plant/env`,
         {
           params: {
             name: plantName,
           },
         },
-      );
+      )
+      .then(response => {
+        plantEnvCache.set(cacheKey, response.data);
+        return response.data;
+      })
+      .finally(() => plantEnvRequests.delete(cacheKey));
 
-    return response.data;
+    plantEnvRequests.set(cacheKey, request);
+    return request;
   };
 
 // 게시글 목록

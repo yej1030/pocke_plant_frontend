@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import AsyncStorage
   from '@react-native-async-storage/async-storage';
@@ -35,6 +35,9 @@ export default function Login_2({
   navigation,
 }) {
 
+  const authInFlightRef = useRef(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
   // 입력값
   const [email, setEmail] =
     useState('');
@@ -60,6 +63,8 @@ export default function Login_2({
 
   // 일반 로그인
   const handleLogin = async () => {
+
+    if (authInFlightRef.current) return;
 
     // 이메일 입력 확인
     if (!email.trim()) {
@@ -96,6 +101,9 @@ export default function Login_2({
 
       return;
     }
+
+    authInFlightRef.current = true;
+    setIsAuthenticating(true);
 
     try {
 
@@ -168,12 +176,19 @@ export default function Login_2({
 
         variant: 'error',
       });
+    } finally {
+      authInFlightRef.current = false;
+      setIsAuthenticating(false);
     }
   };
 
   // 카카오 로그인
   const handleKakaoLogin =
     async () => {
+
+      if (authInFlightRef.current) return;
+      authInFlightRef.current = true;
+      setIsAuthenticating(true);
 
       try {
 
@@ -244,6 +259,9 @@ export default function Login_2({
             '카카오 로그인에 실패했습니다.',
           variant: 'error',
         });
+      } finally {
+        authInFlightRef.current = false;
+        setIsAuthenticating(false);
       }
     };
 
@@ -307,10 +325,11 @@ export default function Login_2({
         <TouchableOpacity
           style={styles.loginSubmitButton}
           onPress={handleLogin}
+          disabled={isAuthenticating}
         >
 
           <Text style={styles.loginSubmitText}>
-            로그인하기
+            {isAuthenticating ? '로그인 중...' : '로그인하기'}
           </Text>
 
         </TouchableOpacity>
@@ -368,6 +387,7 @@ export default function Login_2({
             <TouchableOpacity
               style={styles.snsIconButton}
               onPress={handleKakaoLogin}
+              disabled={isAuthenticating}
               activeOpacity={0.85}
             >
 
