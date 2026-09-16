@@ -30,12 +30,11 @@ import {
   getLatestSensorData,
   getSensorHistory,
   getPlantEnv,
+  increasePlantIntimacy,
 } from '../api/api';
 
 const screenWidth =
   Dimensions.get('window').width;
-
-const USE_MOCK_SENSOR_DATA_WHEN_NO_HARDWARE = false;
 
 const characterImages = {
   1: {
@@ -87,84 +86,6 @@ const characterImages = {
     happy: require('../assets/Plant/plant_19_happy.png'),
     sad: require('../assets/Plant/plant_20_sad.png'),
   },
-};
-
-function generateMockSensorHistory(
-  count = 60,
-  intervalMinutes = 15
-) {
-  const now =
-    Date.now();
-
-  const history =
-    [];
-
-  let soil =
-    2200;
-
-  let temperature =
-    24;
-
-  let humidity =
-    55;
-
-  let light =
-    1800;
-
-  for (
-    let index = 0;
-    index < count;
-    index += 1
-  ) {
-    soil +=
-      (Math.random() - 0.5) * 120;
-
-    temperature +=
-      (Math.random() - 0.5) * 0.8;
-
-    humidity +=
-      (Math.random() - 0.5) * 3;
-
-    light +=
-      (Math.random() - 0.5) * 250;
-
-    soil =
-      Math.min(Math.max(soil, 800), 3800);
-
-    temperature =
-      Math.min(Math.max(temperature, 15), 34);
-
-    humidity =
-      Math.min(Math.max(humidity, 30), 85);
-
-    light =
-      Math.min(Math.max(light, 200), 3900);
-
-    const regDate =
-      new Date(
-        now -
-        (count - 1 - index) *
-        intervalMinutes *
-        60 *
-        1000
-      ).toISOString();
-
-    history.push({
-      soil: Math.round(soil),
-      temperature: Number(temperature.toFixed(1)),
-      humidity: Math.round(humidity),
-      light: Math.round(light),
-      regDate,
-    });
-  }
-
-  return history;
-}
-
-const MOCK_PLANT_ENV = {
-  waterCycleSpring: 2000,
-  growhTp: 24,
-  humidity: 50,
 };
 
 const DEVIATION_TOLERANCE = {
@@ -251,6 +172,7 @@ export default function PlantDetail({
   const [roomId, setRoomId] =
     useState(null);
 
+  // 채팅방은 실제 대화 시작 시점에 지연 생성 (중복 생성 방지용 ref)
   const roomPromiseRef = useRef(null);
 
   const [mood, setMood] =
@@ -274,8 +196,8 @@ export default function PlantDetail({
   ).current;
 
   const heartAnim = useRef(
-  new Animated.Value(0)
-).current;
+    new Animated.Value(0)
+  ).current;
 
   const [showHeart, setShowHeart] =
     useState(false);
@@ -285,6 +207,9 @@ export default function PlantDetail({
     temperature: new Animated.Value(0),
     humidity: new Animated.Value(0),
   }).current;
+
+  // 친밀도
+  const [intimacy, setIntimacy] = useState(plant?.intimacy || 0);
 
   const getAiText =
     answer => {
@@ -336,21 +261,11 @@ export default function PlantDetail({
     return () => loop.stop();
   }, [floatAnim]);
 
+  /**
+   * 최신 센서 데이터 + 전체 센서 히스토리 조회
+   */
   useEffect(() => {
     if (!isHardwareConnected) {
-      if (USE_MOCK_SENSOR_DATA_WHEN_NO_HARDWARE) {
-        const mockHistory =
-          generateMockSensorHistory();
-
-        setSensorHistory(mockHistory);
-
-        setSensorData(
-          mockHistory[mockHistory.length - 1]
-        );
-
-        setMood('happy');
-      }
-
       return;
     }
 
@@ -440,12 +355,11 @@ export default function PlantDetail({
     plant?.macAddress,
   ]);
 
+  /**
+   * 식물 적정 환경 데이터 조회
+   */
   useEffect(() => {
     if (!isHardwareConnected) {
-      if (USE_MOCK_SENSOR_DATA_WHEN_NO_HARDWARE) {
-        setPlantEnv(MOCK_PLANT_ENV);
-      }
-
       return;
     }
 
@@ -488,6 +402,7 @@ export default function PlantDetail({
     isHardwareConnected,
   ]);
 
+  // 센서 값이 적정 범위에서 얼마나 벗어났는지에 따라 막대 색상 애니메이션
   useEffect(() => {
     const targets = {
       soil: plantEnv?.waterCycleSpring,
@@ -535,7 +450,8 @@ export default function PlantDetail({
     );
   }
 
-  const petPlant = () => {
+  // 캐릭터 클릭 시 발동되는 함수
+  const petPlant = async () => {
     Animated.sequence([
       Animated.timing(scaleAnim, {
         toValue: 1.15,
@@ -561,6 +477,16 @@ export default function PlantDetail({
     }).start(() => {
       setShowHeart(false);
     });
+
+    // 친밀도 올리는 부분
+    try {
+      if (!plant?.id) return;
+
+      const updatedPlant = await increasePlantIntimacy(plant.id);
+      setIntimacy(updatedPlant.intimacy);
+    } catch (error) {
+      console.log('친밀도 증가 실패', error.response?.data || error.message);
+    }
   };
 
   const askPlant =
@@ -696,6 +622,10 @@ export default function PlantDetail({
     },
   ];
 
+  /**
+   * 전체 데이터는 유지하고,
+   * 그래프 렌더링은 성능을 위해 최대 120개 점만 표시
+   */
   const sampledHistory =
     sensorHistory.length > 120
       ? sensorHistory.filter(
@@ -852,8 +782,7 @@ export default function PlantDetail({
       : '아직 데이터 없음';
 
   const canShowSensorSection =
-    isHardwareConnected ||
-    USE_MOCK_SENSOR_DATA_WHEN_NO_HARDWARE;
+    isHardwareConnected;
 
   return (
     <>
@@ -899,6 +828,18 @@ export default function PlantDetail({
               ❤️
             </Animated.Text>
           )}
+
+          {/* 친밀도 */}
+          <View style={styles.statusBadge}>
+            <Text>
+              ❤️
+            </Text>
+
+            <Text style={styles.statusBadgeText}>
+              {intimacy}
+            </Text>
+          </View>
+
           <View style={styles.speechBubble}>
             <Text style={styles.speechText}>
               {speechMessage}
@@ -1041,9 +982,7 @@ export default function PlantDetail({
                 <View style={styles.liveDot} />
 
                 <Text style={styles.liveText}>
-                  {isHardwareConnected
-                    ? 'LIVE'
-                    : '테스트'}
+                  LIVE
                 </Text>
               </View>
             </View>

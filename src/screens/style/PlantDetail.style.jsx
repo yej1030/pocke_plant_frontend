@@ -444,4 +444,27 @@ export default StyleSheet.create({
     color: '#8EA798',
     fontWeight: '500',
   },
+
+  statusBadge: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    marginBottom: 8,
+    alignSelf: 'center',
+
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  statusBadgeText:{
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#2E6D32',
+    textAlign:'center',
+  },
+
+
 });

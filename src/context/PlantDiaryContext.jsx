@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState , useCallback} from 'react';
+import { diaryApi } from '../api/api';
 
 const PlantDiaryContext = createContext();
 
@@ -13,57 +14,90 @@ export const MOODS = [
 
 export const PlantDiaryProvider = ({ children }) => {
 	const [diaryEntries, setDiaryEntries] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // 식물별 일지 목록 백엔드에서 불러오기
+  const fetchDiaryEntries = useCallback(async (plantId) => {
+    setLoading(true);
+    try {
+      const data = await diaryApi.getDiaries(plantId);
+      setDiaryEntries(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
 
 	// 일지 추가
-	const addDiaryEntry = (entry) => {
-		setDiaryEntries((prev) => [entry, ...prev]);
-	};
+	const addDiaryEntry = async (entryData) => {
+    const newId = await diaryApi.createDiary({
+      plantId: entryData.plantId,
+      day: entryData.day,
+      moods: entryData.moods,
+      photoUrls: entryData.photoUris,
+      note: entryData.note,
+      sensorSnapshot: entryData.sensorSnapshot,
+    });
+    // 목록 새로고침
+    await fetchDiaryEntries(entryData.plantId);
+    return newId;
+  };
 
 	// 일지 수정
-	const updateDiaryEntry = (updatedEntry) => {
-		setDiaryEntries((prev) =>
-			prev.map((entry) =>
-				entry.id === updatedEntry.id ? updatedEntry : entry
-			)
-		);
-	};
+	const updateDiaryEntry = async (entryId, updatedData) => {
+    await diaryApi.updateDiary(entryId, {
+      moods: updatedData.moods,
+      photoUrls: updatedData.photoUris,
+      note: updatedData.note,
+    });
+    // 목록 갱신
+    if (updatedData.plantId) {
+      await fetchDiaryEntries(updatedData.plantId);
+    }
+  };
 
 	// 일지 삭제
-	const deleteDiaryEntry = (entryId) => {
-		setDiaryEntries((prev) => prev.filter((entry) => entry.id !== entryId));
-	};
+	const deleteDiaryEntry = async (entryId, plantId) => {
+    await diaryApi.deleteDiary(entryId);
+    setDiaryEntries((prev) => prev.filter((item) => item.id !== entryId));
+  };
 
-	const clearDiaryEntries = () => {
-		setDiaryEntries([]);
-	};
+  // 일지 목록 상태 초기화 (예: 로그아웃 시)
+  const clearDiaryEntries = () => {
+    setDiaryEntries([]);
+  };
 
-	// 특정 식물의 일지만 최신순으로 조회
-	const getDiaryEntriesByPlant = (plantId) => {
-		return diaryEntries
-			.filter((entry) => entry.plantId === plantId)
-			.sort((a, b) => new Date(b.date) - new Date(a.date));
-	};
+// 일지 단건 상세 조회
+const getDiaryEntry = useCallback(
+    async (entryId) => {
+      const cached = diaryEntries.find((entry) => entry.id === entryId);
+      if (cached) return cached;
+      return await diaryApi.getDiary(entryId);
+    },
+    [diaryEntries]
+  );
 
-	// 일지 하나 조회 (id 기준) - 상세/수정 화면에서 사용
-	const getDiaryEntry = (entryId) => {
-		return diaryEntries.find((entry) => entry.id === entryId);
-	};
-
-	return (
-		<PlantDiaryContext.Provider
-			value={{
-				diaryEntries,
-				addDiaryEntry,
-				updateDiaryEntry,
-				deleteDiaryEntry,
-				clearDiaryEntries,
-				getDiaryEntriesByPlant,
-				getDiaryEntry,
-			}}
-		>
-			{children}
-		</PlantDiaryContext.Provider>
-	);
+  return (
+    <PlantDiaryContext.Provider
+      value={{
+        diaryEntries,
+        loading,
+        fetchDiaryEntries,
+        addDiaryEntry,
+        updateDiaryEntry,
+        deleteDiaryEntry,
+        clearDiaryEntries,
+        getDiaryEntry,
+      }}
+    >
+      {children}
+    </PlantDiaryContext.Provider>
+  );
 };
+
+  
+
 
 export const usePlantDiary = () => useContext(PlantDiaryContext);
