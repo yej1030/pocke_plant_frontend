@@ -23,7 +23,7 @@ const authPayload = response => {
 };
 
 export const clearAuthSession = async () => {
-  await AsyncStorage.multiRemove(AUTH_STORAGE_KEYS);
+  await AsyncStorage.removeMany(AUTH_STORAGE_KEYS);
 };
 
 export const saveAuthSession = async response => {
@@ -45,7 +45,7 @@ export const saveAuthSession = async response => {
 
   // Remove every value from the previous account before storing the new one.
   await clearAuthSession();
-  await AsyncStorage.multiSet(entries);
+  await AsyncStorage.setMany(Object.fromEntries(entries));
   return payload;
 };
 
@@ -63,6 +63,6 @@ export const syncAuthProfile = async profile => {
   ].filter(Boolean);
 
   const profileKeys = AUTH_STORAGE_KEYS.filter(key => key !== 'serviceToken');
-  await AsyncStorage.multiRemove(profileKeys);
-  await AsyncStorage.multiSet(entries);
+  await AsyncStorage.removeMany(profileKeys);
+  await AsyncStorage.setMany(Object.fromEntries(entries));
 };
