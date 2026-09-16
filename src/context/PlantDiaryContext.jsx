@@ -33,6 +33,10 @@ export const PlantDiaryProvider = ({ children }) => {
 		setDiaryEntries((prev) => prev.filter((entry) => entry.id !== entryId));
 	};
 
+	const clearDiaryEntries = () => {
+		setDiaryEntries([]);
+	};
+
 	// 특정 식물의 일지만 최신순으로 조회
 	const getDiaryEntriesByPlant = (plantId) => {
 		return diaryEntries
@@ -52,6 +56,7 @@ export const PlantDiaryProvider = ({ children }) => {
 				addDiaryEntry,
 				updateDiaryEntry,
 				deleteDiaryEntry,
+				clearDiaryEntries,
 				getDiaryEntriesByPlant,
 				getDiaryEntry,
 			}}

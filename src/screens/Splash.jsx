@@ -13,6 +13,11 @@ import AsyncStorage
 	from '@react-native-async-storage/async-storage';
 
 import {
+	clearAuthSession,
+	syncAuthProfile,
+} from '../auth/authStorage';
+
+import {
 	getMyInfo,
 } from '../api/api';
 
@@ -34,8 +39,10 @@ export default function SplashScreen({
 		).current;
 
 	useEffect(() => {
+		let active = true;
+		let navigationTimer;
 
-		Animated.spring(
+		const spring = Animated.spring(
 			scaleAnim,
 			{
 				toValue: 1,
@@ -43,9 +50,9 @@ export default function SplashScreen({
 				tension: 40,
 				useNativeDriver: true,
 			}
-		).start();
+		);
 
-		Animated.loop(
+		const loop = Animated.loop(
 			Animated.sequence([
 				Animated.timing(
 					floatAnim,
@@ -64,74 +71,43 @@ export default function SplashScreen({
 					}
 				),
 			])
-		).start();
+		);
 
-		checkAutoLogin();
+		const navigateAfterSplash = screenName => {
+			navigationTimer = setTimeout(() => {
+				if (active) navigation.replace(screenName);
+			}, 3000);
+		};
 
-	}, []);
-
-	const checkAutoLogin =
-		async () => {
-
+		const checkAutoLogin = async () => {
 			try {
-
-				const token =
-					await AsyncStorage.getItem(
-						'serviceToken'
-					);
-
-				console.log(
-					'저장된 토큰:',
-					token
-				);
-
+				const token = await AsyncStorage.getItem('serviceToken');
 				if (!token) {
-
-					setTimeout(() => {
-
-						navigation.replace(
-							'Login_1'
-						);
-
-					}, 3000);
-
+					navigateAfterSplash('Login_1');
 					return;
 				}
 
-				await getMyInfo(token);
-
-				console.log(
-					'자동로그인 성공'
-				);
-
-				setTimeout(() => {
-
-					navigation.replace(
-						'Main'
-					);
-
-				}, 3000);
-
+				const userInfo = await getMyInfo(token);
+				await syncAuthProfile(userInfo);
+				navigateAfterSplash('Main');
 			} catch (error) {
-
-				console.log(
-					'자동로그인 실패:',
-					error.response?.data
-				);
-
-				await AsyncStorage.removeItem(
-					'serviceToken'
-				);
-
-				setTimeout(() => {
-
-					navigation.replace(
-						'Login_1'
-					);
-
-				}, 3000);
+				console.log('자동로그인 실패:', error.response?.data);
+				await clearAuthSession();
+				navigateAfterSplash('Login_1');
 			}
 		};
+
+		spring.start();
+		loop.start();
+		checkAutoLogin();
+
+		return () => {
+			active = false;
+			if (navigationTimer) clearTimeout(navigationTimer);
+			spring.stop();
+			loop.stop();
+		};
+	}, [floatAnim, navigation, scaleAnim]);
 
 	return (
 		<View style={styles.container}>

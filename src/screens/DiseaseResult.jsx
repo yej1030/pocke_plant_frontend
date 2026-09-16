@@ -91,10 +91,22 @@ export default function DiseaseResult({
     prediction?.diseaseSymptom ||
     '진단 결과 없음';
 
+  const status = prediction?.status;
+  const resultKind = {
+    unsupported: '현재 미지원 식물',
+    unvalidated: '실사용 검증 중',
+    uncertain: '판단 보류',
+    retake: '재촬영 필요',
+    experimental: '실험 모델 참고 결과',
+  }[status] || '사진 분석 참고 결과';
+
   const confidence =
     normalizePercent(
       prediction?.confidence
     );
+
+  const showConfidence =
+    !status && confidence > 0;
 
   return (
     <View style={styles.background}>
@@ -128,13 +140,19 @@ export default function DiseaseResult({
         <Text
           style={styles.headerText}
         >
-          ⚠ 감지된 이상 징후
+          {resultKind}
         </Text>
 
-        <ResultBar
-          label={diseaseName}
-          percent={confidence}
-        />
+        {showConfidence ? (
+          <ResultBar
+            label={diseaseName}
+            percent={confidence}
+          />
+        ) : (
+          <Text style={styles.resultLabel}>
+            {diseaseName}
+          </Text>
+        )}
 
         <View
           style={styles.divider}
@@ -142,9 +160,11 @@ export default function DiseaseResult({
 
         <View style={styles.tipCard}>
           <Text style={styles.tipText}>
-            {confidence > 0
+            {status === 'experimental'
+              ? '이 결과는 로컬 실험 모델의 외형 유사도이며 진단이 아닙니다. 잎의 색이나 반점만으로 원인을 확정하지 마세요.'
+              : showConfidence
               ? `${diseaseName} 가능성이 ${confidence}%로 분석되었습니다. 결과만으로 질병을 확정하지 말고 잎, 줄기, 흙 상태를 함께 확인해주세요.`
-              : '명확한 진단 결과를 받지 못했습니다. 다른 각도에서 촬영한 선명한 사진으로 다시 시도해주세요.'}
+              : '잎의 색이나 반점만으로 원인을 확정하기 어렵습니다. 식물 종류, 흙의 젖은 정도, 최근 물주기와 빛 환경을 함께 확인해주세요.'}
           </Text>
 
           {note ? (

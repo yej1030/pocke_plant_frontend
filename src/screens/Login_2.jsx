@@ -1,7 +1,4 @@
-import React, { useState } from 'react';
-
-import AsyncStorage
-  from '@react-native-async-storage/async-storage';
+import React, { useContext, useRef, useState } from 'react';
 
 import {
   View,
@@ -30,10 +27,18 @@ import {
   kakaoLoginApi,
   loginUser,
 } from '../api/api';
+import { saveAuthSession } from '../auth/authStorage';
+import { PlantsContext } from '../context/PlantsContext';
+import { usePlantDiary } from '../context/PlantDiaryContext';
 
 export default function Login_2({
   navigation,
 }) {
+
+  const authInFlightRef = useRef(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const { clearPlants } = useContext(PlantsContext);
+  const { clearDiaryEntries } = usePlantDiary();
 
   // 입력값
   const [email, setEmail] =
@@ -60,6 +65,8 @@ export default function Login_2({
 
   // 일반 로그인
   const handleLogin = async () => {
+
+    if (authInFlightRef.current) return;
 
     // 이메일 입력 확인
     if (!email.trim()) {
@@ -97,6 +104,9 @@ export default function Login_2({
       return;
     }
 
+    authInFlightRef.current = true;
+    setIsAuthenticating(true);
+
     try {
 
       const response =
@@ -110,26 +120,9 @@ export default function Login_2({
         response
       );
 
-      // 자동로그인용 토큰 저장
-      await AsyncStorage.setItem(
-        'serviceToken',
-        response.data.serviceToken
-      );
-
-      await AsyncStorage.setItem(
-        'userId',
-        String(response.data.userId)
-      );
-
-      await AsyncStorage.setItem(
-        'nickname',
-        response.data.nickname || ''
-      );
-
-      await AsyncStorage.setItem(
-        'email',
-        response.data.email || ''
-      );
+      await saveAuthSession(response);
+      clearPlants();
+      clearDiaryEntries();
 
       showAlert({
         title: '성공',
@@ -168,12 +161,19 @@ export default function Login_2({
 
         variant: 'error',
       });
+    } finally {
+      authInFlightRef.current = false;
+      setIsAuthenticating(false);
     }
   };
 
   // 카카오 로그인
   const handleKakaoLogin =
     async () => {
+
+      if (authInFlightRef.current) return;
+      authInFlightRef.current = true;
+      setIsAuthenticating(true);
 
       try {
 
@@ -197,18 +197,9 @@ export default function Login_2({
           response
         );
 
-        const serviceToken =
-          response?.data?.serviceToken ||
-          response?.serviceToken ||
-          response?.accessToken ||
-          response?.token;
-
-        if (serviceToken) {
-          await AsyncStorage.setItem(
-            'serviceToken',
-            serviceToken
-          );
-        }
+        await saveAuthSession(response);
+        clearPlants();
+        clearDiaryEntries();
 
         showAlert({
           title: '성공',
@@ -244,6 +235,9 @@ export default function Login_2({
             '카카오 로그인에 실패했습니다.',
           variant: 'error',
         });
+      } finally {
+        authInFlightRef.current = false;
+        setIsAuthenticating(false);
       }
     };
 
@@ -307,10 +301,11 @@ export default function Login_2({
         <TouchableOpacity
           style={styles.loginSubmitButton}
           onPress={handleLogin}
+          disabled={isAuthenticating}
         >
 
           <Text style={styles.loginSubmitText}>
-            로그인하기
+            {isAuthenticating ? '로그인 중...' : '로그인하기'}
           </Text>
 
         </TouchableOpacity>
@@ -368,6 +363,7 @@ export default function Login_2({
             <TouchableOpacity
               style={styles.snsIconButton}
               onPress={handleKakaoLogin}
+              disabled={isAuthenticating}
               activeOpacity={0.85}
             >
 

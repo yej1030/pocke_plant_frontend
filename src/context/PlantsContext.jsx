@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useCallback, useMemo, useRef, useState } from 'react';
 import { getMyPlants } from '../api/api';
 
 export const PlantsContext = createContext({
@@ -8,22 +8,41 @@ export const PlantsContext = createContext({
 
 export function PlantsProvider({ children }) {
   const [plants, setPlants] = useState([]);
+  const loadPromiseRef = useRef(null);
+  const sessionGenerationRef = useRef(0);
 
-  const loadPlants = async () => {
-    try {
-      const response = await getMyPlants();
-      if (Array.isArray(response)) {
-        setPlants(response);
-      } else if (response && response.data && Array.isArray(response.data)) {
-        setPlants(response.data);
-      } else {
-        // fallback: if API returns single object or wrapped shape
-        setPlants(response || []);
-      }
-    } catch (e) {
-      console.log('PlantsContext: loadPlants failed', e.response?.data || e.message);
-    }
-  };
+  // Keep one stable function reference and coalesce overlapping screen-focus loads.
+  // An unstable function here retriggered Main's useFocusEffect after every setPlants,
+  // creating a continuous /api/plants/my request loop.
+  const loadPlants = useCallback(() => {
+    if (loadPromiseRef.current) return loadPromiseRef.current;
+
+    const generation = sessionGenerationRef.current;
+
+    const request = getMyPlants()
+      .then((response) => {
+        if (generation !== sessionGenerationRef.current) return response;
+
+        if (Array.isArray(response)) {
+          setPlants(response);
+        } else if (response && response.data && Array.isArray(response.data)) {
+          setPlants(response.data);
+        } else {
+          setPlants(response || []);
+        }
+        return response;
+      })
+      .catch((e) => {
+        console.log('PlantsContext: loadPlants failed', e.response?.data || e.message);
+        return null;
+      })
+      .finally(() => {
+        loadPromiseRef.current = null;
+      });
+
+    loadPromiseRef.current = request;
+    return request;
+  }, []);
 
   const addPlant = (plant) => {
     const id = plant?.id ?? `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -48,8 +67,19 @@ export function PlantsProvider({ children }) {
     setPlants((prev) => prev.map((item) => (item.id === id ? { ...item, bookmarked: !item.bookmarked } : item)));
   };
 
+  const clearPlants = useCallback(() => {
+    sessionGenerationRef.current += 1;
+    loadPromiseRef.current = null;
+    setPlants([]);
+  }, []);
+
+  const value = useMemo(
+    () => ({ plants, addPlant, updatePlant, removePlant, toggleBookmark, loadPlants, clearPlants }),
+    [plants, loadPlants, clearPlants],
+  );
+
   return (
-    <PlantsContext.Provider value={{ plants, addPlant, updatePlant, removePlant, toggleBookmark, loadPlants }}>
+    <PlantsContext.Provider value={value}>
       {children}
     </PlantsContext.Provider>
   );

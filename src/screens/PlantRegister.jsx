@@ -2,6 +2,7 @@ import React, {
 	useState,
 	useContext,
 	useEffect,
+	useRef,
 } from 'react';
 import {
 	View,
@@ -75,6 +76,10 @@ export default function PlantRegister({ navigation, route }) {
 	const [isAnalyzed, setIsAnalyzed] = useState(false);
 	const [analysisAccuracy, setAnalysisAccuracy] = useState('');
 	const [selectedCharacter, setSelectedCharacter] = useState(1);
+	const [isAnalyzing, setIsAnalyzing] = useState(false);
+	const [isSaving, setIsSaving] = useState(false);
+	const analysisInFlightRef = useRef(false);
+	const saveInFlightRef = useRef(false);
 
 	useEffect(() => {
 		if (route.params?.macAddress) {
@@ -133,6 +138,8 @@ export default function PlantRegister({ navigation, route }) {
 	};
 
 	const handleAnalyzeSpecies = async () => {
+		if (analysisInFlightRef.current) return;
+
 		if (!imageUri) {
 			showAlert({
 				title: '이미지 필요',
@@ -141,6 +148,9 @@ export default function PlantRegister({ navigation, route }) {
 			});
 			return;
 		}
+
+		analysisInFlightRef.current = true;
+		setIsAnalyzing(true);
 
 		try {
 			const result = await identifyPlantApi(imageUri);
@@ -156,6 +166,9 @@ export default function PlantRegister({ navigation, route }) {
 				message: '식물 종 분석에 실패했습니다.',
 				variant: 'error',
 			});
+		} finally {
+			analysisInFlightRef.current = false;
+			setIsAnalyzing(false);
 		}
 	};
 
@@ -173,6 +186,8 @@ export default function PlantRegister({ navigation, route }) {
 	}, [species]);
 
 const handleSubmit = async () => {
+  if (saveInFlightRef.current) return;
+
   const missing = [];
 
   if (!name || name.trim() === '') {
@@ -193,6 +208,9 @@ const handleSubmit = async () => {
 
     return;
   }
+
+  saveInFlightRef.current = true;
+  setIsSaving(true);
 
   try {
     const savedImageUri =
@@ -268,6 +286,9 @@ const handleSubmit = async () => {
         '식물 저장에 실패했습니다.',
       variant: 'error',
     });
+  } finally {
+    saveInFlightRef.current = false;
+    setIsSaving(false);
   }
 };
 
@@ -422,8 +443,10 @@ const handleSubmit = async () => {
 					<View style={styles.aiResultCard}>
 						<View style={styles.aiResultTop}>
 							<Text style={styles.aiResultTitle}>🌿 {analyzedSpecies}</Text>
-							<TouchableOpacity onPress={handleAnalyzeSpecies}>
-								<Text style={styles.aiRetry}>다시 분석하기</Text>
+							<TouchableOpacity onPress={handleAnalyzeSpecies} disabled={isAnalyzing}>
+								<Text style={styles.aiRetry}>
+									{isAnalyzing ? '분석 중...' : '다시 분석하기'}
+								</Text>
 							</TouchableOpacity>
 						</View>
 						<Text style={styles.aiResultDesc}>신뢰도: {analysisAccuracy}</Text>
@@ -463,8 +486,11 @@ const handleSubmit = async () => {
 						style={styles.analyzeButton}
 						onPress={handleAnalyzeSpecies}
 						activeOpacity={0.85}
+						disabled={isAnalyzing}
 					>
-						<Text style={styles.analyzeButtonText}>🌿 종 분석하기</Text>
+						<Text style={styles.analyzeButtonText}>
+							{isAnalyzing ? '분석 중...' : '🌿 종 분석하기'}
+						</Text>
 					</TouchableOpacity>
 				) : (
 					<Text style={styles.aiGuide}>사진을 등록하면 AI가 종을 분석합니다.</Text>
@@ -557,7 +583,11 @@ const handleSubmit = async () => {
 				onRequestClose={closeAlert}
 			/>
 
-			<BottomButton title="등록하기" onPress={handleSubmit} />
+			<BottomButton
+				title={isSaving ? '저장 중...' : editingId ? '수정하기' : '등록하기'}
+				onPress={handleSubmit}
+				disabled={isSaving}
+			/>
 		</View>
 	);
 }

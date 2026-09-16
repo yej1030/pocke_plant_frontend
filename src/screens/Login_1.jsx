@@ -1,14 +1,20 @@
-import React, { useRef, useEffect, } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, Animated, } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { login } from '@react-native-seoul/kakao-login';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import styles from './style/Login_1.style';
 import { kakaoLoginApi } from '../api/api';
+import { saveAuthSession } from '../auth/authStorage';
+import { PlantsContext } from '../context/PlantsContext';
+import { usePlantDiary } from '../context/PlantDiaryContext';
 
 export default function Login_1({ navigation }) {
   const { alertConfig, showAlert, closeAlert } = useCustomAlert();
+  const { clearPlants } = useContext(PlantsContext);
+  const { clearDiaryEntries } = usePlantDiary();
+  const loginInFlightRef = useRef(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const floatAnim =
     useRef(
@@ -17,7 +23,7 @@ export default function Login_1({ navigation }) {
 
   useEffect(() => {
 
-    Animated.loop(
+    const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(
           floatAnim,
@@ -36,25 +42,26 @@ export default function Login_1({ navigation }) {
           }
         ),
       ])
-    ).start();
+    );
 
-  }, []);
+    loop.start();
+
+    return () => loop.stop();
+  }, [floatAnim]);
 
   const handleKakaoLogin = async () => {
+    if (loginInFlightRef.current) return;
+    loginInFlightRef.current = true;
+    setIsLoggingIn(true);
+
     try {
       const token = await login();
 
       const response = await kakaoLoginApi(token.accessToken);
 
-      const serviceToken =
-        response?.data?.serviceToken ||
-        response?.serviceToken ||
-        response?.accessToken ||
-        response?.token;
-
-      if (serviceToken) {
-        await AsyncStorage.setItem('serviceToken', serviceToken);
-      }
+      await saveAuthSession(response);
+      clearPlants();
+      clearDiaryEntries();
 
       navigation.replace('Main');
     } catch (error) {
@@ -68,6 +75,9 @@ export default function Login_1({ navigation }) {
           '카카오 로그인에 실패했습니다.',
         variant: 'error',
       });
+    } finally {
+      loginInFlightRef.current = false;
+      setIsLoggingIn(false);
     }
   };
 
@@ -101,12 +111,15 @@ export default function Login_1({ navigation }) {
           style={styles.kakaoButton}
           onPress={handleKakaoLogin}
           activeOpacity={0.85}
+          disabled={isLoggingIn}
         >
           <Image
             source={require('../assets/logo/Kakao.png')}
             style={styles.kakaoIcon}
           />
-          <Text style={styles.kakaoText}>카카오로 시작하기</Text>
+          <Text style={styles.kakaoText}>
+            {isLoggingIn ? '로그인 중...' : '카카오로 시작하기'}
+          </Text>
         </TouchableOpacity>
 
         {/* 신규 회원가입 버튼 */}
