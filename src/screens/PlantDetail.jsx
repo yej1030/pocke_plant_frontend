@@ -35,6 +35,8 @@ import {
 const screenWidth =
   Dimensions.get('window').width;
 
+const USE_MOCK_SENSOR_DATA_WHEN_NO_HARDWARE = false;
+
 const characterImages = {
   1: {
     happy: require('../assets/Plant/plant_01_happy.png'),
@@ -87,6 +89,129 @@ const characterImages = {
   },
 };
 
+function generateMockSensorHistory(
+  count = 60,
+  intervalMinutes = 15
+) {
+  const now =
+    Date.now();
+
+  const history =
+    [];
+
+  let soil =
+    2200;
+
+  let temperature =
+    24;
+
+  let humidity =
+    55;
+
+  let light =
+    1800;
+
+  for (
+    let index = 0;
+    index < count;
+    index += 1
+  ) {
+    soil +=
+      (Math.random() - 0.5) * 120;
+
+    temperature +=
+      (Math.random() - 0.5) * 0.8;
+
+    humidity +=
+      (Math.random() - 0.5) * 3;
+
+    light +=
+      (Math.random() - 0.5) * 250;
+
+    soil =
+      Math.min(Math.max(soil, 800), 3800);
+
+    temperature =
+      Math.min(Math.max(temperature, 15), 34);
+
+    humidity =
+      Math.min(Math.max(humidity, 30), 85);
+
+    light =
+      Math.min(Math.max(light, 200), 3900);
+
+    const regDate =
+      new Date(
+        now -
+        (count - 1 - index) *
+        intervalMinutes *
+        60 *
+        1000
+      ).toISOString();
+
+    history.push({
+      soil: Math.round(soil),
+      temperature: Number(temperature.toFixed(1)),
+      humidity: Math.round(humidity),
+      light: Math.round(light),
+      regDate,
+    });
+  }
+
+  return history;
+}
+
+const MOCK_PLANT_ENV = {
+  waterCycleSpring: 2000,
+  growhTp: 24,
+  humidity: 50,
+};
+
+const DEVIATION_TOLERANCE = {
+  soil: 900,
+  temperature: 6,
+  humidity: 25,
+};
+
+const SENSOR_STATUS_COLORS = [
+  '#4CAF7F',
+  '#B08968',
+  '#E0524F',
+];
+
+function calcDeviationProgress(
+  type,
+  value,
+  target
+) {
+  const tolerance =
+    DEVIATION_TOLERANCE[type];
+
+  if (!tolerance) {
+    return null;
+  }
+
+  const numericValue =
+    Number(value);
+
+  const numericTarget =
+    Number(target);
+
+  if (
+    !Number.isFinite(numericValue) ||
+    !Number.isFinite(numericTarget)
+  ) {
+    return null;
+  }
+
+  const diff =
+    Math.abs(
+      numericValue - numericTarget
+    );
+
+  return Math.min(diff / tolerance, 1);
+}
+
 export default function PlantDetail({
   navigation,
   route,
@@ -120,10 +245,6 @@ export default function PlantDetail({
       !!route?.params?.plant?.macAddress
     );
 
-  // const [isHardwareConnected, setIsHardwareConnected] =
-  //   useState(true);
-  // 하드웨어 없어서 테스트
-
   const [speechMessage, setSpeechMessage] =
     useState('오늘은\n기분이 좋아요!');
 
@@ -137,16 +258,6 @@ export default function PlantDetail({
 
   const [sensorData, setSensorData] =
     useState(null);
-
-  // const [sensorData, setSensorData] =
-  //   useState({
-  //     soil: 3933,
-  //     temperature: 30.8,
-  //     humidity: 55,
-  //     light: 3673,
-  //   });
-  //  이것도 테스트
-
 
   const [sensorHistory, setSensorHistory] =
     useState([]);
@@ -168,6 +279,12 @@ export default function PlantDetail({
 
   const [showHeart, setShowHeart] =
     useState(false);
+
+  const deviationAnim = useRef({
+    soil: new Animated.Value(0),
+    temperature: new Animated.Value(0),
+    humidity: new Animated.Value(0),
+  }).current;
 
   const getAiText =
     answer => {
@@ -219,11 +336,21 @@ export default function PlantDetail({
     return () => loop.stop();
   }, [floatAnim]);
 
-  /**
-   * 최신 센서 데이터 + 전체 센서 히스토리 조회
-   */
   useEffect(() => {
     if (!isHardwareConnected) {
+      if (USE_MOCK_SENSOR_DATA_WHEN_NO_HARDWARE) {
+        const mockHistory =
+          generateMockSensorHistory();
+
+        setSensorHistory(mockHistory);
+
+        setSensorData(
+          mockHistory[mockHistory.length - 1]
+        );
+
+        setMood('happy');
+      }
+
       return;
     }
 
@@ -313,11 +440,12 @@ export default function PlantDetail({
     plant?.macAddress,
   ]);
 
-  /**
-   * 식물 적정 환경 데이터 조회
-   */
   useEffect(() => {
     if (!isHardwareConnected) {
+      if (USE_MOCK_SENSOR_DATA_WHEN_NO_HARDWARE) {
+        setPlantEnv(MOCK_PLANT_ENV);
+      }
+
       return;
     }
 
@@ -359,6 +487,35 @@ export default function PlantDetail({
     plant?.name,
     isHardwareConnected,
   ]);
+
+  useEffect(() => {
+    const targets = {
+      soil: plantEnv?.waterCycleSpring,
+      temperature: plantEnv?.growhTp,
+      humidity: plantEnv?.humidity,
+    };
+
+    Object.keys(deviationAnim).forEach(
+      type => {
+        const progress =
+          calcDeviationProgress(
+            type,
+            sensorData?.[type],
+            targets[type]
+          );
+
+        Animated.timing(
+          deviationAnim[type],
+          {
+            toValue: progress ?? 0,
+            duration: 600,
+            easing: Easing.out(Easing.quad),
+            useNativeDriver: false,
+          }
+        ).start();
+      }
+    );
+  }, [sensorData, plantEnv]);
 
   if (!plant) {
     return (
@@ -539,10 +696,6 @@ export default function PlantDetail({
     },
   ];
 
-  /**
-   * 전체 데이터는 유지하고,
-   * 그래프 렌더링은 성능을 위해 최대 120개 점만 표시
-   */
   const sampledHistory =
     sensorHistory.length > 120
       ? sensorHistory.filter(
@@ -697,6 +850,10 @@ export default function PlantDetail({
         sensorData.regDate
       )
       : '아직 데이터 없음';
+
+  const canShowSensorSection =
+    isHardwareConnected ||
+    USE_MOCK_SENSOR_DATA_WHEN_NO_HARDWARE;
 
   return (
     <>
@@ -860,7 +1017,7 @@ export default function PlantDetail({
           </TouchableOpacity>
         )}
 
-        {isHardwareConnected ? (
+        {canShowSensorSection ? (
           <>
             <View style={styles.summaryCard}>
               <View>
@@ -884,7 +1041,9 @@ export default function PlantDetail({
                 <View style={styles.liveDot} />
 
                 <Text style={styles.liveText}>
-                  LIVE
+                  {isHardwareConnected
+                    ? 'LIVE'
+                    : '테스트'}
                 </Text>
               </View>
             </View>
@@ -911,6 +1070,11 @@ export default function PlantDetail({
                       100
                     )
                     : 0;
+
+                const statusAnim =
+                  deviationAnim[
+                    item.type
+                  ];
 
                 return (
                   <TouchableOpacity
@@ -970,13 +1134,26 @@ export default function PlantDetail({
                         styles.miniBarTrack
                       }
                     >
-                      <View
+                      <Animated.View
                         style={[
                           styles.miniBarFill,
                           {
                             width:
                               `${barValue}%`,
                           },
+                          statusAnim
+                            ? {
+                              backgroundColor:
+                                statusAnim.interpolate(
+                                  {
+                                    inputRange:
+                                      [0, 0.5, 1],
+                                    outputRange:
+                                      SENSOR_STATUS_COLORS,
+                                  }
+                                ),
+                            }
+                            : null,
                         ]}
                       />
                     </View>
