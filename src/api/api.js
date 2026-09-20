@@ -3,9 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Android debug builds reach the PC through `adb reverse tcp:8080 tcp:8080`.
 // Release builds continue to use the deployed backend.
-const BASE_URL = __DEV__
-  // ? 'http://127.0.0.1:8080'
-   'http://3.25.69.13:8080';
+const BASE_URL = 'http://3.25.69.13:8080';
 
 const plantEnvCache = new Map();
 const plantEnvRequests = new Map();

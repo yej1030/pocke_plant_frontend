@@ -446,7 +446,7 @@ export default StyleSheet.create({
   },
 
   statusBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgb(255, 255, 255)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
