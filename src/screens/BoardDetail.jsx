@@ -15,11 +15,9 @@ import {
   Platform,
 } from 'react-native';
 
-import {
-  IconEye,
-  IconMessageCircle,
-  IconEdit,
-} from '@tabler/icons-react-native';
+import IconEye from '@tabler/icons-react-native/IconEye';
+import IconMessageCircle from '@tabler/icons-react-native/IconMessageCircle';
+import IconEdit from '@tabler/icons-react-native/IconEdit';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

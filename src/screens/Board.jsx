@@ -19,13 +19,11 @@ import {
   useFocusEffect,
 } from '@react-navigation/native';
 
-import {
-  IconEye,
-  IconMessageCircle,
-  IconPlus,
-  IconSearch,
-  IconX,
-} from '@tabler/icons-react-native';
+import IconEye from '@tabler/icons-react-native/IconEye';
+import IconMessageCircle from '@tabler/icons-react-native/IconMessageCircle';
+import IconPlus from '@tabler/icons-react-native/IconPlus';
+import IconSearch from '@tabler/icons-react-native/IconSearch';
+import IconX from '@tabler/icons-react-native/IconX';
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';

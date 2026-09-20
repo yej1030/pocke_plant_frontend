@@ -23,6 +23,7 @@ import MyPosts from '../screens/MyPosts';
 import FindPassword from '../screens/FindPassword';
 import ResetPassword from '../screens/ResetPassword';
 import HardwareConnect from '../screens/HardwareConnect';
+import WateringControl from '../screens/WateringControl';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +54,7 @@ export default function AppNavigator() {
         <Stack.Screen name="FindPassword" component={FindPassword} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
         <Stack.Screen name="HardwareConnect" component={HardwareConnect} />
+        <Stack.Screen name="WateringControl" component={WateringControl} />
       </Stack.Navigator>
     </NavigationContainer>
   );

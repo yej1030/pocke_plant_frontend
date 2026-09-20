@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 const DEFAULT_ALERT = {
   visible: false,
@@ -18,20 +18,20 @@ export default function useCustomAlert(initialValues = {}) {
     ...initialValues,
   });
 
-  const showAlert = config => {
+  const showAlert = useCallback(config => {
     setAlertConfig({
       ...DEFAULT_ALERT,
       ...config,
       visible: true,
     });
-  };
+  }, []);
 
-  const closeAlert = () => {
+  const closeAlert = useCallback(() => {
     setAlertConfig(prev => ({
       ...prev,
       visible: false,
     }));
-  };
+  }, []);
 
   return {
     alertConfig,

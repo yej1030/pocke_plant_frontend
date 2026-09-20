@@ -332,7 +332,7 @@ export default StyleSheet.create({
         color: '#FFFFFF',
     },
 
-    emptyText: {
+    detailEmptyText: {
         textAlign: 'center',
         color: '#9CA3AF',
         fontSize: 14,

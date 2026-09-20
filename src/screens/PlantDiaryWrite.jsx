@@ -10,8 +10,17 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+<<<<<<< HEAD
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { IconCameraPlus, IconX } from '@tabler/icons-react-native';
+=======
+import {
+	launchCamera,
+	launchImageLibrary,
+} from 'react-native-image-picker';
+import IconCameraPlus from '@tabler/icons-react-native/IconCameraPlus';
+import IconX from '@tabler/icons-react-native/IconX';
+>>>>>>> bb3efd3 (프론트엔드 기능 수정)
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
@@ -298,6 +307,7 @@ export default function PlantDiaryWrite({ navigation, route }) {
         onRequestClose={closeAlert}
       />
 
+<<<<<<< HEAD
       <Bottom
         type="detail"
         active="diary"
@@ -307,3 +317,50 @@ export default function PlantDiaryWrite({ navigation, route }) {
     </>
   );
 }
+=======
+					{isHardwareConnected && (
+						<View style={styles.sensorInfoCard}>
+							<Text style={styles.sensorInfoText}>
+								오늘의 센서 스냅샷이 자동으로 함께 저장돼요.{'\n'}
+								🌡️ {getTodaySensorSnapshot().temp} · 💧{' '}
+								{getTodaySensorSnapshot().humidity} · 🌱{' '}
+								{getTodaySensorSnapshot().soil}
+							</Text>
+						</View>
+					)}
+
+					<TouchableOpacity
+						style={[styles.submitButton, !isValid && styles.submitButtonDisabled]}
+						activeOpacity={0.85}
+						onPress={handleSubmit}
+					>
+						<Text style={styles.submitButtonText}>
+							{isEditing ? '저장하기' : '등록하기'}
+						</Text>
+					</TouchableOpacity>
+				</ScrollView>
+			</KeyboardAvoidingView>
+
+			<CustomAlert
+				visible={alertConfig.visible}
+				title={alertConfig.title}
+				message={alertConfig.message}
+				buttonText={alertConfig.buttonText}
+				onPress={alertConfig.onPress}
+				secondaryButtonText={alertConfig.secondaryButtonText}
+				onSecondaryPress={alertConfig.onSecondaryPress}
+				actions={alertConfig.actions}
+				variant={alertConfig.variant}
+				onRequestClose={closeAlert}
+			/>
+
+			<Bottom
+				type="detail"
+				active="diary"
+				navigation={navigation}
+				params={{ plantId, plant }}
+			/>
+		</>
+	);
+}
+>>>>>>> bb3efd3 (프론트엔드 기능 수정)

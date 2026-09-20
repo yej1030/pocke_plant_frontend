@@ -9,7 +9,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { IconPlus, IconChevronRight } from '@tabler/icons-react-native';
+import IconPlus from '@tabler/icons-react-native/IconPlus';
+import IconChevronRight from '@tabler/icons-react-native/IconChevronRight';
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
@@ -148,6 +149,7 @@ export default function PlantDiary({ navigation, route }) {
         </TouchableOpacity>
       </View>
 
+<<<<<<< HEAD
       <Bottom
         type="detail"
         active="diary"
@@ -157,3 +159,25 @@ export default function PlantDiary({ navigation, route }) {
     </>
   );
 }
+=======
+				<TouchableOpacity
+					style={styles.writeButton}
+					activeOpacity={0.85}
+					onPress={() =>
+						navigation.navigate('PlantDiaryWrite', { plantId, plant })
+					}
+				>
+					<IconPlus size={24} color="#FFFFFF" strokeWidth={2} />
+				</TouchableOpacity>
+			</View>
+
+			<Bottom
+				type="detail"
+				active="diary"
+				navigation={navigation}
+				params={{ plantId, plant }}
+			/>
+		</>
+	);
+}
+>>>>>>> bb3efd3 (프론트엔드 기능 수정)

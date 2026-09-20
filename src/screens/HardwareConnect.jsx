@@ -29,55 +29,6 @@ import styles from './style/HardwareConnect.style';
 const SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
 const CHARACTERISTIC_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
-// ─── 펄스 링 애니메이션 ──────────────────────────────────────────────────────
-function PulseView({ style, delay = 0, minScale = 0.92, maxScale = 1.08 }) {
-  const anim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.delay(delay),
-        Animated.timing(anim, {
-          toValue: 1,
-          duration: 1200,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-        Animated.timing(anim, {
-          toValue: 0,
-          duration: 1200,
-          easing: Easing.inOut(Easing.sin),
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, []);
-
-  return (
-    <Animated.View
-      style={[
-        style,
-        {
-          transform: [
-            {
-              scale: anim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [minScale, maxScale],
-              }),
-            },
-          ],
-          opacity: anim.interpolate({
-            inputRange: [0, 0.5, 1],
-            outputRange: [0.4, 1, 0.4],
-          }),
-        },
-      ]}
-    />
-  );
-}
-
 // ─── 스텝 정의 ───────────────────────────────────────────────────────────────
 const STEPS = [
   { title: 'QR 코드 스캔', subtitle: 'ESP32 기기의 QR 코드를\n카메라로 스캔해주세요.', button: null },
@@ -111,7 +62,7 @@ export default function HardwareConnect({ navigation, route }) {
       easing: Easing.out(Easing.cubic),
       useNativeDriver: true,
     }).start();
-  }, [step]);
+  }, [contentAnim, step]);
 
   // ── STEP 3 체크 팝 스프링 ────────────────────────────────────────────────
   const checkAnim = useRef(new Animated.Value(0)).current;
@@ -125,7 +76,7 @@ export default function HardwareConnect({ navigation, route }) {
       tension: 120,
       useNativeDriver: true,
     }).start();
-  }, [step]);
+  }, [checkAnim, step]);
 
   // ── 카메라 권한 요청 ──────────────────────────────────────────────────────
   useEffect(() => {

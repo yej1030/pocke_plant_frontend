@@ -177,11 +177,4 @@ export default StyleSheet.create({
 		color: '#7FC77C',
 	},
 
-    // 하드코딩
-    emptySubText: {
-	fontSize: 12,
-	color: '#9CA3AF',
-	marginTop: 6,
-	textAlign: 'center',
-},
 });

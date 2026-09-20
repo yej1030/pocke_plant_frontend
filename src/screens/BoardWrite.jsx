@@ -19,10 +19,8 @@ import {
   launchImageLibrary,
 } from 'react-native-image-picker';
 
-import {
-  IconCameraPlus,
-  IconX,
-} from '@tabler/icons-react-native';
+import IconCameraPlus from '@tabler/icons-react-native/IconCameraPlus';
+import IconX from '@tabler/icons-react-native/IconX';
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';

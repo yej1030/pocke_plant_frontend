@@ -1,12 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import {
-	IconHome,
-	IconClipboardText,
-	IconLeaf,
-	IconNotebook,
-	IconHeart,
-} from '@tabler/icons-react-native';
+import IconHome from '@tabler/icons-react-native/IconHome';
+import IconClipboardText from '@tabler/icons-react-native/IconClipboardText';
+import IconLeaf from '@tabler/icons-react-native/IconLeaf';
+import IconNotebook from '@tabler/icons-react-native/IconNotebook';
+import IconHeart from '@tabler/icons-react-native/IconHeart';
 
 const MAIN_TABS = [
 	{ key: 'home', title: '홈', screen: 'Main', Icon: IconHome },

@@ -35,7 +35,7 @@ function AnimatedPlantCard({ index, children }) {
 			easing: Easing.out(Easing.cubic),
 			useNativeDriver: true,
 		}).start();
-	}, []);
+	}, [enterAnim, index]);
 
 	return (
 		<Animated.View

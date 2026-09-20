@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IconEye, IconMessageCircle } from '@tabler/icons-react-native';
+import IconEye from '@tabler/icons-react-native/IconEye';
+import IconMessageCircle from '@tabler/icons-react-native/IconMessageCircle';
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';

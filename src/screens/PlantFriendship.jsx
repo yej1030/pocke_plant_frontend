@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { View, Text, Image, ScrollView, ActivityIndicator } from 'react-native';
 
 import Header from '../components/Header';
@@ -80,7 +80,10 @@ function buildMockAffinityList(plants) {
 
 export default function PlantFriendship({ navigation }) {
 	const { plants } = useContext(PlantsContext) || {};
-	const plantList = Array.isArray(plants) ? plants : [];
+	const plantList = useMemo(
+		() => (Array.isArray(plants) ? plants : []),
+		[plants]
+	);
 
 	const [loading, setLoading] = useState(true);
 	const [affinityList, setAffinityList] = useState([]);
@@ -125,7 +128,7 @@ export default function PlantFriendship({ navigation }) {
 		return () => {
 			isMounted = false;
 		};
-	}, [plantList.length]);
+	}, [plantList]);
 
 	const getAffinityFor = plantId => {
 		return affinityList.find(item => item.plantId === plantId);

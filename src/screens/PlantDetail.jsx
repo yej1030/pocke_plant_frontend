@@ -343,7 +343,7 @@ export default function PlantDetail({
     const interval =
       setInterval(
         fetchLatestSensorData,
-        30000
+        5000
       );
 
     return () => {
@@ -430,7 +430,7 @@ export default function PlantDetail({
         ).start();
       }
     );
-  }, [sensorData, plantEnv]);
+  }, [deviationAnim, sensorData, plantEnv]);
 
   if (!plant) {
     return (
@@ -573,12 +573,10 @@ export default function PlantDetail({
       type: 'soil',
       label: '토양 수분',
       value: sensorData?.soil ?? '-',
-      target:
-        plantEnv?.waterCycleSpring ??
-        '-',
-      unit: '',
+      target: '-',
+      unit: '%',
       icon: require('../assets/sensor/sensor_soil.png'),
-      max: 4095,
+      max: 100,
     },
 
     {
@@ -645,7 +643,7 @@ export default function PlantDetail({
     {
       type: 'soil',
       title: '토양 수분 전체 변화',
-      unit: '',
+      unit: '%',
       color: '#7fc77c',
     },
 
@@ -1291,10 +1289,14 @@ export default function PlantDetail({
               })}
             </View>
 
-            <TouchableOpacity
-              style={styles.waterButton}
-              activeOpacity={0.85}
-            >
+          <TouchableOpacity
+            style={styles.waterButton}
+            activeOpacity={0.85}
+            onPress={() => navigation.navigate(
+              'WateringControl',
+              { plant },
+            )}
+          >
               <Image
                 source={require('../assets/sensor/sensor_humidity.png')}
                 style={styles.waterIcon}
