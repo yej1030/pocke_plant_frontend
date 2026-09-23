@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,10 +11,16 @@ import styles from './style/ResetPassword.style';
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
+import { resetPasswordApi } from '../api/api';
 
 export default function ResetPassword({
   navigation,
+  route,
 }) {
+
+  // 비밀번호 찾기 화면에서 인증 완료 후 넘겨받은 값
+  const { email, code } =
+    route?.params ?? {};
 
   // 입력값
   const [password, setPassword] =
@@ -42,6 +48,10 @@ export default function ResetPassword({
     setShowNewPasswordCheck,
   ] = useState(false);
 
+  // 변경 요청 중 여부 (중복 클릭 방지)
+  const [submitting, setSubmitting] =
+    useState(false);
+
   // 커스텀 알림
   const {
     alertConfig,
@@ -49,13 +59,37 @@ export default function ResetPassword({
     closeAlert,
   } = useCustomAlert();
 
+  // 이메일 인증 없이 직접 들어온 경우 이전 화면으로 돌려보냄
+  useEffect(() => {
+    if (!email || !code) {
+      showAlert({
+        title: '안내',
+        message:
+          '이메일 인증을 먼저 완료해 주세요.',
+        variant: 'warning',
+        onPress: () => navigation.goBack(),
+      });
+    }
+  }, []);
+
   // 비밀번호 형식 검사
   const isValidPassword = value =>
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,15}$/
       .test(value);
 
   // 비밀번호 변경
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!email || !code) {
+      showAlert({
+        title: '안내',
+        message:
+          '이메일 인증을 먼저 완료해 주세요.',
+        variant: 'warning',
+        onPress: () => navigation.goBack(),
+      });
+      return;
+    }
+
     if (!newPassword.trim()) {
       showAlert({
         title: '안내',
@@ -94,14 +128,42 @@ export default function ResetPassword({
       return;
     }
 
-    showAlert({
-      title: '안내',
-      message:
-        '비밀번호가 변경되었습니다!',
-      onPress: () => {
-        navigation.navigate('Login_2');
-      },
-    });
+    setSubmitting(true);
+
+    try {
+      // 이메일 + 인증번호 + 새 비밀번호를 서버로 전송
+      await resetPasswordApi({
+        email,
+        code,
+        newPassword,
+      });
+
+      showAlert({
+        title: '안내',
+        message:
+          '비밀번호가 변경되었습니다!',
+        onPress: () => {
+          navigation.navigate('Login_2');
+        },
+      });
+    } catch (error) {
+      console.log(
+        '비밀번호 변경 실패:',
+        error.response?.data
+      );
+
+      showAlert({
+        title: '안내',
+        message:
+          typeof error.response?.data === 'string' &&
+          error.response.data
+            ? error.response.data
+            : '비밀번호 변경에 실패했습니다.',
+        variant: 'error',
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -214,6 +276,7 @@ export default function ResetPassword({
         <TouchableOpacity
           style={styles.submitButton}
           onPress={handleSubmit}
+          disabled={submitting}
         >
 
           <Text style={styles.submitButtonText}>
