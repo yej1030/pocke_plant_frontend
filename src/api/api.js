@@ -269,15 +269,6 @@ export const getSensorHistory = async macAddress => {
   return response.data;
 };
 
-// 식물 환경 정보 (캐시 + 중복 요청 방지 적용)
-export const getPlantEnv = async plantName => {
-  const cacheKey = String(plantName || '').trim().toLowerCase();
-  if (!cacheKey) throw new Error('식물 이름이 없습니다.');
-=======
-// export const getPlantEnv = async plantName => {
-//   const cacheKey = String(plantName || '').trim().toLowerCase();
-//   if (!cacheKey) throw new Error('식물 이름이 없습니다.');
-  
 // 급수 설정 조회
 export const getWateringSettings = async plantId => {
   const headers = await getAuthHeaders();

@@ -1,12 +1,6 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { IconEdit } from '@tabler/icons-react-native';
-=======
-import React, { useMemo } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import IconEdit from '@tabler/icons-react-native/IconEdit';
->>>>>>> bb3efd3 (프론트엔드 기능 수정)
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
@@ -28,7 +22,6 @@ export default function PlantDiaryDetail({ navigation, route }) {
   const [entry, setEntry] = useState(null);
   const [loading, setLoading] = useState(true);
 
-<<<<<<< HEAD
   useEffect(() => {
     let isMounted = true;
     (async () => {
@@ -45,24 +38,6 @@ export default function PlantDiaryDetail({ navigation, route }) {
       isMounted = false;
     };
   }, [entryId, getDiaryEntry]);
-=======
-	if (!entry) {
-		return (
-			<>
-				<Header title="일지 상세" navigation={navigation} type="full" />
-				<View style={styles.container}>
-					<Text style={styles.detailEmptyText}>일지를 찾을 수 없습니다.</Text>
-				</View>
-				<Bottom
-					type="detail"
-					active="diary"
-					navigation={navigation}
-					params={{ plantId, plant }}
-				/>
-			</>
-		);
-	}
->>>>>>> bb3efd3 (프론트엔드 기능 수정)
 
   const handleDelete = () => {
     showAlert({
@@ -174,7 +149,6 @@ export default function PlantDiaryDetail({ navigation, route }) {
             <Text style={styles.detailActionText}>수정하기</Text>
           </TouchableOpacity>
 
-<<<<<<< HEAD
           <TouchableOpacity
             style={[
               styles.detailActionButton,
@@ -206,14 +180,3 @@ export default function PlantDiaryDetail({ navigation, route }) {
     </>
   );
 }
-=======
-			<Bottom
-				type="detail"
-				active="diary"
-				navigation={navigation}
-				params={{ plantId, plant }}
-			/>
-		</>
-	);
-}
->>>>>>> bb3efd3 (프론트엔드 기능 수정)
