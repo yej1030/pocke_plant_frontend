@@ -1,13 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-<<<<<<< HEAD
-// Android debug builds reach the PC through `adb reverse tcp:8080 tcp:8080`.
-// Release builds continue to use the deployed backend.
-=======
 // 개발/배포 앱 모두 AWS 백엔드에 직접 연결한다.
 // 따라서 API 통신에는 `adb reverse tcp:8080 tcp:8080`이 필요하지 않다.
->>>>>>> bb3efd3 (프론트엔드 기능 수정)
 const BASE_URL = 'http://3.25.69.13:8080';
 
 const plantEnvCache = new Map();
@@ -274,12 +269,15 @@ export const getSensorHistory = async macAddress => {
   return response.data;
 };
 
-<<<<<<< HEAD
 // 식물 환경 정보 (캐시 + 중복 요청 방지 적용)
 export const getPlantEnv = async plantName => {
   const cacheKey = String(plantName || '').trim().toLowerCase();
   if (!cacheKey) throw new Error('식물 이름이 없습니다.');
 =======
+// export const getPlantEnv = async plantName => {
+//   const cacheKey = String(plantName || '').trim().toLowerCase();
+//   if (!cacheKey) throw new Error('식물 이름이 없습니다.');
+  
 // 급수 설정 조회
 export const getWateringSettings = async plantId => {
   const headers = await getAuthHeaders();
@@ -327,7 +325,7 @@ export const getPlantEnv =
   async plantName => {
     const cacheKey = String(plantName || '').trim().toLowerCase();
     if (!cacheKey) throw new Error('식물 이름이 없습니다.');
->>>>>>> bb3efd3 (프론트엔드 기능 수정)
+    
 
   if (plantEnvCache.has(cacheKey)) {
     return plantEnvCache.get(cacheKey);
