@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "질병 예측 웹 실행",
+      "type": "shell",
+      "command": "npm run web",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {"reveal":"always","panel":"dedicated"}
+    },
+    {
+      "label": "연결된 안드로이드에서 실행",
+      "type": "shell",
+      "command": "npm run phone",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {"reveal":"always","panel":"dedicated"}
+    }
+  ]
+}

@@ -8,3 +8,7 @@ tools/__pycache__/
 android/.kotlin/
 android/local.properties
 hs_err_pid*.log
+.env.local
+.env.*.local
+dist-web/
+.preview/

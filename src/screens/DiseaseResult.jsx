@@ -106,7 +106,12 @@ export default function DiseaseResult({
     );
 
   const showConfidence =
-    !status && confidence > 0;
+    !status && prediction?.confidence != null && confidence > 0;
+
+  const blocked = prediction?.normal_result_blocked === true;
+  const candidates = !blocked && Array.isArray(prediction?.candidates)
+    ? prediction.candidates : [];
+  const relativeScores = prediction?.score_kind === 'relative_model_score';
 
   return (
     <View style={styles.background}>
@@ -159,9 +164,26 @@ export default function DiseaseResult({
         />
 
         <View style={styles.tipCard}>
+          {prediction?.observation ? (
+            <Text style={styles.tipText}>사진에서 보이는 상태: {prediction.observation}{'\n'}</Text>
+          ) : null}
+          {candidates.map((candidate, index) => (
+            <View key={`${candidate.name}-${index}`}>
+              {relativeScores && Number.isFinite(candidate.comparison_score) ? (
+                <ResultBar label={`${index + 1}. ${candidate.name}`} percent={normalizePercent(candidate.comparison_score)} />
+              ) : <Text style={styles.resultLabel}>{index + 1}. {candidate.name}</Text>}
+              {candidate.features ? <Text style={styles.tipText}>특징·관찰 근거: {candidate.features}</Text> : null}
+              {candidate.actions ? <Text style={styles.tipText}>확인·조치: {candidate.actions}{'\n'}</Text> : null}
+            </View>
+          ))}
+          {blocked || candidates.length === 0 ? (
+            <Text style={styles.tipText}>{prediction?.analysis_text || prediction?.actions || ''}</Text>
+          ) : null}
           <Text style={styles.tipText}>
-            {status === 'experimental'
-              ? '이 결과는 로컬 실험 모델의 외형 유사도이며 진단이 아닙니다. 잎의 색이나 반점만으로 원인을 확정하지 마세요.'
+            {relativeScores && !blocked
+              ? '위 %는 학습한 후보 사이의 모델 비교 점수입니다. 실제 발병 확률은 아직 검증되지 않았습니다.'
+              : status === 'experimental'
+              ? '사진에서 가장 비슷한 원인 후보입니다. 확률은 아직 검증되지 않았습니다. 추가 확인 항목을 함께 살펴보세요.'
               : showConfidence
               ? `${diseaseName} 가능성이 ${confidence}%로 분석되었습니다. 결과만으로 질병을 확정하지 말고 잎, 줄기, 흙 상태를 함께 확인해주세요.`
               : '잎의 색이나 반점만으로 원인을 확정하기 어렵습니다. 식물 종류, 흙의 젖은 정도, 최근 물주기와 빛 환경을 함께 확인해주세요.'}

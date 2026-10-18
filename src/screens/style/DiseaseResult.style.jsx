@@ -20,9 +20,10 @@ scroll: {
 
 image: {
 width: '100%',
-height: 300,
+height: 250,
 borderRadius: 8,
-resizeMode: 'cover',
+resizeMode: 'contain',
+backgroundColor: '#F8FAFC',
 marginBottom: 16,
 },
 
@@ -57,6 +58,7 @@ marginBottom: 6,
 resultLabel: {
 color: '#1F2937',
 fontSize: 14,
+fontWeight: '600',
 },
 
 resultPercent: {
@@ -89,9 +91,9 @@ paddingVertical: 2,
 },
 
 tipText: {
-color: '#9CA3AF',
-fontSize: 12,
-lineHeight: 18,
+color: '#475569',
+fontSize: 14,
+lineHeight: 22,
 },
 
 
