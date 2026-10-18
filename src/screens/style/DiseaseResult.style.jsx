@@ -20,7 +20,7 @@ scroll: {
 
 image: {
 width: '100%',
-height: 250,
+height: 160,
 borderRadius: 8,
 resizeMode: 'contain',
 backgroundColor: '#F8FAFC',
@@ -42,6 +42,40 @@ fontWeight: '700',
 marginBottom: 12,
 fontSize: 16,
 color: '#1F2937',
+},
+
+sectionLabel: {
+color: '#52645C',
+fontSize: 13,
+marginBottom: 6,
+},
+
+diseaseTitle: {
+color: '#183B2A',
+fontSize: 22,
+fontWeight: '700',
+lineHeight: 30,
+marginBottom: 12,
+},
+
+guidanceCard: {
+backgroundColor: '#F2F6F3',
+padding: 16,
+borderRadius: 12,
+marginBottom: 12,
+},
+
+actionCard: {
+backgroundColor: '#E9F5EA',
+padding: 16,
+borderRadius: 12,
+marginBottom: 16,
+},
+
+resultStatus: {
+fontSize: 12,
+color: '#64748B',
+marginTop: 12,
 },
 
 resultRow: {
