@@ -23,9 +23,6 @@ export default function ResetPassword({
     route?.params ?? {};
 
   // 입력값
-  const [password, setPassword] =
-    useState('');
-
   const [newPassword, setNewPassword] =
     useState('');
 
@@ -35,9 +32,6 @@ export default function ResetPassword({
   ] = useState('');
 
   // 비밀번호 보기
-  const [showPassword, setShowPassword] =
-    useState(false);
-
   const [
     showNewPassword,
     setShowNewPassword,
@@ -79,6 +73,7 @@ export default function ResetPassword({
 
   // 비밀번호 변경
   const handleSubmit = async () => {
+    if (submitting) return;
     if (!email || !code) {
       showAlert({
         title: '안내',
@@ -158,7 +153,7 @@ export default function ResetPassword({
           typeof error.response?.data === 'string' &&
           error.response.data
             ? error.response.data
-            : '비밀번호 변경에 실패했습니다.',
+            : error.response?.data?.message || '비밀번호 변경에 실패했습니다.',
         variant: 'error',
       });
     } finally {
@@ -200,7 +195,7 @@ export default function ResetPassword({
           >
           <Image
             source={
-              showPassword
+              showNewPassword
                 ? require('../assets/icon/open.png')
                 : require('../assets/icon/close.png')
             }
@@ -250,7 +245,7 @@ export default function ResetPassword({
 
           <Image
             source={
-              showPassword
+              showNewPasswordCheck
                 ? require('../assets/icon/open.png')
                 : require('../assets/icon/close.png')
             }

@@ -6,7 +6,7 @@ import signupStyles from './style/Signup.style';
 import Header from '../components/Header';
 import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
-import { sendEmailCode, verifyEmailCode } from '../api/api';
+import { requestPasswordResetCode, verifyPasswordResetCode } from '../api/api';
 
 export default function FindPassword({
   navigation,
@@ -26,6 +26,7 @@ export default function FindPassword({
   // 인증번호 확인 완료 여부
   const [isEmailVerified, setIsEmailVerified] =
     useState(false);
+  const [busy, setBusy] = useState(false);
 
   // 커스텀 알림
   const {
@@ -96,6 +97,8 @@ export default function FindPassword({
 
   // 인증번호 메일 받기
   const handleCert = async () => {
+    if (busy) return;
+    setIsEmailVerified(false);
     if (!email.trim()) {
       setCertMessage('');
       setIsEmailVerified(false);
@@ -118,9 +121,10 @@ export default function FindPassword({
       return;
     }
 
+    setBusy(true);
     try {
       const response =
-        await sendEmailCode(
+        await requestPasswordResetCode(
           email.trim()
         );
 
@@ -149,14 +153,17 @@ export default function FindPassword({
           typeof error.response?.data === 'string' &&
           error.response.data
             ? error.response.data
-            : '이메일 인증 요청 실패',
+            : error.response?.data?.message || '이메일 인증 요청 실패',
         variant: 'error',
       });
+    } finally {
+      setBusy(false);
     }
   };
 
   // 인증번호 확인
   const handleVerifyCode = async () => {
+    if (busy) return;
     if (!email.trim()) {
       showAlert({
         title: '안내',
@@ -173,9 +180,11 @@ export default function FindPassword({
       return;
     }
 
+    setBusy(true);
+    setIsEmailVerified(false);
     try {
       const response =
-        await verifyEmailCode(
+        await verifyPasswordResetCode(
           email.trim(),
           code.trim()
         );
@@ -208,17 +217,19 @@ export default function FindPassword({
           typeof error.response?.data === 'string' &&
           error.response.data
             ? error.response.data
-            : '인증번호 확인에 실패했습니다.',
+            : error.response?.data?.message || '인증번호 확인에 실패했습니다.',
         variant: 'error',
       });
 
       setIsEmailVerified(false);
+    } finally {
+      setBusy(false);
     }
   };
 
   // 다음 단계 (비밀번호 변경 화면으로 이동)
   const handleNext = () => {
-    if (!isEmailVerified) {
+    if (busy || !isEmailVerified) {
       showAlert({
         title: '안내',
         message: '이메일 인증을 완료해 주세요.',
@@ -251,6 +262,7 @@ export default function FindPassword({
             placeholder="아이디 (이메일)"
             placeholderTextColor="#aaa"
             value={email}
+            editable={!busy}
             onChangeText={text => {
               setEmail(text);
               setIsEmailVerified(false);
@@ -262,6 +274,7 @@ export default function FindPassword({
           <TouchableOpacity
             style={signupStyles.certButton}
             onPress={handleCert}
+            disabled={busy}
           >
             <Text style={signupStyles.certText}>
               인증하기
@@ -282,6 +295,7 @@ export default function FindPassword({
             placeholder="인증번호"
             placeholderTextColor="#aaa"
             value={code}
+            editable={!busy}
             onChangeText={text => {
               setCode(text);
               setIsEmailVerified(false);
@@ -292,6 +306,7 @@ export default function FindPassword({
           <TouchableOpacity
             style={signupStyles.certButton}
             onPress={handleVerifyCode}
+            disabled={busy}
           >
             <Text style={signupStyles.certText}>
               인증하기
@@ -303,6 +318,7 @@ export default function FindPassword({
         <TouchableOpacity
           style={styles.submitButton}
           onPress={handleNext}
+          disabled={busy}
         >
 
           <Text style={styles.submitButtonText}>

@@ -79,6 +79,22 @@ export const verifyEmailCode = async (email, code) => {
   return response.data;
 };
 
+// 비밀번호 재설정 인증은 회원가입 인증과 별도로 처리한다.
+export const requestPasswordResetCode = async email => {
+  const response = await axios.post(`${BASE_URL}/api/email/password-reset/request`, {email});
+  return response.data;
+};
+
+export const verifyPasswordResetCode = async (email, code) => {
+  const response = await axios.post(`${BASE_URL}/api/email/password-reset/verify`, {email, code});
+  return response.data;
+};
+
+export const resetPasswordApi = async ({email, code, newPassword}) => {
+  const response = await axios.post(`${BASE_URL}/api/email/password-reset/confirm`, {email, code, newPassword});
+  return response.data;
+};
+
 // 카카오 로그인
 export const kakaoLoginApi = async accessToken => {
   const response = await axios.post(`${BASE_URL}/kakao/login/token`, {
