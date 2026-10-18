@@ -24,6 +24,8 @@ if (!ready) {
 if (!ready) throw Error('Metro 개발 서버를 시작하지 못했습니다.');
 command('reverse','tcp:8081','tcp:8081');
 command('shell','am','start','-n','com.pocketplants/.MainActivity');
+const reload=await fetch('http://127.0.0.1:8081/reload',{method:'POST',signal:AbortSignal.timeout(5000)});
+if (!reload.ok) throw Error('휴대폰 앱을 열었지만 최신 화면을 다시 읽지 못했습니다. 개발 메뉴에서 Reload를 눌러 주세요.');
 console.log('연결된 휴대폰에서 Pocket Plant를 실행했습니다. 이 PC의 수정된 화면 코드를 사용합니다.');
 console.log('네이티브 라이브러리를 바꿨다면 먼저 npm run android로 APK를 다시 빌드해야 합니다.');
 if (metro) process.on('SIGINT',()=>{metro.kill('SIGINT');process.exit(0);});
