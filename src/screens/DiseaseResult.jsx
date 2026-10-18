@@ -116,6 +116,8 @@ export default function DiseaseResult({
   const candidates = !blocked && Array.isArray(prediction?.candidates)
     ? prediction.candidates : [];
   const relativeScores = prediction?.score_kind === 'relative_model_score';
+  const topFeatures = candidates[0]?.features || prediction?.features;
+  const topActions = candidates[0]?.actions || prediction?.actions;
 
   return (
     <View style={styles.background}>
@@ -148,11 +150,7 @@ export default function DiseaseResult({
 
         {speciesName ? <Text style={styles.resultLabel}>선택한 식물: {speciesName}{'\n'}</Text> : null}
 
-        <Text
-          style={styles.headerText}
-        >
-          {resultKind}
-        </Text>
+        <Text style={styles.sectionLabel}>{blocked ? '확인된 상태' : '가장 유사한 병명·장해 후보'}</Text>
 
         {showConfidence ? (
           <ResultBar
@@ -160,7 +158,7 @@ export default function DiseaseResult({
             percent={confidence}
           />
         ) : (
-          <Text style={styles.resultLabel}>
+          <Text style={styles.diseaseTitle}>
             {diseaseName}
           </Text>
         )}
@@ -170,19 +168,32 @@ export default function DiseaseResult({
         />
 
         <View style={styles.tipCard}>
+          {topFeatures ? (
+            <View style={styles.guidanceCard}>
+              <Text style={styles.headerText}>어떤 문제인가요?</Text>
+              <Text style={styles.tipText}>{topFeatures}</Text>
+            </View>
+          ) : null}
+          {topActions ? (
+            <View style={styles.actionCard}>
+              <Text style={styles.headerText}>지금 이렇게 해주세요</Text>
+              <Text style={styles.tipText}>{topActions}</Text>
+            </View>
+          ) : null}
           {prediction?.observation ? (
             <Text style={styles.tipText}>사진에서 보이는 상태: {prediction.observation}{'\n'}</Text>
           ) : null}
+          {relativeScores && candidates.length > 0 ? <Text style={styles.headerText}>다른 후보와 비교</Text> : null}
           {candidates.map((candidate, index) => (
             <View key={`${candidate.name}-${index}`}>
               {relativeScores && Number.isFinite(candidate.comparison_score) ? (
                 <ResultBar label={`${index + 1}. ${candidate.name}`} percent={normalizePercent(candidate.comparison_score)} />
-              ) : <Text style={styles.resultLabel}>{index + 1}. {candidate.name}</Text>}
-              {candidate.features ? <Text style={styles.tipText}>특징·관찰 근거: {candidate.features}</Text> : null}
-              {candidate.actions ? <Text style={styles.tipText}>확인·조치: {candidate.actions}{'\n'}</Text> : null}
+              ) : index > 0 ? <Text style={styles.resultLabel}>{index + 1}. {candidate.name}</Text> : null}
+              {index > 0 && candidate.features ? <Text style={styles.tipText}>특징·가능한 원인: {candidate.features}</Text> : null}
+              {index > 0 && candidate.actions ? <Text style={styles.tipText}>관리 방법: {candidate.actions}{'\n'}</Text> : null}
             </View>
           ))}
-          {blocked || candidates.length === 0 ? (
+          {!topActions && (blocked || candidates.length === 0) ? (
             <Text style={styles.tipText}>{prediction?.analysis_text || prediction?.actions || ''}</Text>
           ) : null}
           <Text style={styles.tipText}>
@@ -194,6 +205,7 @@ export default function DiseaseResult({
               ? `${diseaseName} 가능성이 ${confidence}%로 분석되었습니다. 결과만으로 질병을 확정하지 말고 잎, 줄기, 흙 상태를 함께 확인해주세요.`
               : '잎의 색이나 반점만으로 원인을 확정하기 어렵습니다. 식물 종류, 흙의 젖은 정도, 최근 물주기와 빛 환경을 함께 확인해주세요.'}
           </Text>
+          <Text style={styles.resultStatus}>{resultKind}</Text>
 
           {note ? (
             <Text
