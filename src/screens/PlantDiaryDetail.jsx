@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { IconEdit } from '@tabler/icons-react-native';
+import IconEdit from '@tabler/icons-react-native/IconEdit';
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';

@@ -455,6 +455,7 @@ export const predictDiseaseApi = async (imageUri, species = '') => {
     `${BASE_URL}/api/disease/predict`,
     formData,
     {
+      timeout: 105000,
       headers: {
         ...headers,
         'Content-Type': 'multipart/form-data',
