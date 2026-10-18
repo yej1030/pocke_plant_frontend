@@ -24,6 +24,7 @@ import CustomAlert from '../components/CustomAlert';
 import useCustomAlert from '../components/useCustomAlert';
 import BottomButton from '../components/Bottombutton';
 import styles from './style/DiseasePredict.style';
+import {DISEASE_SPECIES, canonicalDiseaseSpecies} from '../utils/diseaseSpecies';
 
 import {
   predictDiseaseApi,
@@ -35,6 +36,9 @@ export default function DiseasePredict({
 }) {
   const plant =
     route?.params?.plant;
+  const [selectedSpecies, setSelectedSpecies] = useState(() =>
+    canonicalDiseaseSpecies(plant?.species),
+  );
 
   const [
     imageUri,
@@ -130,6 +134,10 @@ export default function DiseasePredict({
       if (isPredicting) {
         return;
       }
+      if (!selectedSpecies) {
+        showAlert({title: '식물 종류 확인', message: '사진 속 식물 종류를 먼저 선택해주세요.', variant: 'warning'});
+        return;
+      }
 
       try {
         setIsPredicting(true);
@@ -137,7 +145,7 @@ export default function DiseasePredict({
         const prediction =
           await predictDiseaseApi(
             imageUri,
-            plant?.species || '',
+            selectedSpecies,
           );
 
         navigation.replace(
@@ -147,6 +155,7 @@ export default function DiseasePredict({
             imageUri,
             note,
             prediction,
+            selectedSpecies,
           },
         );
       } catch (error) {
@@ -196,6 +205,22 @@ export default function DiseasePredict({
         >
           진단할 식물 정보를 입력해주세요
         </Text>
+
+        <Text style={styles.formLabel}>사진 속 식물 종류</Text>
+        <View style={styles.speciesOptions}>
+          {DISEASE_SPECIES.map(species => (
+            <TouchableOpacity
+              key={species.value}
+              accessibilityRole="button"
+              accessibilityState={{selected: selectedSpecies === species.value}}
+              style={[styles.speciesOption, selectedSpecies === species.value && styles.speciesOptionSelected]}
+              onPress={() => setSelectedSpecies(species.value)}
+              disabled={isPredicting}
+            >
+              <Text style={styles.speciesText}>{species.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
         <Text
           style={styles.formLabel}

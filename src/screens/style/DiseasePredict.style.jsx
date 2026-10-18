@@ -7,7 +7,7 @@ export default StyleSheet.create({
 	},
 
 	container: {
-        flex: 1,
+        flexGrow: 1,
 			backgroundColor: '#FFFFFF',
 		paddingHorizontal: 20,
 		paddingTop: 14,
@@ -18,6 +18,10 @@ export default StyleSheet.create({
 		fontWeight: '600',
 		color: '#1F2937',
 	},
+  speciesOptions: {flexDirection: 'row', flexWrap: 'wrap', gap: 6},
+  speciesOption: {width: '31%', paddingVertical: 9, paddingHorizontal: 4, alignItems: 'center', borderWidth: 1, borderColor: '#D8E2D9', borderRadius: 8, backgroundColor: '#FFFFFF'},
+  speciesOptionSelected: {borderColor: '#488E58', backgroundColor: '#E6F5E8'},
+  speciesText: {fontSize: 13, color: '#264A30', fontWeight: '600'},
 
 	// 통일: 라벨-위 배치, 폰트값은 기존 그대로 유지 (이미 맞춰져 있음)
 	formLabel: {

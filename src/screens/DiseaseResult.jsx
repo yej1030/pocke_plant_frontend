@@ -10,6 +10,7 @@ import {
 import Header from '../components/Header';
 import BottomButton from '../components/Bottombutton';
 import styles from './style/DiseaseResult.style';
+import {DISEASE_SPECIES, canonicalDiseaseSpecies} from '../utils/diseaseSpecies';
 
 function normalizePercent(
   confidence
@@ -84,6 +85,7 @@ export default function DiseaseResult({
     imageUri,
     note,
     prediction,
+    selectedSpecies,
   } = route?.params || {};
 
   const diseaseName =
@@ -92,6 +94,8 @@ export default function DiseaseResult({
     '진단 결과 없음';
 
   const status = prediction?.status;
+  const speciesName = DISEASE_SPECIES.find(species => species.value ===
+    (prediction?.species || selectedSpecies || canonicalDiseaseSpecies(plant?.species)))?.label;
   const resultKind = {
     unsupported: '현재 미지원 식물',
     unvalidated: '실사용 검증 중',
@@ -141,6 +145,8 @@ export default function DiseaseResult({
             </Text>
           </View>
         )}
+
+        {speciesName ? <Text style={styles.resultLabel}>선택한 식물: {speciesName}{'\n'}</Text> : null}
 
         <Text
           style={styles.headerText}
