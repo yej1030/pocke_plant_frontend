@@ -1,9 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const BASE_URL ='http://192.168.0.211:8080';
-const BASE_URL = 'http://10.0.2.2:8080';
-// const BASE_URL = 'http://3.25.69.13:8080';
+const BASE_URL = 'http://3.25.69.13:8080';
+
+const plantEnvCache = new Map();
+const plantEnvRequests = new Map();
 
 const getToken = async () => AsyncStorage.getItem('serviceToken');
 
@@ -75,6 +76,23 @@ export const verifyEmailCode = async (email, code) => {
 
   return response.data;
 };
+
+// 비밀번호 재설정 인증은 회원가입 인증과 별도로 처리한다.
+export const requestPasswordResetCode = async email => {
+  const response = await axios.post(`${BASE_URL}/api/email/password-reset/request`, {email});
+  return response.data;
+};
+
+export const verifyPasswordResetCode = async (email, code) => {
+  const response = await axios.post(`${BASE_URL}/api/email/password-reset/verify`, {email, code});
+  return response.data;
+};
+
+export const resetPasswordApi = async ({email, code, newPassword}) => {
+  const response = await axios.post(`${BASE_URL}/api/email/password-reset/confirm`, {email, code, newPassword});
+  return response.data;
+};
+
 
 // 카카오 로그인
 export const kakaoLoginApi = async accessToken => {
@@ -231,7 +249,7 @@ export const sendAiMessage = async (roomId, message) => {
     { headers },
   );
 
-  return response.data;
+  return response.status === 204 ? null : response.data;
 };
 
 // 최신 센서 데이터
@@ -266,16 +284,77 @@ export const getSensorHistory = async macAddress => {
   return response.data;
 };
 
-// 식물 환경 정보
-export const getPlantEnv = async plantName => {
-  const response = await axios.get(`${BASE_URL}/api/plant/env`, {
-    params: {
-      name: plantName,
-    },
-  });
-
+// 급수 설정 조회
+export const getWateringSettings = async plantId => {
+  const headers = await getAuthHeaders();
+  const response = await axios.get(
+    `${BASE_URL}/api/plants/${plantId}/watering`,
+    { headers },
+  );
   return response.data;
 };
+
+// 급수 설정 저장
+export const updateWateringSettings = async (plantId, settings) => {
+  const headers = await getAuthHeaders();
+  const response = await axios.put(
+    `${BASE_URL}/api/plants/${plantId}/watering`,
+    settings,
+    { headers },
+  );
+  return response.data;
+};
+
+// 즉시 급수 명령
+export const requestManualWatering = async (plantId, amountMl) => {
+  const headers = await getAuthHeaders();
+  const response = await axios.post(
+    `${BASE_URL}/api/plants/${plantId}/watering/manual`,
+    { amountMl },
+    { headers },
+  );
+  return response.data;
+};
+
+// 최근 급수 명령과 결과
+export const getWateringHistory = async plantId => {
+  const headers = await getAuthHeaders();
+  const response = await axios.get(
+    `${BASE_URL}/api/plants/${plantId}/watering/history`,
+    { headers },
+  );
+  return response.data;
+};
+
+// 식물 환경 정보
+export const getPlantEnv =
+  async plantName => {
+    const cacheKey = String(plantName || '').trim().toLowerCase();
+    if (!cacheKey) throw new Error('식물 이름이 없습니다.');
+    
+
+  if (plantEnvCache.has(cacheKey)) {
+    return plantEnvCache.get(cacheKey);
+  }
+
+  if (plantEnvRequests.has(cacheKey)) {
+    return plantEnvRequests.get(cacheKey);
+  }
+    const request = axios
+    .get(`${BASE_URL}/api/plant/env`, {
+      params: {
+        name: plantName,
+      },
+    })
+    .then(response => {
+      plantEnvCache.set(cacheKey, response.data);
+      return response.data;
+    })
+    .finally(() => plantEnvRequests.delete(cacheKey));
+
+  plantEnvRequests.set(cacheKey, request);
+  return request;
+  };
 
 // 게시글 목록
 export const getBoardsApi = async () => {
@@ -370,7 +449,7 @@ export const deleteCommentApi = async commentId => {
 };
 
 // 질병 진단
-export const predictDiseaseApi = async imageUri => {
+export const predictDiseaseApi = async (imageUri, species = '') => {
   if (!imageUri) {
     throw new Error('질병 진단 이미지가 없습니다.');
   }
@@ -381,11 +460,17 @@ export const predictDiseaseApi = async imageUri => {
 
   formData.append('image', getImageInfo(imageUri, 'disease'));
 
+  // 종을 모르면 별명으로 추측하지 않고 서버가 판단을 보류하도록 한다.
+  if (typeof species === 'string' && species.trim()) {
+    formData.append('species', species.trim());
+  }
+
   const response = await axios.post(
     `${BASE_URL}/api/disease/predict`,
     formData,
     {
       headers: {
+        timeout: 105000,
         ...headers,
         'Content-Type': 'multipart/form-data',
       },
