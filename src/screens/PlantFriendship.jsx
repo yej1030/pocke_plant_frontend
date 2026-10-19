@@ -1,280 +1,170 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react';
-import { View, Text, Image, ScrollView, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 
 import Header from '../components/Header';
 import Bottom from '../components/Bottom';
-import { PlantsContext } from '../context/PlantsContext';
 import styles from './style/PlantFriendship.style';
-import { getAllPlantsAffinity } from '../api/api';
+import { getMyPlants } from '../api/api';
 
+// 캐릭터 이미지 매핑
 const characterImages = {
-	1: require('../assets/Plant/plant_01_happy.png'),
-	2: require('../assets/Plant/plant_03_happy.png'),
-	3: require('../assets/Plant/plant_05_happy.png'),
-	4: require('../assets/Plant/plant_07_happy.png'),
-	5: require('../assets/Plant/plant_09_happy.png'),
-	6: require('../assets/Plant/plant_11_happy.png'),
-	7: require('../assets/Plant/plant_13_happy.png'),
-	8: require('../assets/Plant/plant_15_happy.png'),
-	9: require('../assets/Plant/plant_17_happy.png'),
-	10: require('../assets/Plant/plant_19_happy.png'),
+  1: { happy: require('../assets/Plant/plant_01_happy.png') },
+  2: { happy: require('../assets/Plant/plant_03_happy.png') },
+  3: { happy: require('../assets/Plant/plant_05_happy.png') },
+  4: { happy: require('../assets/Plant/plant_07_happy.png') },
+  5: { happy: require('../assets/Plant/plant_09_happy.png') },
+  6: { happy: require('../assets/Plant/plant_11_happy.png') },
+  7: { happy: require('../assets/Plant/plant_13_happy.png') },
+  8: { happy: require('../assets/Plant/plant_15_happy.png') },
+  9: { happy: require('../assets/Plant/plant_17_happy.png') },
+  10: { happy: require('../assets/Plant/plant_19_happy.png') },
 };
 
-const TIER_NAMES = {
-	1: '새친구',
-	2: '친구',
-	3: '좋은친구',
-	4: '단짝',
-};
-
-function getTierName(level) {
-	return TIER_NAMES[level] ?? TIER_NAMES[4];
+// 5단계 아가 성장 레벨 계산 함수
+function getGrowthLevelInfo(score = 0) {
+  if (score <= 20) {
+    return { level: 'Lv.1', name: '씨앗 아가 🌱', color: '#8EA798', bgColor: '#F1F5F3' };
+  } else if (score <= 45) {
+    return { level: 'Lv.2', name: '꼬꼬마 새싹 🌿', color: '#2E6D32', bgColor: '#E8F7EF' };
+  } else if (score <= 70) {
+    return { level: 'Lv.3', name: '무럭무럭 줄기 🪴', color: '#2563EB', bgColor: '#EFF6FF' };
+  } else if (score <= 90) {
+    return { level: 'Lv.4', name: '꽃봉오리 단짝 🌷', color: '#DB2777', bgColor: '#FDF2F8' };
+  } else {
+    return { level: 'Lv.5', name: '만개한 소울메이트 🌸', color: '#D97706', bgColor: '#FFFBEB' };
+  }
 }
 
-// 친밀도 올리는 방법
-const AFFINITY_GUIDE = [
-	{ icon: '💬', label: 'AI와 대화하기', points: 2 },
-	{ icon: '💧', label: '물주기 완료', points: 3 },
-	{ icon: '📔', label: '일지 작성', points: 5 },
+// 친밀도 미션 안내 목록
+const INTIMACY_GUIDES = [
+  { icon: '📅', label: '매일 첫 접속', points: '+1점', sub: '(하루 1회)' },
+  { icon: '💧', label: '물 주기', points: '+3점', sub: '' },
+  { icon: '💬', label: 'AI 식물과 대화', points: '+2점', sub: '(하루 1회)' },
+  { icon: '📝', label: '식물 일지 작성', points: '+3점', sub: '' },
+  { icon: '❤️', label: '식물 쓰다듬기(관심)', points: '+1점', sub: '(하루 1회)' },
+  { icon: '🔎', label: '식물 질병 진단하기', points: '+4점', sub: '' },
 ];
 
-// ============================================================
-// 친밀도 더미 데이터
-// 등록된 식물 수만큼 자동으로 생성
-// ============================================================
-function buildMockAffinityList(plants) {
-	return (plants || []).map((plant, index) => {
-		const dummyData = [
-			{
-				level: 1,
-				currentExp: 35,
-				expForNextLevel: 100,
-				todayEarned: 2,
-			},
-			{
-				level: 2,
-				currentExp: 68,
-				expForNextLevel: 100,
-				todayEarned: 5,
-			},
-			{
-				level: 3,
-				currentExp: 82,
-				expForNextLevel: 100,
-				todayEarned: 3,
-			},
-			{
-				level: 4,
-				currentExp: 95,
-				expForNextLevel: 100,
-				todayEarned: 0,
-			},
-		];
-
-		return {
-			plantId: plant.id,
-			...dummyData[index % dummyData.length],
-		};
-	});
-}
-
 export default function PlantFriendship({ navigation }) {
-	const { plants } = useContext(PlantsContext) || {};
-	const plantList = useMemo(
-		() => (Array.isArray(plants) ? plants : []),
-		[plants]
-	);
+  const [plants, setPlants] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-	const [loading, setLoading] = useState(true);
-	const [affinityList, setAffinityList] = useState([]);
+  useEffect(() => {
+    const fetchPlants = async () => {
+      try {
+        setLoading(true);
+        const data = await getMyPlants();
+        setPlants(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('식물 친밀도 목록 조회 실패:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-	useEffect(() => {
-		let isMounted = true;
+    fetchPlants();
+  }, []);
 
-		const load = async () => {
-			setLoading(true);
+  return (
+    <>
+      <Header title="친밀도 관리" navigation={navigation} type="full" />
 
-			try {
-				// 서버 API가 있으면 서버 데이터를 사용
-				const data = await getAllPlantsAffinity();
+      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
+        <Text style={styles.sectionBadge}>내 반려식물 성장도</Text>
 
-				if (!isMounted) return;
+        {loading ? (
+          <View style={styles.loadingWrap}>
+            <ActivityIndicator size="large" color="#7FC77C" />
+          </View>
+        ) : plants.length === 0 ? (
+          <View style={styles.emptyWrap}>
+            <Text style={styles.emptyText}>등록된 반려식물이 없습니다.</Text>
+            <Text style={styles.emptySubText}>먼저 홈에서 식물을 등록해주세요!</Text>
+          </View>
+        ) : (
+          plants.map(plant => {
+            const currentIntimacy = Number(plant.intimacy || 0);
+            const growth = getGrowthLevelInfo(currentIntimacy);
 
-				if (Array.isArray(data) && data.length > 0) {
-					setAffinityList(data);
-				} else {
-					// 서버 데이터가 아직 없으면 더미 데이터 사용
-					setAffinityList(buildMockAffinityList(plantList));
-				}
-			} catch (error) {
-				console.log(
-					'친밀도 API 조회 실패 → 더미 데이터를 사용합니다.',
-					error?.message || error
-				);
+            return (
+              <TouchableOpacity
+                key={plant.id}
+                style={styles.affCard}
+                activeOpacity={0.85}
+                onPress={() => navigation.navigate('PlantDetail', { plantId: plant.id })}
+              >
+                {/* 상단: 이미지, 이름, 레벨 뱃지 */}
+                <View style={styles.affCardTop}>
+                  <View style={styles.affPlantInfo}>
+                    <Image
+                      source={characterImages[plant.character_id || 1]?.happy}
+                      style={styles.affPlantImage}
+                    />
+                    <View>
+                      <Text style={styles.affPlantName}>{plant.name}</Text>
+                    </View>
+                  </View>
 
-				if (!isMounted) return;
+                  {/* 성장 레벨 뱃지 */}
+                  <View style={[styles.tierBadge, { backgroundColor: growth.bgColor }]}>
+                    <Text style={[styles.tierBadgeText, { color: growth.color }]}>
+                      {growth.level} {growth.name}
+                    </Text>
+                  </View>
+                </View>
 
-				// API 연결 전에는 더미 데이터 사용
-				setAffinityList(buildMockAffinityList(plantList));
-			} finally {
-				if (isMounted) {
-					setLoading(false);
-				}
-			}
-		};
+                {/* 게이지 바 (0~100점) */}
+                <View style={styles.gaugeTrack}>
+                  <View
+                    style={[
+                      styles.gaugeFill,
+                      {
+                        width: `${Math.min(100, Math.max(0, currentIntimacy))}%`,
+                        backgroundColor: growth.color,
+                      },
+                    ]}
+                  />
+                </View>
 
-		load();
+                {/* 하단 점수 안내 */}
+                <View style={styles.affCardBottom}>
+                  <Text style={styles.affExpText}>친밀도 {currentIntimacy} / 100</Text>
+                  <Text style={[styles.affTodayUp, { color: growth.color }]}>
+                    {currentIntimacy >= 100 ? '최고 레벨 도달! 🎉' : '쑥쑥 자라는 중 🌱'}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })
+        )}
 
-		return () => {
-			isMounted = false;
-		};
-	}, [plantList]);
+        {/* 하단: 친밀도 올리는 방법 가이드 카드 */}
+        <View style={styles.guideCard}>
+          <Text style={styles.guideTitle}>친밀도 올리는 방법 (총 100점)</Text>
 
-	const getAffinityFor = plantId => {
-		return affinityList.find(item => item.plantId === plantId);
-	};
+          {INTIMACY_GUIDES.map(item => (
+            <View key={item.label} style={styles.guideRow}>
+              <Text style={styles.guideIcon}>{item.icon}</Text>
+              <Text style={styles.guideLabel}>
+                {item.label}{' '}
+                {item.sub ? (
+                  <Text style={{ fontSize: 10, color: '#9CA3AF' }}>{item.sub}</Text>
+                ) : null}
+              </Text>
+              <Text style={styles.guidePoints}>{item.points}</Text>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
 
-	return (
-		<>
-			<Header
-				title="친밀도"
-				navigation={navigation}
-				type="full"
-			/>
-
-			<ScrollView
-				style={styles.container}
-				contentContainerStyle={styles.content}
-			>
-				<Text style={styles.sectionBadge}>
-					전체 식물 친밀도
-				</Text>
-
-				{loading ? (
-					<View style={styles.loadingWrap}>
-						<ActivityIndicator color="#7FC77C" />
-					</View>
-				) : plantList.length === 0 ? (
-					<View style={styles.emptyWrap}>
-						<Text style={styles.emptyText}>
-							아직 등록된 식물이 없습니다.
-						</Text>
-
-						<Text style={styles.emptySubText}>
-							식물을 등록하면 친밀도를 확인할 수 있어요.
-						</Text>
-					</View>
-				) : (
-					plantList.map(plant => {
-						const affinity = getAffinityFor(plant.id);
-
-						const level = affinity?.level ?? 1;
-						const currentExp = affinity?.currentExp ?? 0;
-						const expForNextLevel =
-							affinity?.expForNextLevel ?? 100;
-						const todayEarned =
-							affinity?.todayEarned ?? 0;
-
-						const percent = Math.min(
-							100,
-							Math.round(
-								(currentExp / expForNextLevel) * 100
-							)
-						);
-
-						return (
-							<View
-								key={plant.id}
-								style={styles.affCard}
-							>
-								<View style={styles.affCardTop}>
-									<View style={styles.affPlantInfo}>
-										<Image
-											source={
-												characterImages[
-													plant.character_id
-												]
-											}
-											style={styles.affPlantImage}
-										/>
-
-										<Text style={styles.affPlantName}>
-											{plant.name}
-										</Text>
-									</View>
-
-									<View style={styles.tierBadge}>
-										<Text style={styles.tierBadgeText}>
-											⭐ Lv.{level}{' '}
-											{getTierName(level)}
-										</Text>
-									</View>
-								</View>
-
-								<View style={styles.gaugeTrack}>
-									<View
-										style={[
-											styles.gaugeFill,
-											{
-												width: `${percent}%`,
-											},
-										]}
-									/>
-								</View>
-
-								<View style={styles.affCardBottom}>
-									<Text style={styles.affExpText}>
-										{currentExp} / {expForNextLevel}
-									</Text>
-
-									{todayEarned > 0 ? (
-										<Text style={styles.affTodayUp}>
-											▲ +{todayEarned} 오늘
-										</Text>
-									) : (
-										<Text style={styles.affTodayNone}>
-											오늘 활동 없음
-										</Text>
-									)}
-								</View>
-							</View>
-						);
-					})
-				)}
-
-				{plantList.length > 0 && (
-					<View style={styles.guideCard}>
-						<Text style={styles.guideTitle}>
-							친밀도 올리는 방법
-						</Text>
-
-						{AFFINITY_GUIDE.map(item => (
-							<View
-								key={item.label}
-								style={styles.guideRow}
-							>
-								<Text style={styles.guideIcon}>
-									{item.icon}
-								</Text>
-
-								<Text style={styles.guideLabel}>
-									{item.label}
-								</Text>
-
-								<Text style={styles.guidePoints}>
-									+{item.points}pt
-								</Text>
-							</View>
-						))}
-					</View>
-				)}
-			</ScrollView>
-
-			<Bottom
-				type="main"
-				active="friend"
-				navigation={navigation}
-			/>
-		</>
-	);
+      <Bottom active="friendship" navigation={navigation} />
+    </>
+  );
 }

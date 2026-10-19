@@ -1,8 +1,8 @@
-import { StyleSheet } from 'react-native';
-import { Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
-const CARD_WIDTH =
-  (Dimensions.get('window').width - 50) / 2;
+const CARD_WIDTH = (Dimensions.get('window').width - 50) / 2;
+
+
 
 export default StyleSheet.create({
   container: {
@@ -17,7 +17,7 @@ export default StyleSheet.create({
 
   heroCard: {
     marginTop: 12,
-    paddingTop: 24,
+    paddingTop: 18,
     paddingBottom: 16,
     borderRadius: 26,
     borderWidth: 1,
@@ -49,6 +49,74 @@ export default StyleSheet.create({
     opacity: 0.12,
   },
 
+  // ==========================================
+  // 🍼 아가 레벨 & 성장 진행바 스타일 (개편)
+  // ==========================================
+  growthCard: {
+    width: '88%',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 18,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E0EEE6',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+
+  growthHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+
+  growthLevelBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 12,
+    backgroundColor: '#EBF7EE',
+  },
+
+  growthLevelText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#2E6D32',
+  },
+
+  growthTitleText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#8EA798',
+  },
+
+  growthScoreText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#51645A',
+  },
+
+  growthBarTrack: {
+    height: 7,
+    borderRadius: 999,
+    backgroundColor: '#EAEFEA',
+    overflow: 'hidden',
+  },
+
+  growthBarFill: {
+    height: '100%',
+    borderRadius: 999,
+    backgroundColor: '#7FC77C',
+  },
+
+  // 말풍선
   speechBubble: {
     minWidth: 130,
     paddingHorizontal: 16,
@@ -58,7 +126,7 @@ export default StyleSheet.create({
     borderColor: '#D8E6DE',
     borderRadius: 25,
     backgroundColor: '#FFFFFF',
-    marginBottom: 12,
+    marginBottom: 10,
   },
 
   speechText: {
@@ -70,8 +138,8 @@ export default StyleSheet.create({
   },
 
   heroImage: {
-    width: 230,
-    height: 230,
+    width: 220,
+    height: 220,
     resizeMode: 'contain',
   },
 
@@ -169,7 +237,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-// 이후부터 텍스트 나중에 수정
+
   summaryTitle: {
     fontSize: 16,
     color: '#30443A',
@@ -223,10 +291,7 @@ export default StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.05,
     shadowRadius: 7,
     elevation: 2,
@@ -302,10 +367,7 @@ export default StyleSheet.create({
     backgroundColor: '#FFFFFF',
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
+    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
@@ -396,17 +458,18 @@ export default StyleSheet.create({
     shadowRadius: 6,
     elevation: 2,
   },
+
   waterIcon: {
     width: 20,
     height: 20,
     resizeMode: 'contain',
   },
+
   waterText: {
     fontSize: 15,
     color: '#7FC77C',
     fontWeight: '700',
   },
-
 
   emptyWrap: {
     flex: 1,
@@ -444,27 +507,4 @@ export default StyleSheet.create({
     color: '#8EA798',
     fontWeight: '500',
   },
-
-  statusBadge: {
-    backgroundColor: 'rgb(255, 255, 255)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    marginBottom: 8,
-    alignSelf: 'center',
-
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  statusBadgeText:{
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#2E6D32',
-    textAlign:'center',
-  },
-
-
 });
